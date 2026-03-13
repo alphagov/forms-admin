@@ -89,34 +89,19 @@ describe FormTaskListService do
       expect(all_sections).to be_an_instance_of(Array)
     end
 
-    context "when welsh is not enabled" do
-      it "returns 6 sections" do
-        expect(all_sections.count).to eq 6
-      end
-
-      it "does not include translations section" do
-        section_titles = all_sections.map { |section| section[:title] }
-        expect(section_titles).not_to include(I18n.t("forms.task_list_create.translations_section.title"))
-      end
+    it "returns 7 sections" do
+      expect(all_sections.count).to eq 7
     end
 
-    context "when welsh is enabled" do
-      let(:group) { create(:group, :with_welsh_enabled, name: "Group 1", organisation:, status: group_status) }
+    it "includes translations section" do
+      section_titles = all_sections.map { |section| section[:title] }
+      expect(section_titles).to include(I18n.t("forms.task_list_create.translations_section.title"))
+    end
 
-      it "returns 7 sections" do
-        expect(all_sections.count).to eq 7
-      end
-
-      it "includes translations section" do
-        section_titles = all_sections.map { |section| section[:title] }
-        expect(section_titles).to include(I18n.t("forms.task_list_create.translations_section.title"))
-      end
-
-      it "has translations section before make form live section" do
-        translations_section_index = all_sections.index { |section| section[:title] == I18n.t("forms.task_list_create.translations_section.title") }
-        make_live_section_index = all_sections.index { |section| section[:title] == I18n.t("forms.task_list_create.make_form_live_section.title") }
-        expect(translations_section_index).to be < make_live_section_index
-      end
+    it "has translations section before make form live section" do
+      translations_section_index = all_sections.index { |section| section[:title] == I18n.t("forms.task_list_create.translations_section.title") }
+      make_live_section_index = all_sections.index { |section| section[:title] == I18n.t("forms.task_list_create.make_form_live_section.title") }
+      expect(translations_section_index).to be < make_live_section_index
     end
 
     describe "create form section tasks" do
@@ -341,7 +326,7 @@ describe FormTaskListService do
 
     describe "make form live section tasks" do
       let(:section) do
-        all_sections[5]
+        all_sections[6]
       end
 
       let(:section_rows) { section[:rows] }
@@ -511,7 +496,7 @@ describe FormTaskListService do
 
     context "when editing an existing form" do
       let(:form) { create(:form, :live) }
-      let(:group) { create(:group, :with_welsh_enabled, name: "Group 1", organisation:, status: group_status) }
+      let(:group) { create(:group, name: "Group 1", organisation:, status: group_status) }
       let(:can_make_form_live) { true }
 
       it "has the expected section titles" do

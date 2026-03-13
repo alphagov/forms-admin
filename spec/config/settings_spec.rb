@@ -22,7 +22,6 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
-    include_examples expected_value_test, :welsh, features, { "enabled_by_group" => true }
     include_examples expected_value_test, :org_admin_alerts_enabled, features, false
   end
 

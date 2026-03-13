@@ -6,9 +6,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
   let(:condition) { create :condition, routing_page: form.pages.first, answer_value: "No", exit_page_heading: "You are ineligible", exit_page_markdown: "Sorry, you are ineligible for this service." }
 
   let(:current_user) { standard_user }
-  let(:group) { create(:group, organisation: standard_user.organisation, welsh_enabled:) }
-
-  let(:welsh_enabled) { true }
+  let(:group) { create(:group, organisation: standard_user.organisation) }
 
   before do
     Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
@@ -32,14 +30,6 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when the welsh feature is not enabled for the group" do
-      let(:welsh_enabled) { false }
-
-      it "redirects to the form" do
-        expect(response).to redirect_to(form_path(id))
       end
     end
   end
@@ -120,23 +110,6 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
         expect(response).to have_http_status(:forbidden)
       end
     end
-
-    context "when the welsh feature is not enabled for the group" do
-      let(:welsh_enabled) { false }
-
-      it "does not update the form, pages or conditions" do
-        expect {
-          post(welsh_translation_create_path(id), params:)
-        }.to not_change { form.reload.welsh_completed }
-        .and not_change { form.pages.first.reload.question_text_cy }
-        .and(not_change { condition.reload.exit_page_markdown_cy })
-      end
-
-      it "redirects to the form" do
-        post(welsh_translation_create_path(id), params:)
-        expect(response).to redirect_to(form_path(id))
-      end
-    end
   end
 
   describe "#delete" do
@@ -154,14 +127,6 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
       it "returns 403" do
         expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when the welsh feature is not enabled for the group" do
-      let(:welsh_enabled) { false }
-
-      it "redirects to the form" do
-        expect(response).to redirect_to(form_path(id))
       end
     end
   end
@@ -230,21 +195,6 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       it "returns 403" do
         delete(welsh_translation_destroy_path(id), params:)
         expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context "when the welsh feature is not enabled for the group" do
-      let(:welsh_enabled) { false }
-
-      it "does not change the form" do
-        expect {
-          delete(welsh_translation_destroy_path(id), params:)
-        }.not_to(change(form, :reload))
-      end
-
-      it "redirects to the form" do
-        delete(welsh_translation_destroy_path(id), params:)
-        expect(response).to redirect_to(form_path(id))
       end
     end
   end

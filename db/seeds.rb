@@ -130,7 +130,6 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   test_group = Group.create! name: "Test Group", organisation: gds, creator: default_user, status: :active
   Group.create! name: "Ministry of Tests forms", organisation: mot_org
   Group.create! name: "Ministry of Tests forms - secret!", organisation: mot_org, creator: mot_user
-  welsh_group = Group.create! name: "Welsh enabled", organisation: gds, welsh_enabled: true, status: :active
 
   Membership.create! user: default_user, group: end_to_end_group, added_by: default_user, role: :group_admin
 
@@ -468,5 +467,5 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
   GroupForm.create! group: end_to_end_group, form_id: e2e_s3_forms.id # s3 submission test form
   GroupForm.create! group: test_group, form_id: branch_route_form.id # Branch routing form
   GroupForm.create! group: test_group, form_id: none_of_the_above_form.id # None of the above form
-  GroupForm.create! group: welsh_group, form_id: welsh_form.id # Welsh form
+  GroupForm.create! group: test_group, form_id: welsh_form.id # Welsh form
 end
