@@ -58,6 +58,16 @@ module Forms
       render json: { preview_html:, errors: [] }.to_json
     end
 
+    def download
+      authorize current_form, :can_edit_form?
+
+      form_content_service = WelshCsvService.new(form_with_pages_and_conditions)
+
+      send_data form_content_service.as_csv,
+                type: "text/csv; charset=iso-8859-1",
+                disposition: "attachment; filename=#{form_content_service.filename}"
+    end
+
   private
 
     def preview_html
