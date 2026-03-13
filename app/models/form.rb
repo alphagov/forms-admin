@@ -191,8 +191,6 @@ class Form < ApplicationRecord
   end
 
   def has_welsh_translation?
-    return false unless FeatureService.new(group: group).enabled?(:welsh)
-
     available_languages.include?("cy")
   end
 
