@@ -39,7 +39,7 @@ module Forms
     end
 
     def preview_html(declaration_input)
-      return t("guidance.no_guidance_added_html") if declaration_input.declaration_markdown.blank?
+      return t("markdown_editor.no_markdown_content_html") if declaration_input.declaration_markdown.blank?
 
       GovukFormsMarkdown.render(declaration_input.declaration_markdown, allow_headings: false)
     end
