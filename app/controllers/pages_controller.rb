@@ -111,15 +111,19 @@ private
   end
 
   def page
-    @page ||= current_form.pages.find(params[:page_id])
+    @page ||= current_form.pages.find(page_id)
   end
 
   def draft_question
-    @draft_question ||= if params[:page_id].present?
+    @draft_question ||= if page_id.present?
                           setup_draft_question_for_existing_page
                         else
                           DraftQuestion.find_or_initialize_by(form_id: current_form.id, user_id: current_user.id)
                         end
+  end
+
+  def page_id
+    params[:page_id]
   end
 
   def move_params
