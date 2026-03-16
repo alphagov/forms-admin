@@ -19,27 +19,49 @@ RSpec.describe "mou_signatures.rake" do
     let(:date) { Date.iso8601 "2020-01-01T00:00" }
 
     it "aborts when the user is not found" do
-      expect { task.invoke("John Doe", organisation.name, date.iso8601) }
+      expect { task.invoke("John Doe", organisation.name, date.iso8601, "crown") }
         .to raise_error(ActiveRecord::RecordNotFound, /Couldn't find User/)
     end
 
     it "aborts when the organisation is not found" do
-      expect { task.invoke(user.email, "GDS", date.iso8601) }
+      expect { task.invoke(user.email, "GDS", date.iso8601, "crown") }
         .to raise_error(ActiveRecord::RecordNotFound, /Couldn't find Organisation/)
     end
 
     it "aborts when the agreed at date is not a valid date" do
-      expect { task.invoke(user.email, organisation.name, "not a date") }
+      expect { task.invoke(user.email, organisation.name, "not a date", "crown") }
         .to raise_error(Date::Error, /invalid date/)
     end
 
     it "creates an MOU signature" do
       freeze_time do
-        expect { task.invoke(user.email, organisation.name, date.iso8601) }
+        expect { task.invoke(user.email, organisation.name, date.iso8601, "crown") }
           .to change(MouSignature, :count).by(1)
           .and output(/Added MOU signature for User: A Person and Organisation: Government Digital Service signed at: 2020-01-01 00:00/).to_stdout
 
-        expect(MouSignature.last).to have_attributes(user:, organisation:, created_at: date, updated_at: Time.zone.now)
+        expect(MouSignature.last).to have_attributes(
+          user:,
+          organisation:,
+          created_at: date,
+          updated_at: Time.zone.now,
+          agreement_type: "crown",
+        )
+      end
+    end
+
+    it "creates a non-crown MOU signature" do
+      freeze_time do
+        expect { task.invoke(user.email, organisation.name, date.iso8601, "non_crown") }
+          .to change(MouSignature, :count).by(1)
+                                          .and output(/Added MOU signature for User: A Person and Organisation: Government Digital Service signed at: 2020-01-01 00:00/).to_stdout
+
+        expect(MouSignature.last).to have_attributes(
+          user:,
+          organisation:,
+          created_at: date,
+          updated_at: Time.zone.now,
+          agreement_type: "non_crown",
+        )
       end
     end
   end
