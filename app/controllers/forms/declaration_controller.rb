@@ -11,16 +11,25 @@ module Forms
       @declaration_input = DeclarationInput.new(**declaration_input_params)
       @preview_html = preview_html(@declaration_input)
 
-      if @declaration_input.submit
-        success_message = if @declaration_input.mark_complete == "true"
-                            t("banner.success.form.declaration_saved_and_completed")
-                          else
-                            t("banner.success.form.declaration_saved")
-                          end
+      case route_to
+      when :preview
+        if @declaration_input.valid?
+          render :new, status: :ok
+        else
+          render :new, status: :unprocessable_content
+        end
+      when :save_and_continue
+        if @declaration_input.submit
+          success_message = if @declaration_input.mark_complete == "true"
+                              t("banner.success.form.declaration_saved_and_completed")
+                            else
+                              t("banner.success.form.declaration_saved")
+                            end
 
-        redirect_to form_path(@declaration_input.form), success: success_message
-      else
-        render :new
+          redirect_to form_path(@declaration_input.form), success: success_message
+        else
+          render :new, status: :unprocessable_content
+        end
       end
     end
 
@@ -42,6 +51,10 @@ module Forms
       return t("markdown_editor.no_markdown_content_html") if declaration_input.declaration_markdown.blank?
 
       GovukFormsMarkdown.render(declaration_input.declaration_markdown, allow_headings: true)
+    end
+
+    def route_to
+      params[:route_to].to_sym
     end
   end
 end
