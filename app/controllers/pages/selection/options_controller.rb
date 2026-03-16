@@ -1,4 +1,6 @@
 class Pages::Selection::OptionsController < PagesController
+  before_action { redirect_if_unexpected_answer_type("selection") }
+
   def new
     @selection_options_input = Pages::Selection::OptionsInput.new(draft_question:)
     @selection_options_input.assign_form_values

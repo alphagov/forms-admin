@@ -14,24 +14,26 @@ describe Pages::Selection::TypeController, type: :request do
     create :draft_question,
            answer_type: "selection",
            page_id:,
-           user: standard_user,
+           user:,
            form_id: form.id,
            is_optional: false,
            answer_settings:
   end
   let(:page_id) { nil }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:user) { standard_user }
+
+  let(:group) { create(:group, organisation: user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
+    Membership.create!(group_id: group.id, user:, added_by: user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_standard_user
+    draft_question
+    login_as user
   end
 
   describe "#new" do
     before do
-      draft_question
       get selection_type_new_path(form_id: form.id)
     end
 
@@ -59,6 +61,8 @@ describe Pages::Selection::TypeController, type: :request do
         expect(selection_type_input.only_one_option).to eq "true"
       end
     end
+
+    it_behaves_like "an add a new question page that expects a certain answer type", "selection"
   end
 
   describe "#create" do
@@ -77,6 +81,8 @@ describe Pages::Selection::TypeController, type: :request do
       it "redirects the user to the selection options page" do
         expect(response).to redirect_to selection_options_new_path(form.id)
       end
+
+      it_behaves_like "an add a new question page that expects a certain answer type", "selection"
     end
 
     context "when form is invalid" do
@@ -95,7 +101,6 @@ describe Pages::Selection::TypeController, type: :request do
     let(:page_id) { page.id }
 
     before do
-      draft_question
       get selection_type_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -123,10 +128,13 @@ describe Pages::Selection::TypeController, type: :request do
         expect(selection_type_input.only_one_option).to eq "false"
       end
     end
+
+    it_behaves_like "an edit question page that expects a certain answer type", "selection"
   end
 
   describe "#update" do
     let(:page) { create :page, form: }
+    let(:page_id) { page.id }
 
     context "when form is valid and ready to update in the DB" do
       before do
@@ -143,6 +151,8 @@ describe Pages::Selection::TypeController, type: :request do
       it "redirects the user to the selection options page" do
         expect(response).to redirect_to selection_options_edit_path(form.id)
       end
+
+      it_behaves_like "an edit question page that expects a certain answer type", "selection"
     end
 
     context "when form is invalid" do

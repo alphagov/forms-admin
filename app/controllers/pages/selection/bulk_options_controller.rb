@@ -1,4 +1,6 @@
 class Pages::Selection::BulkOptionsController < PagesController
+  before_action { redirect_if_unexpected_answer_type("selection") }
+
   def new
     @bulk_options_input = Pages::Selection::BulkOptionsInput.new(draft_question:)
     @bulk_options_input.assign_form_values
