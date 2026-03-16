@@ -110,6 +110,16 @@ private
     authorize current_form, :can_edit_form?
   end
 
+  def redirect_if_unexpected_answer_type(expected_answer_type)
+    return if draft_question.answer_type == expected_answer_type
+
+    if page_id.present?
+      redirect_to edit_question_path(current_form.id, page_id)
+    else
+      redirect_to Pages::AddOrEditQuestionService.new(form_id: current_form.id).new_or_edit_path_for_answer_type(draft_question.answer_type)
+    end
+  end
+
   def page
     @page ||= current_form.pages.find(page_id)
   end

@@ -3,11 +3,12 @@ require "rails_helper"
 RSpec.describe Pages::AddressSettingsController, type: :request do
   let(:form) { create :form }
   let(:pages) { create_list :page, 5, answer_type: "address", form: }
+  let(:user) { standard_user }
 
   let(:draft_question) do
     create :draft_question_for_new_page,
            answer_type: "address",
-           user: standard_user,
+           user:,
            form_id: form.id,
            answer_settings: {
              input_type: {
@@ -19,12 +20,13 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
 
   let(:address_settings_input) { build :address_settings_input, draft_question: }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:group) { create(:group, organisation: user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
+    Membership.create!(group_id: group.id, user:, added_by: user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_standard_user
+    draft_question
+    login_as user
   end
 
   describe "#new" do
@@ -40,6 +42,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     it "renders the template" do
       expect(response).to have_rendered("pages/address_settings")
     end
+
+    it_behaves_like "an add a new question page that expects a certain answer type", "address"
   end
 
   describe "#create" do
@@ -68,6 +72,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       it "redirects the user to the edit question page" do
         expect(response).to redirect_to new_question_path(form.id)
       end
+
+      it_behaves_like "an add a new question page that expects a certain answer type", "address"
     end
   end
 
@@ -76,7 +82,7 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     let(:draft_question) do
       create :draft_question,
              answer_type: "address",
-             user: standard_user,
+             user:,
              form_id: form.id,
              page_id: page.id,
              answer_settings: {
@@ -88,7 +94,6 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     end
 
     before do
-      draft_question
       get address_settings_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -106,6 +111,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
     it "renders the template" do
       expect(response).to have_rendered("pages/address_settings")
     end
+
+    it_behaves_like "an edit question page that expects a certain answer type", "address"
   end
 
   describe "#update" do
@@ -113,6 +120,13 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       new_page = create(:page, :with_address_settings, form:)
       new_page.answer_settings = { input_type: { uk_address: "false", international_address: "true" } }
       new_page
+    end
+    let(:draft_question) do
+      create :draft_question,
+             answer_type: "address",
+             user:,
+             form_id: form.id,
+             page_id: page.id
     end
 
     context "when form is valid and ready to update in the DB" do
@@ -134,6 +148,8 @@ RSpec.describe Pages::AddressSettingsController, type: :request do
       it "redirects the user to the edit question page" do
         expect(response).to redirect_to edit_question_path(form.id, page.id)
       end
+
+      it_behaves_like "an edit question page that expects a certain answer type", "address"
     end
 
     context "when form is invalid" do

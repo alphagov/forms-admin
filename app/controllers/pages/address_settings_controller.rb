@@ -1,4 +1,6 @@
 class Pages::AddressSettingsController < PagesController
+  before_action { redirect_if_unexpected_answer_type("address") }
+
   def new
     settings = draft_question.answer_settings
     @address_settings_input = Pages::AddressSettingsInput.new(uk_address: settings.dig(:input_type, :uk_address),
