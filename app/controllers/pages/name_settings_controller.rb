@@ -1,4 +1,6 @@
 class Pages::NameSettingsController < PagesController
+  before_action { redirect_if_unexpected_answer_type("name") }
+
   def new
     @name_settings_input = Pages::NameSettingsInput.new(input_type: draft_question.answer_settings[:input_type],
                                                         title_needed: draft_question.answer_settings[:title_needed])
