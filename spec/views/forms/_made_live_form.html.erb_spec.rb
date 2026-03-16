@@ -1,11 +1,11 @@
 require "rails_helper"
 
 describe "forms/_made_live_form.html.erb" do
-  let(:declaration_text) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
+  let(:declaration_markdown) { Faker::Lorem.paragraph(sentence_count: 2, supplemental: true, random_sentences_to_add: 4) }
   let(:past_week_metrics_data) { { weekly_submissions: 125, weekly_starts: 256 } }
   let(:what_happens_next_markdown) { "If you have not received a response within 5 working days, [contact our user support team](https://example.com)." }
   let(:form_metadata) do
-    create(:form, :live, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format:,
+    create(:form, :live, declaration_markdown:, what_happens_next_markdown:, submission_type:, submission_format:,
                          send_daily_submission_batch:)
   end
   let(:form_document) do
@@ -122,11 +122,11 @@ describe "forms/_made_live_form.html.erb" do
 
   it "contains declaration" do
     expect(rendered).to have_css("h3", text: "Declaration")
-    expect(rendered).to have_content(declaration_text)
+    expect(rendered).to have_content(declaration_markdown)
   end
 
   context "with no declaration set" do
-    let(:declaration_text) { nil }
+    let(:declaration_markdown) { nil }
 
     it "does not include declaration" do
       expect(rendered).not_to have_css("h3", text: "Declaration")
@@ -422,20 +422,20 @@ describe "forms/_made_live_form.html.erb" do
     end
 
     context "when the form has a declaration" do
-      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format: }
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_markdown:, what_happens_next_markdown:, submission_type:, submission_format: }
 
       it "contains a table displaying the declaration text in each language" do
         expect(rendered).to have_css(".govuk-summary-card__title", text: "Declaration")
         expect(rendered).to have_css("th", text: "English content")
-        expect(rendered).to have_css("td", text: form_document.declaration_text)
+        expect(rendered).to have_css("td", text: form_document.declaration_markdown)
         expect(rendered).to have_css("th", text: "Welsh content")
-        expect(rendered).to have_css("td", text: welsh_form_document.declaration_text)
+        expect(rendered).to have_css("td", text: welsh_form_document.declaration_markdown)
       end
     end
 
     context "when the form has a GOV.UK Pay payment link" do
       let(:payment_url) { "https://www.gov.uk/payments/your-payment-link" }
-      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_text:, what_happens_next_markdown:, submission_type:, submission_format:, payment_url: }
+      let(:form_metadata) { create :form, :live, :with_welsh_translation, declaration_markdown:, what_happens_next_markdown:, submission_type:, submission_format:, payment_url: }
 
       it "contains a table displaying the payment link in each language" do
         expect(rendered).to have_css(".govuk-summary-card__title", text: "GOV.UK Pay payment link")

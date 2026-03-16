@@ -5,11 +5,11 @@ en:
       models:
         forms/declaration_input:
           attributes:
-            declaration_text:
+            declaration_markdown:
               too_long: The declaration cannot be longer than 2,000 characters
             mark_complete:
               blank: You must choose an option
   helpers:
     label:
       forms_declaration_input:
-        declaration_text: Enter a declaration for people to agree to (optional)
+        declaration_markdown: Enter a declaration for people to agree to (optional)

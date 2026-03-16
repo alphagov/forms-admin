@@ -29,7 +29,7 @@ describe "forms/welsh_translation/new.html.erb" do
       support_phone: "English support phone",
       support_url: "https://www.gov.uk/support",
       support_url_text: "Support URL text",
-      declaration_text: "Declaration text", # no welsh version to test nil
+      declaration_markdown: "Declaration markdown", # no welsh version to test nil
       pages: [page, another_page],
     }
     build(:form, default_attributes.merge(attributes))
@@ -70,7 +70,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders english text for 'Declaration'" do
-      expect(rendered).to have_text("Declaration text")
+      expect(rendered).to have_text("Declaration markdown")
     end
 
     it "renders a text area for 'What happens next'" do
@@ -141,8 +141,8 @@ describe "forms/welsh_translation/new.html.erb" do
       end
     end
 
-    context "when the form does not have a declaration text" do
-      let(:form) { build_form(declaration_text: nil) }
+    context "when the form does not have a declaration markdown" do
+      let(:form) { build_form(declaration_markdown: nil) }
 
       it "does not render a declaration text area" do
         expect(rendered).not_to have_field("Declaration", type: "textarea")

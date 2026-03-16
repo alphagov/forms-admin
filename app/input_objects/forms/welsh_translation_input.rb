@@ -12,7 +12,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   attribute :support_phone_cy
   attribute :support_url_cy
   attribute :support_url_text_cy
-  attribute :declaration_text_cy
+  attribute :declaration_markdown_cy
   attribute :what_happens_next_markdown_cy
   attribute :payment_url_cy
 
@@ -35,8 +35,8 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   validates :support_url_text_cy, presence: true, if: -> { marked_complete? && form_has_support_url? }
   validates :support_url_text_cy, length: { maximum: 120 }, if: -> { support_url_text_cy.present? }
 
-  validates :declaration_text_cy, presence: true, if: -> { marked_complete? && form_has_declaration? }
-  validates :declaration_text_cy, length: { maximum: 2000 }, if: -> { declaration_text_cy.present? }
+  validates :declaration_markdown_cy, presence: true, if: -> { marked_complete? && form_has_declaration? }
+  validates :declaration_markdown_cy, length: { maximum: 2000 }, if: -> { declaration_markdown_cy.present? }
 
   validates :what_happens_next_markdown_cy, presence: true, if: -> { marked_complete? && form.what_happens_next_markdown.present? }
   validates :what_happens_next_markdown_cy, markdown: { allow_headings: false }, if: -> { what_happens_next_markdown_cy.present? }
@@ -74,8 +74,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     return false if invalid?
 
     form.name_cy = name_cy
-    form.declaration_text_cy = form_has_declaration? ? declaration_text_cy : nil
-    form.declaration_markdown_cy = form_has_declaration? ? MarkdownConversionService.new(form.declaration_text_cy).to_markdown : nil
+    form.declaration_markdown_cy = form_has_declaration? ? declaration_markdown_cy : nil
     form.payment_url_cy = form_has_payment_url? ? payment_url_cy : nil
     form.privacy_policy_url_cy = privacy_policy_url_cy
     form.support_email_cy = form_has_support_email? ? support_email_cy : nil
@@ -111,7 +110,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     self.support_phone_cy = form.support_phone_cy
     self.support_url_cy = form.support_url_cy
     self.support_url_text_cy = form.support_url_text_cy
-    self.declaration_text_cy = form.declaration_text_cy
+    self.declaration_markdown_cy = form.declaration_markdown_cy
     self.what_happens_next_markdown_cy = form.what_happens_next_markdown_cy
     self.payment_url_cy = form.payment_url_cy
 
@@ -125,7 +124,7 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
   end
 
   def form_has_declaration?
-    form.declaration_text.present?
+    form.declaration_markdown.present?
   end
 
   def form_has_payment_url?

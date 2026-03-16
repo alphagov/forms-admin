@@ -22,7 +22,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       mark_complete:,
       name_cy: "New Welsh name",
       what_happens_next_markdown_cy: "New Welsh what happens next",
-      declaration_text_cy: "New Welsh declaration",
+      declaration_markdown_cy: "New Welsh declaration",
       support_email_cy: "new-welsh-support@example.gov.uk",
       support_phone_cy: "0800 123 4567",
       support_url_cy: "https://www.gov.uk/new-welsh-support",
@@ -39,8 +39,8 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       what_happens_next_markdown: "English what happens next",
       welsh_completed: false,
       what_happens_next_markdown_cy: "Welsh what happens next",
-      declaration_text: "English declaration",
-      declaration_text_cy: "Welsh declaration",
+      declaration_markdown: "English declaration",
+      declaration_markdown_cy: "Welsh declaration",
       support_email: "english-support@example.gov.uk",
       support_email_cy: "welsh-support@example.gov.uk",
       support_phone: "01234 987654",
@@ -328,41 +328,41 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the Welsh declaration text is present" do
-        context "when the Welsh declaration text is 2000 characters or fewer" do
-          let(:new_input_data) { super().merge(declaration_text_cy: "By submitting this form you’re confirming that, to the best of your knowledge, the answers you’re providing are correct.".ljust(2000, "x")) }
+      context "when the Welsh declaration markdown is present" do
+        context "when the Welsh declaration markdown is 2000 characters or fewer" do
+          let(:new_input_data) { super().merge(declaration_markdown_cy: "By submitting this form you’re confirming that, to the best of your knowledge, the answers you’re providing are correct.".ljust(2000, "x")) }
 
           it "is valid" do
             expect(welsh_translation_input).to be_valid
           end
         end
 
-        context "when the Welsh declaration text is 2001 characters or more" do
-          let(:new_input_data) { super().merge(declaration_text_cy: "By submitting this form you’re confirming that, to the best of your knowledge, the answers you’re providing are correct.".ljust(2001, "x")) }
+        context "when the Welsh declaration markdown is 2001 characters or more" do
+          let(:new_input_data) { super().merge(declaration_markdown_cy: "By submitting this form you’re confirming that, to the best of your knowledge, the answers you’re providing are correct.".ljust(2001, "x")) }
 
           it "is invalid" do
             expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:declaration_text_cy)).to include "Declaration text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.declaration_text_cy.too_long')}"
+            expect(welsh_translation_input.errors.full_messages_for(:declaration_markdown_cy)).to include "Declaration markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.declaration_markdown_cy.too_long')}"
           end
         end
       end
 
-      context "when the Welsh declaration text is missing" do
-        let(:new_input_data) { super().merge(declaration_text_cy: nil) }
+      context "when the Welsh declaration markdown is missing" do
+        let(:new_input_data) { super().merge(declaration_markdown_cy: nil) }
 
         context "when the form has declaration text in English" do
           it "is not valid" do
             expect(welsh_translation_input).not_to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:declaration_text_cy)).to include "Declaration text cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.declaration_text_cy.blank')}"
+            expect(welsh_translation_input.errors.full_messages_for(:declaration_markdown_cy)).to include "Declaration markdown cy #{I18n.t('activemodel.errors.models.forms/welsh_translation_input.attributes.declaration_markdown_cy.blank')}"
           end
         end
 
         context "when the form does not have declaration text in English" do
-          let(:form) { build_form(declaration_text: nil) }
+          let(:form) { build_form(declaration_markdown: nil) }
 
           it "is valid" do
             expect(welsh_translation_input).to be_valid
-            expect(welsh_translation_input.errors.full_messages_for(:declaration_text_cy)).to be_empty
+            expect(welsh_translation_input.errors.full_messages_for(:declaration_markdown_cy)).to be_empty
           end
         end
       end
@@ -491,11 +491,11 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       end
 
       context "when the Welsh declaration text is missing" do
-        let(:new_input_data) { super().merge(declaration_text_cy: nil) }
+        let(:new_input_data) { super().merge(declaration_markdown_cy: nil) }
 
         it "is valid" do
           expect(welsh_translation_input).to be_valid
-          expect(welsh_translation_input.errors.full_messages_for(:declaration_text_cy)).to be_empty
+          expect(welsh_translation_input.errors.full_messages_for(:declaration_markdown_cy)).to be_empty
         end
       end
 
@@ -554,7 +554,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
 
         expect(form.welsh_completed).to be true
         expect(form.what_happens_next_markdown_cy).to eq(new_input_data[:what_happens_next_markdown_cy])
-        expect(form.declaration_text_cy).to eq(new_input_data[:declaration_text_cy])
+        expect(form.declaration_markdown_cy).to eq(new_input_data[:declaration_markdown_cy])
         expect(form.support_email_cy).to eq(new_input_data[:support_email_cy])
         expect(form.support_phone_cy).to eq(new_input_data[:support_phone_cy])
         expect(form.support_url_cy).to eq(new_input_data[:support_url_cy])
@@ -574,12 +574,12 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         expect(form.available_languages).to include("cy")
       end
 
-      context "when the form has no declaration text" do
-        let(:form) { build_form(declaration_text: nil) }
+      context "when the form has no declaration markdown" do
+        let(:form) { build_form(declaration_markdown: nil) }
 
         it "clears the Welsh declaration text" do
           welsh_translation_input.submit
-          expect(form.declaration_text_cy).to be_nil
+          expect(form.declaration_markdown_cy).to be_nil
         end
       end
 
@@ -624,15 +624,6 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
         end
       end
 
-      context "when the form has declaration text" do
-        let(:new_input_data) { super().merge(declaration_text_cy: "<p>This is the Welsh declaration</p>") }
-
-        it "converts the declaration text to markdown" do
-          welsh_translation_input.submit
-          expect(form.declaration_markdown_cy).to eq("This is the Welsh declaration\n\n")
-        end
-      end
-
       context "when the form includes page translation objects" do
         let(:page_translation) { Forms::WelshPageTranslationInput.new(page:, question_text_cy: "Ydych chi'n adnewyddu trwydded?", hint_text_cy: "Dewiswch 'Ydw' os oes gennych drwydded ddilys eisoes.", page_heading_cy: "Trwyddedu", guidance_markdown_cy: "Mae'r rhan hon o'r ffurflen yn ymwneud â thrwyddedu.") }
         let(:another_page_translation) { Forms::WelshPageTranslationInput.new(page: another_page, question_text_cy: "Ydych chi'n adnewyddu trwydded?") }
@@ -656,7 +647,7 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       welsh_translation_input.assign_form_values
 
       expect(welsh_translation_input.what_happens_next_markdown_cy).to eq(form.what_happens_next_markdown_cy)
-      expect(welsh_translation_input.declaration_text_cy).to eq(form.declaration_text_cy)
+      expect(welsh_translation_input.declaration_markdown_cy).to eq(form.declaration_markdown_cy)
       expect(welsh_translation_input.support_email_cy).to eq(form.support_email_cy)
       expect(welsh_translation_input.support_phone_cy).to eq(form.support_phone_cy)
       expect(welsh_translation_input.support_url_cy).to eq(form.support_url_cy)
