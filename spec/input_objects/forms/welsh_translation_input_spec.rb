@@ -56,6 +56,30 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
     build(:form, default_attributes.merge(attributes))
   end
 
+  def build_empty_welsh_form
+    empty_attributes = {
+      id: 1,
+      name: "Apply for a juggling licence",
+      what_happens_next_markdown: "English what happens next",
+      welsh_completed: false,
+      what_happens_next_markdown_cy: "",
+      declaration_text: "English declaration",
+      declaration_text_cy: "",
+      support_email: "english-support@example.gov.uk",
+      support_email_cy: "",
+      support_phone: "01234 987654",
+      support_phone_cy: "",
+      support_url_cy: "",
+      support_url: "https://www.gov.uk/english-support",
+      support_url_text_cy: "",
+      support_url_text: "English Support",
+      privacy_policy_url_cy: "",
+      payment_url: "https://www.gov.uk/english-payment",
+      payment_url_cy: "",
+    }
+    build(:form, empty_attributes)
+  end
+
   describe "validations" do
     it "is not valid if mark complete is blank" do
       form = OpenStruct.new(welsh_completed: false, name: "Apply for a juggling licence")
@@ -655,6 +679,25 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       expect(welsh_translation_input.privacy_policy_url_cy).to eq(form.privacy_policy_url_cy)
       expect(welsh_translation_input.payment_url_cy).to eq(form.payment_url_cy)
       expect(welsh_translation_input.mark_complete).to eq(form.welsh_completed)
+    end
+  end
+
+  describe "#all_fields_empty?" do
+    context "when the welsh translation fields are not empty" do
+      let(:form) { build_form }
+
+      it "returns false" do
+        expect(welsh_translation_input.all_fields_empty?).to be false
+      end
+    end
+
+    context "when the welsh translation fields are all empty" do
+      let(:form) { build_empty_welsh_form }
+
+      it "returns true" do
+        welsh_translation_input = described_class.new(form:)
+        expect(welsh_translation_input.all_fields_empty?).to be true
+      end
     end
   end
 end
