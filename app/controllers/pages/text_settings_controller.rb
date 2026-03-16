@@ -1,4 +1,6 @@
 class Pages::TextSettingsController < PagesController
+  before_action { redirect_if_unexpected_answer_type("text") }
+
   def new
     @text_settings_input = Pages::TextSettingsInput.new(input_type: draft_question.answer_settings[:input_type])
     @text_settings_path = text_settings_create_path(current_form.id)
