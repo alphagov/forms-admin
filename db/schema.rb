@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_04_145907) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_16_122813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -185,7 +185,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_04_145907) do
   end
 
   create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|
-    t.string "agreement_type", default: "crown", null: false
+    t.string "agreement_type", null: false
     t.datetime "created_at", null: false
     t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
     t.datetime "updated_at", null: false

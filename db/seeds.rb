@@ -28,7 +28,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
                                 research_contact_status: :consented,
                                 user_research_opted_in_at: Time.zone.now })
 
-  MouSignature.create! user: default_user, organisation: gds
+  MouSignature.create! user: default_user, organisation: gds, agreement_type: "crown"
 
   # create extra organisations
   test_org = Organisation.create! slug: "test-org", name: "Test Org", abbreviation: "TO"
