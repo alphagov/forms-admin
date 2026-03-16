@@ -17,24 +17,15 @@ class FormTaskListService
   end
 
   def all_sections
-    sections = [
+    [
       create_form_section(section_number: 1),
       payment_link_subsection,
       how_you_get_completed_forms_section(section_number: 2),
       how_you_get_completed_forms_optional_subsection,
       privacy_and_contact_details_section(section_number: 3),
+      translations_section(section_number: 4),
+      make_form_live_section(section_number: 5),
     ].compact
-
-    last_sections = [make_form_live_section(section_number: 4)]
-
-    if FeatureService.new(group: @form.group).enabled?(:welsh)
-      last_sections = [
-        translations_section(section_number: 4),
-        make_form_live_section(section_number: 5),
-      ]
-    end
-
-    sections + last_sections
   end
 
 private

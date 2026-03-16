@@ -2,8 +2,6 @@
 features:
   exit_pages:
     enabled_by_group: true
-  welsh:
-    enabled_by_group: true
   org_admin_alerts_enabled: false
 
 forms_api:

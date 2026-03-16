@@ -980,7 +980,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "#all_task_statuses" do
-    let(:group) { create :group, :with_welsh_enabled }
+    let(:group) { create :group }
     let(:completed_form) { build :form, :live, :with_group, group: }
 
     it "returns a hash with each of the task statuses" do
@@ -1264,29 +1264,19 @@ RSpec.describe Form, type: :model do
       GroupForm.create!(group:, form:)
     end
 
-    context "when the Welsh feature is not enabled for the form's group" do
+    context "when the available_languages array does not include Welsh" do
+      let(:form) { create :form, :ready_for_live, available_languages: %w[en] }
+
       it "returns false" do
         expect(form.has_welsh_translation?).to be false
       end
     end
 
-    context "when the Welsh feature is enabled for the form's group" do
-      let(:group) { create :group, :with_welsh_enabled }
+    context "when the available_languages field does includes Welsh" do
+      let(:form) { create :form, :ready_for_live, available_languages: %w[en cy] }
 
-      context "when the available_languages array does not include Welsh" do
-        let(:form) { create :form, :ready_for_live, available_languages: %w[en] }
-
-        it "returns false" do
-          expect(form.has_welsh_translation?).to be false
-        end
-      end
-
-      context "when the available_languages field does includes Welsh" do
-        let(:form) { create :form, :ready_for_live, available_languages: %w[en cy] }
-
-        it "returns true" do
-          expect(form.has_welsh_translation?).to be true
-        end
+      it "returns true" do
+        expect(form.has_welsh_translation?).to be true
       end
     end
   end

@@ -43,39 +43,6 @@ namespace :groups do
       raise ActiveRecord::Rollback
     end
   end
-
-  desc "List enabled features for groups"
-  task features: :environment do
-    feature_flags = %i[welsh_enabled]
-    query = feature_flags.map { "#{it} IS TRUE" }.join(" OR ")
-
-    Group.where(query).find_each do |group|
-      puts({
-        id: group.external_id,
-        name: group.name,
-        organisation: group.organisation.name,
-        **group.slice(feature_flags),
-      }.to_json)
-    end
-  end
-
-  desc "Enable welsh feature for group"
-  task :enable_welsh, %i[group_id] => :environment do |_, args|
-    usage_message = "usage: rake groups:enable_welsh[<group_external_id>]".freeze
-    abort usage_message if args[:group_id].blank?
-
-    Group.find_by(external_id: args[:group_id]).update!(welsh_enabled: true)
-    Rails.logger.info("Updated welsh_enabled to true for group #{args[:group_id]}")
-  end
-
-  desc "Disable Welsh feature for group"
-  task :disable_welsh, %i[group_id] => :environment do |_, args|
-    usage_message = "usage: rake groups:disable_welsh[<group_external_id>]".freeze
-    abort usage_message if args[:group_id].blank?
-
-    Group.find_by(external_id: args[:group_id]).update!(welsh_enabled: false)
-    Rails.logger.info("Updated welsh_enabled to false for group #{args[:group_id]}")
-  end
 end
 
 def run_task(task_name, args, rollback:)
