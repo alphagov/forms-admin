@@ -8,6 +8,11 @@ class Forms::DeleteWelshTranslationInput < DeleteConfirmationInput
     true
   end
 
+  def submit_without_confirm
+    reset_translations
+    true
+  end
+
 private
 
   def reset_translations

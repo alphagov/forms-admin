@@ -94,6 +94,23 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       end
     end
 
+    context "when 'Yes' is selected and all fields are empty" do
+      let(:page_translations_attributes) { { "0" => { "id" => form.pages.first.id, question_text_cy: "", condition_translations_attributes: } } }
+      let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "", privacy_policy_url_cy: "", page_translations_attributes: } } }
+
+      it "deletes the form" do
+        post(welsh_translation_create_path(id), params:)
+        expect(form.pages.first.reload.question_text_cy).to be_nil
+        expect(condition.reload.exit_page_heading_cy).to be_nil
+      end
+
+      it "redirects to the form with a success banner" do
+        post(welsh_translation_create_path(id), params:)
+        expect(response).to redirect_to(form_path(id))
+        expect(flash[:success]).to eq(I18n.t("forms.welsh_translation.destroy.success"))
+      end
+    end
+
     context "when the user is not authorized" do
       let(:current_user) { build :user }
 

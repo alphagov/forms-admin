@@ -13,7 +13,13 @@ module Forms
       @welsh_translation_input = WelshTranslationInput.new(welsh_translation_params)
       @table_presenter = Forms::TranslationTablePresenter.new
 
-      if @welsh_translation_input.submit
+      if @welsh_translation_input.all_fields_empty?
+        # if all fields are empty we delete the welsh translation
+        @delete_welsh_translation_input = Forms::DeleteWelshTranslationInput.new(form: current_form)
+        if @delete_welsh_translation_input.submit_without_confirm
+          redirect_to form_path(@welsh_translation_input.form), success: t("forms.welsh_translation.destroy.success")
+        end
+      elsif @welsh_translation_input.submit
         success_message = if @welsh_translation_input.mark_complete == "true"
                             t("banner.success.form.welsh_translation_saved_and_completed")
                           else
