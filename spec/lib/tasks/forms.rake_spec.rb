@@ -606,51 +606,29 @@ RSpec.describe "forms.rake" do
     end
   end
 
-  describe "add_send_daily_submission_batch_to_form_documents" do
+  describe "add_send_weekly_submission_batch_to_form_documents" do
     subject(:task) do
-      Rake::Task["forms:add_send_daily_submission_batch_to_form_documents"]
+      Rake::Task["forms:add_send_weekly_submission_batch_to_form_documents"]
         .tap(&:reenable)
     end
 
-    let!(:form_with_send_daily_submission_batch) { create :form, send_daily_submission_batch: true }
-    let(:form_without_send_daily_submission_batch) { create :form }
+    let!(:form_with_send_weekly_submission_batch) { create :form, send_weekly_submission_batch: true }
+    let(:form_without_send_weekly_submission_batch) { create :form }
 
     before do
-      form_without_send_daily_submission_batch.draft_form_document.update(content: form_without_send_daily_submission_batch.draft_form_document.content.except("send_daily_submission_batch"))
+      form_without_send_weekly_submission_batch.draft_form_document.update(content: form_without_send_weekly_submission_batch.draft_form_document.content.except("send_weekly_submission_batch"))
     end
 
-    it "does not change forms that already have send_daily_submission_batch set" do
+    it "does not change forms that already have send_weekly_submission_batch set" do
       expect {
         task.invoke
-      }.not_to(change { form_with_send_daily_submission_batch.reload.draft_form_document.content["send_daily_submission_batch"] })
+      }.not_to(change { form_with_send_weekly_submission_batch.reload.draft_form_document.content["send_weekly_submission_batch"] })
     end
 
-    it "sets send_daily_submission_batch to false for forms that do not have it set" do
+    it "sets send_weekly_submission_batch to false for forms that do not have it set" do
       expect {
         task.invoke
-      }.to(change { form_without_send_daily_submission_batch.reload.draft_form_document.content["send_daily_submission_batch"] }.from(nil).to(false))
-    end
-  end
-
-  describe "toggle_send_daily_submission_batch" do
-    subject(:task) do
-      Rake::Task["forms:toggle_send_daily_submission_batch"]
-        .tap(&:reenable)
-    end
-
-    let!(:form) { create :form, send_daily_submission_batch: false }
-
-    it "enables send_daily_submission_batch when currently disabled" do
-      expect {
-        task.invoke(form.id)
-      }.to change { form.reload.send_daily_submission_batch }.from(false).to(true)
-    end
-
-    it "disables send_daily_submission_batch when currently enabled" do
-      form.update!(send_daily_submission_batch: true)
-      expect {
-        task.invoke(form.id)
-      }.to change { form.reload.send_daily_submission_batch }.from(true).to(false)
+      }.to change { form_without_send_weekly_submission_batch.reload.draft_form_document.content["send_weekly_submission_batch"] }.from(nil).to(false)
     end
   end
 
