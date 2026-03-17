@@ -184,6 +184,25 @@ namespace :forms do
     Rails.logger.info "data_migrations:add_send_daily_submission_batch_to_form_documents finished"
   end
 
+  desc "Updates form documents to add send_weekly_submission_batch attribute"
+  task add_send_weekly_submission_batch_to_form_documents: :environment do
+    # find all form documents that don't have a batch_submissions attribute
+    form_documents_without_send_weekly_submission_batch = FormDocument.where("NOT jsonb_path_exists(content, '$.send_weekly_submission_batch')")
+    Rails.logger.info "data_migrations:add_send_weekly_submission_batch_to_form_documents will update #{form_documents_without_send_weekly_submission_batch.count} form documents"
+
+    form_documents_without_send_weekly_submission_batch.find_each do |form_document|
+      form_document.content["send_weekly_submission_batch"] = false
+
+      begin
+        form_document.save!
+      rescue StandardError => e
+        Rails.logger.info "data_migrations:add_send_weekly_submission_batch_to_form_documents Failed to update form #{form_document.id}: #{e.message}"
+      end
+    end
+
+    Rails.logger.info "data_migrations:add_send_weekly_submission_batch_to_form_documents finished"
+  end
+
   desc "Toggle send_daily_submission_batch for a form"
   task :toggle_send_daily_submission_batch, %i[form_id] => :environment do |_, args|
     usage_message = "usage: rake forms:toggle_send_daily_submission_batch[<form_id>]".freeze

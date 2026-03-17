@@ -19,6 +19,7 @@ FactoryBot.define do
     payment_url { nil }
     external_id { nil }
     send_daily_submission_batch { false }
+    send_weekly_submission_batch { false }
 
     trait :with_group do
       transient do
