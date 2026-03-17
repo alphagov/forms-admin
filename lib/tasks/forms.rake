@@ -165,25 +165,6 @@ namespace :forms do
     Rails.logger.info "data_migrations:check_selection_options finished"
   end
 
-  desc "Updates form documents to add batch_submissions attribute"
-  task add_send_daily_submission_batch_to_form_documents: :environment do
-    # find all form documents that don't have a batch_submissions attribute
-    form_documents_without_send_daily_submission_batch = FormDocument.where("NOT jsonb_path_exists(content, '$.send_daily_submission_batch')")
-    Rails.logger.info "data_migrations:add_batch_submissions_to_form_documents will update #{form_documents_without_send_daily_submission_batch.count} form_documents"
-
-    form_documents_without_send_daily_submission_batch.find_each do |form_document|
-      form_document.content["send_daily_submission_batch"] = false
-
-      begin
-        form_document.save!
-      rescue StandardError => e
-        Rails.logger.info "data_migrations:add_send_daily_submission_batch_to_form_documents Failed to update form #{form_document.id}: #{e.message}"
-      end
-    end
-
-    Rails.logger.info "data_migrations:add_send_daily_submission_batch_to_form_documents finished"
-  end
-
   desc "Updates form documents to add send_weekly_submission_batch attribute"
   task add_send_weekly_submission_batch_to_form_documents: :environment do
     # find all form documents that don't have a batch_submissions attribute
@@ -201,18 +182,6 @@ namespace :forms do
     end
 
     Rails.logger.info "data_migrations:add_send_weekly_submission_batch_to_form_documents finished"
-  end
-
-  desc "Toggle send_daily_submission_batch for a form"
-  task :toggle_send_daily_submission_batch, %i[form_id] => :environment do |_, args|
-    usage_message = "usage: rake forms:toggle_send_daily_submission_batch[<form_id>]".freeze
-    abort usage_message if args[:form_id].blank?
-
-    form = Form.find(args[:form_id])
-    form.update!(send_daily_submission_batch: !form.send_daily_submission_batch)
-
-    Rails.logger.info "send_daily_submission_batch set to #{form.send_daily_submission_batch} for #{fmt_form(form)}."
-    Rails.logger.info "You will need to make the changes live for the change to take effect for live submissions." if form.is_live?
   end
 
   desc "Add declation_markdown based on declation_text"
