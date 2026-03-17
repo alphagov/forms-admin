@@ -2,7 +2,9 @@ class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewCompon
   include FactoryBot::Syntax::Methods
 
   def default
-    render(PageListComponent::ErrorSummary::View.new(pages: []))
+    form = build(:form, id: 1, pages: [])
+
+    render(PageListComponent::ErrorSummary::View.new(form))
   end
 
   def error_component_without_errors
@@ -23,7 +25,7 @@ class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewCompon
       condition.form = form
     end
 
-    render(PageListComponent::ErrorSummary::View.new(pages:))
+    render(PageListComponent::ErrorSummary::View.new(form))
   end
 
   def error_component_with_errors
@@ -45,6 +47,6 @@ class PageListComponent::ErrorSummary::ErrorSummaryComponentPreview < ViewCompon
       condition.form = form
     end
 
-    render(PageListComponent::ErrorSummary::View.new(pages:))
+    render(PageListComponent::ErrorSummary::View.new(form))
   end
 end
