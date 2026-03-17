@@ -5,6 +5,13 @@ describe "Previewing components", type: :feature do
     login_as_standard_user
   end
 
+  it "renders component previews" do
+    visit "/preview/"
+
+    expect(page).to have_text "Component"
+    expect(page).to have_selector "main li > a"
+  end
+
   it "checks all component previews for axe errors" do
     visit "/preview/"
     links = page.all("main li > a").map { |a| a["href"] }
