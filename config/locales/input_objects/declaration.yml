@@ -7,6 +7,7 @@ en:
           attributes:
             declaration_markdown:
               too_long: The declaration cannot be longer than 2,000 characters
+              unsupported_markdown_syntax: The declaration can only contain formatting for links, subheadings (##), bulleted lists (*), or numbered lists (1.)
             mark_complete:
               blank: You must choose an option
   helpers:

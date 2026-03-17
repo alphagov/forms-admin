@@ -4,6 +4,7 @@ class Forms::DeclarationInput < Forms::MarkCompleteInput
   attr_accessor :declaration_markdown
 
   validates :declaration_markdown, length: { maximum: 2000 }
+  validates :declaration_markdown, markdown: { allow_headings: true }
 
   before_validation :strip_carriage_returns_from_input
 
