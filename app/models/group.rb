@@ -1,6 +1,4 @@
 class Group < ApplicationRecord
-  self.ignored_columns += [:welsh_enabled]
-
   belongs_to :organisation
 
   belongs_to :creator, class_name: "User", optional: true
