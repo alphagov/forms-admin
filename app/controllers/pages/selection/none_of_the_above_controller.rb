@@ -1,6 +1,8 @@
 class Pages::Selection::NoneOfTheAboveController < PagesController
   include PagesHelper
 
+  before_action { redirect_if_unexpected_answer_type("selection") }
+
   def new
     @none_of_the_above_input = input_object_from_draft_question
     @none_of_the_above_path = selection_none_of_the_above_create_path(current_form.id)

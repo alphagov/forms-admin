@@ -4,12 +4,13 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   let(:form) { create :form }
   let(:pages) { create_list :page, 5, form: }
   let(:page) { pages.first }
+  let(:user) { standard_user }
 
   let(:draft_question) do
     create :draft_question,
            answer_type: "selection",
            page_id:,
-           user: standard_user,
+           user:,
            form_id: form.id,
            is_optional: false,
            answer_settings: { selection_options: [{ name: "" }, { name: "" }],
@@ -17,17 +18,17 @@ describe Pages::Selection::BulkOptionsController, type: :request do
   end
   let(:page_id) { nil }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:group) { create(:group, organisation: user.organisation) }
 
   before do
-    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
+    Membership.create!(group_id: group.id, user:, added_by: user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_standard_user
+    draft_question
+    login_as user
   end
 
   describe "#new" do
     before do
-      draft_question
       get selection_bulk_options_new_path(form_id: form.id)
     end
 
@@ -50,7 +51,7 @@ describe Pages::Selection::BulkOptionsController, type: :request do
         create :draft_question,
                answer_type: "selection",
                page_id:,
-               user: standard_user,
+               user:,
                form_id: form.id,
                is_optional: true,
                answer_settings: { selection_options: [{ name: "Option 1" }, { name: "Option 2" }],
@@ -64,11 +65,12 @@ describe Pages::Selection::BulkOptionsController, type: :request do
         expect(settings_form.include_none_of_the_above).to eq "yes"
       end
     end
+
+    it_behaves_like "an add a new question page that expects a certain answer type", "selection"
   end
 
   describe "#create" do
     before do
-      draft_question
       post selection_bulk_options_create_path(form_id: form.id, params:)
     end
 
@@ -106,6 +108,8 @@ describe Pages::Selection::BulkOptionsController, type: :request do
           expect(response).to redirect_to selection_none_of_the_above_new_path(form.id)
         end
       end
+
+      it_behaves_like "an add a new question page that expects a certain answer type", "selection"
     end
 
     context "when form is invalid" do
@@ -128,7 +132,6 @@ describe Pages::Selection::BulkOptionsController, type: :request do
     let(:page_id) { page.id }
 
     before do
-      draft_question
       get selection_bulk_options_edit_path(form_id: page.form_id, page_id: page.id)
     end
 
@@ -152,6 +155,8 @@ describe Pages::Selection::BulkOptionsController, type: :request do
     it "renders the template" do
       expect(response).to have_rendered("pages/selection/bulk_options")
     end
+
+    it_behaves_like "an edit question page that expects a certain answer type", "selection"
   end
 
   describe "#update" do
@@ -203,6 +208,8 @@ describe Pages::Selection::BulkOptionsController, type: :request do
           expect(response).to redirect_to selection_none_of_the_above_edit_path(form.id, page.id)
         end
       end
+
+      it_behaves_like "an edit question page that expects a certain answer type", "selection"
     end
 
     context "when form is invalid" do

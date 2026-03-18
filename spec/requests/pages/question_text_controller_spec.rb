@@ -3,10 +3,20 @@ require "rails_helper"
 RSpec.describe Pages::QuestionTextController, type: :request do
   let(:form) { create :form }
   let(:pages) { build_list :page, 5, form_id: form.id }
+  let(:user) { standard_user }
 
   let(:question_text_input) { build :question_text_input, form: }
 
-  let(:group) { create(:group, organisation: standard_user.organisation) }
+  let(:group) { create(:group, organisation: user.organisation) }
+
+  let(:draft_question) do
+    create :draft_question,
+           answer_type: "selection",
+           user:,
+           form_id: form.id,
+           page_id: page_id
+  end
+  let(:page_id) { nil }
 
   let(:output) { StringIO.new }
   let(:logger) { ActiveSupport::Logger.new(output) }
@@ -14,9 +24,10 @@ RSpec.describe Pages::QuestionTextController, type: :request do
   before do
     allow(Lograge).to receive(:logger).and_return(logger)
 
-    Membership.create!(group_id: group.id, user: standard_user, added_by: standard_user)
+    Membership.create!(group_id: group.id, user:, added_by: user)
     GroupForm.create!(form_id: form.id, group_id: group.id)
-    login_as_standard_user
+    draft_question
+    login_as user
   end
 
   describe "#new" do
@@ -32,6 +43,8 @@ RSpec.describe Pages::QuestionTextController, type: :request do
     it "renders the template" do
       expect(response).to have_rendered("pages/question_text")
     end
+
+    it_behaves_like "an add a new question page that expects a certain answer type", "selection"
   end
 
   describe "#create" do
@@ -70,6 +83,8 @@ RSpec.describe Pages::QuestionTextController, type: :request do
       it "does not add validation_errors logging attribute" do
         expect(log_lines[0].keys).not_to include("validation_errors")
       end
+
+      it_behaves_like "an add a new question page that expects a certain answer type", "selection"
     end
   end
 

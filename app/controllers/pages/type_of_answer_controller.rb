@@ -9,7 +9,7 @@ class Pages::TypeOfAnswerController < PagesController
     @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type_form_params)
 
     if @type_of_answer_input.submit
-      redirect_to next_page_path(current_form.id, @type_of_answer_input.answer_type, :create)
+      redirect_to next_page_path(@type_of_answer_input.answer_type)
     else
       @type_of_answer_path = type_of_answer_create_path(current_form.id)
       render :type_of_answer, locals: { current_form: }
@@ -26,7 +26,7 @@ class Pages::TypeOfAnswerController < PagesController
     @type_of_answer_input = Pages::TypeOfAnswerInput.new(answer_type_form_params)
 
     if @type_of_answer_input.submit
-      redirect_to next_page_path(current_form.id, @type_of_answer_input.answer_type, :update)
+      redirect_to next_page_path(@type_of_answer_input.answer_type)
     else
       @type_of_answer_path = type_of_answer_update_path(current_form.id)
       render :type_of_answer
@@ -35,54 +35,15 @@ class Pages::TypeOfAnswerController < PagesController
 
 private
 
-  def selection_path(form_id, action)
-    return question_text_new_path(form_id) if action == :create
-
-    selection_type_edit_path(form_id, page.id)
-  end
-
-  def text_path(form_id, action)
-    action == :create ? text_settings_new_path(form_id) : text_settings_edit_path(form_id)
-  end
-
-  def date_path(form_id, action)
-    action == :create ? date_settings_new_path(form_id) : date_settings_edit_path(form_id)
-  end
-
-  def address_path(form_id, action)
-    action == :create ? address_settings_new_path(form_id) : address_settings_edit_path(form_id)
-  end
-
-  def name_path(form_id, action)
-    action == :create ? name_settings_new_path(form_id) : name_settings_edit_path(form_id)
-  end
-
-  def default_path(form_id, action)
-    action == :create ? new_question_path(form_id) : edit_question_path(form_id)
-  end
-
-  def next_page_path(form_id, answer_type, action)
-    case answer_type
-    when "selection"
-      selection_path(form_id, action)
-    when "text"
-      text_path(form_id, action)
-    when "date"
-      date_path(form_id, action)
-    when "address"
-      address_path(form_id, action)
-    when "name"
-      name_path(form_id, action)
-    else
-      default_path(form_id, action)
-    end
-  end
-
   def answer_type_form_params
     params.require(:pages_type_of_answer_input).permit(:answer_type).merge(draft_question:, current_form:)
   end
 
   def answer_type_changed?
     @type_of_answer_input.answer_type != @type_of_answer_input.draft_question.answer_type
+  end
+
+  def next_page_path(answer_type)
+    Pages::AddOrEditQuestionService.new(form_id: current_form.id, existing_page_id: page_id).new_or_edit_path_for_answer_type(answer_type)
   end
 end

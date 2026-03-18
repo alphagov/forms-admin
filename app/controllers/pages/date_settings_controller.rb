@@ -1,4 +1,6 @@
 class Pages::DateSettingsController < PagesController
+  before_action { redirect_if_unexpected_answer_type("date") }
+
   def new
     @date_settings_input = Pages::DateSettingsInput.new(input_type: draft_question.answer_settings[:input_type])
     @date_settings_path = date_settings_create_path(current_form.id)

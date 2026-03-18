@@ -1,4 +1,6 @@
 class Pages::QuestionTextController < PagesController
+  before_action { redirect_if_unexpected_answer_type("selection") }
+
   def new
     @question_text_input = Pages::QuestionTextInput.new(question_text: draft_question.question_text)
     @question_text_path = question_text_create_path(current_form.id)

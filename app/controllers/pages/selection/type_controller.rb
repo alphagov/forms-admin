@@ -1,5 +1,8 @@
 class Pages::Selection::TypeController < PagesController
   include PagesHelper
+
+  before_action { redirect_if_unexpected_answer_type("selection") }
+
   def new
     @selection_type_input = Pages::Selection::TypeInput.new(only_one_option:, draft_question:)
     @selection_type_path = selection_type_create_path(current_form.id)
