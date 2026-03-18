@@ -22,6 +22,6 @@
 
 .app-page_list__route-text--error {
   @include govuk-responsive-margin(2, "bottom");
-  color: $govuk-error-colour;
+  color: govuk-functional-colour(error);
   font-weight: 700;
 }

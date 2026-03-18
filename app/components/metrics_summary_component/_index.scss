@@ -21,8 +21,8 @@
       flex-flow: column nowrap;
       justify-content: space-between;
 
-      border-top: $govuk-border-width solid $govuk-border-colour;
-      border-bottom: $govuk-border-width solid $govuk-border-colour;
+      border-top: $govuk-border-width solid govuk-functional-colour(border);
+      border-bottom: $govuk-border-width solid govuk-functional-colour(border);
     }
   }
 }

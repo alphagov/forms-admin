@@ -14,7 +14,7 @@ describe "forms/live/show_form.html.erb" do
   end
 
   it "renders the live tag" do
-    expect(rendered).to have_css(".govuk-tag.govuk-tag--turquoise", text: "Live")
+    expect(rendered).to have_css(".govuk-tag.govuk-tag--teal", text: "Live")
   end
 
   it "contains a link to preview the live form" do
