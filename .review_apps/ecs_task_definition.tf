@@ -70,10 +70,15 @@ resource "aws_ecs_task_definition" "task" {
       portMappings = [
         {
           containerPort = 3000
+          hostPort      = 3000
           protocol      = "tcp"
           appProtocol   = "http"
         }
       ]
+
+      mountPoints    = []
+      systemControls = []
+      volumesFrom    = []
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -89,6 +94,7 @@ resource "aws_ecs_task_definition" "task" {
         interval    = 30
         retries     = 5
         startPeriod = 180
+        timeout     = 5
       }
 
       dependsOn = [
@@ -106,7 +112,17 @@ resource "aws_ecs_task_definition" "task" {
       command   = []
       essential = true
 
-      portMappings = [{ containerPort = 5432 }]
+      portMappings = [
+        {
+          containerPort = 5432
+          hostPort      = 5432
+          protocol      = "tcp"
+        }
+      ]
+
+      mountPoints    = []
+      systemControls = []
+      volumesFrom    = []
 
       environment = [
         { name = "POSTGRES_PASSWORD", value = "postgres" }
@@ -122,7 +138,10 @@ resource "aws_ecs_task_definition" "task" {
       }
 
       healthCheck = {
-        command = ["CMD-SHELL", "psql -h localhost -p 5432 -U postgres -c \"SELECT current_timestamp - pg_postmaster_start_time();\""]
+        command  = ["CMD-SHELL", "psql -h localhost -p 5432 -U postgres -c \"SELECT current_timestamp - pg_postmaster_start_time();\""]
+        interval = 30
+        retries  = 3
+        timeout  = 5
       }
     },
 
@@ -134,6 +153,10 @@ resource "aws_ecs_task_definition" "task" {
       essential              = false
       environment            = local.forms_admin_env_vars
       readonlyRootFilesystem = true
+
+      mountPoints    = []
+      systemControls = []
+      volumesFrom    = []
 
       logConfiguration = {
         logDriver = "awslogs"
