@@ -11,6 +11,8 @@
 .app-translation-table .govuk-table__cell {
   height: 100%;
   width: 37.5%;
+  word-wrap: break-word; // Fallback for older browsers only
+  overflow-wrap: break-word;
 }
 
 .app-translation-table--two-column .govuk-table__cell {
