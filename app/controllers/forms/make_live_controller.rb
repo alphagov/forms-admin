@@ -31,7 +31,9 @@ module Forms
     end
 
     def render_new(status: :ok)
-      if current_form.is_live?
+      if current_form.live_welsh_form_document.present? && current_form.task_statuses[:welsh_language_status] == :in_progress
+        render "make_your_changes_to_english_live", status:, locals: { current_form: }
+      elsif current_form.is_live?
         render "make_your_changes_live", status:, locals: { current_form: }
       elsif current_form.is_archived?
         render "make_archived_draft_live", status:, locals: { current_form: }

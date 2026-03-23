@@ -5,7 +5,7 @@ describe "forms/make_live/make_your_changes_to_english_live.html.erb" do
 
   before do
     without_partial_double_verification do
-      allow(view).to receive_messages(form_path: "/forms/1")
+      allow(view).to receive_messages(form_path: "/forms/1", archive_welsh_path: "/forms/1/archive-welsh")
     end
 
     assign(:current_form, current_form)

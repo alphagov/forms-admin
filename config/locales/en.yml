@@ -1193,7 +1193,7 @@ en:
     body_html: |
       <p>You’ve updated your English form.<p>
       <p>The English and Welsh versions must match before you can make your changes live.</p>
-      <p>If necessary, you can archive the Welsh version to take it offline until you have new translations.</p>
+      <p>If necessary, you can <a href="%{archive_welsh_link}">archive the Welsh version</a> to take it offline until you have new translations.</p>
     continue_editing_link_text: Continue editing your form
   mark_complete:
     'false': No, I’ll come back later
