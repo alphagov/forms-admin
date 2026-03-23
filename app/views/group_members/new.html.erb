@@ -25,7 +25,7 @@
 
       <%= t(".body_html") %>
 
-      <%= f.govuk_text_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
+      <%= f.govuk_email_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
 
       <% if show_role_options %>
         <%= f.govuk_collection_radio_buttons(
