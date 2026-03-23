@@ -2,14 +2,14 @@ module Forms
   class DailySubmissionBatchController < FormsController
     def new
       authorize current_form, :can_edit_form?
-      @daily_submission_batch_input = Forms::DailySubmissionBatchInput.new(form: current_form).assign_form_values
+      @batch_submissions_input = Forms::BatchSubmissionsInput.new(form: current_form).assign_form_values
     end
 
     def create
       authorize current_form, :can_edit_form?
-      @daily_submission_batch_input = Forms::DailySubmissionBatchInput.new(daily_submission_batch_input_params)
+      @batch_submissions_input = Forms::BatchSubmissionsInput.new(batch_submissions_input_params)
 
-      if @daily_submission_batch_input.submit
+      if @batch_submissions_input.submit
         redirect_to form_path(current_form.id), success: success_message(current_form)
       else
         render :new, status: :unprocessable_content
@@ -18,8 +18,8 @@ module Forms
 
   private
 
-    def daily_submission_batch_input_params
-      params.require(:forms_daily_submission_batch_input).permit(:send_daily_submission_batch).merge(form: current_form)
+    def batch_submissions_input_params
+      params.require(:forms_batch_submissions_input).permit(:send_daily_submission_batch).merge(form: current_form)
     end
 
     def success_message(form)

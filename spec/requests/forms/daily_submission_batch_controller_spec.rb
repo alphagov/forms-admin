@@ -23,7 +23,7 @@ RSpec.describe Forms::DailySubmissionBatchController, type: :request do
     end
 
     it "uses the daily submission batch input" do
-      expect(assigns).to include daily_submission_batch_input: an_instance_of(Forms::DailySubmissionBatchInput)
+      expect(assigns).to include batch_submissions_input: an_instance_of(Forms::BatchSubmissionsInput)
     end
 
     context "when the user is not authorized" do
@@ -36,11 +36,11 @@ RSpec.describe Forms::DailySubmissionBatchController, type: :request do
   end
 
   describe "#create" do
-    let(:send_daily_submission_batch_input_value) { "1" }
-    let(:params) { { forms_daily_submission_batch_input: { send_daily_submission_batch: send_daily_submission_batch_input_value } } }
+    let(:send_batch_submissions_input_value) { "1" }
+    let(:params) { { forms_batch_submissions_input: { send_daily_submission_batch: send_batch_submissions_input_value } } }
 
     context "when the checkbox is checked" do
-      let(:send_daily_submission_batch_input_value) { "1" }
+      let(:send_batch_submissions_input_value) { "1" }
 
       it "updates the form send_daily_submission_batch flag to true" do
         expect {
@@ -61,7 +61,7 @@ RSpec.describe Forms::DailySubmissionBatchController, type: :request do
 
     context "when the checkbox is not checked" do
       let(:send_daily_submission_batch_original_value) { true }
-      let(:send_daily_submission_batch_input_value) { "0" }
+      let(:send_batch_submissions_input_value) { "0" }
 
       it "updates the form send_daily_submission_batch flag to false" do
         expect {
@@ -77,7 +77,7 @@ RSpec.describe Forms::DailySubmissionBatchController, type: :request do
 
     context "when the setting is unchanged" do
       let(:send_daily_submission_batch_original_value) { true }
-      let(:send_daily_submission_batch_input_value) { "1" }
+      let(:send_batch_submissions_input_value) { "1" }
 
       it "does not display a flash message" do
         post(daily_submission_batch_create_path(form_id: form.id), params:)

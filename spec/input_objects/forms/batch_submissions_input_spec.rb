@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::DailySubmissionBatchInput, type: :model do
+RSpec.describe Forms::BatchSubmissionsInput, type: :model do
   describe "#submit" do
     subject(:input) { described_class.new(form:, send_daily_submission_batch: value) }
 

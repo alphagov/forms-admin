@@ -922,11 +922,11 @@ en:
       account_terms_of_use_input:
         agreed_options:
           '1': I agree to these terms
-      forms_copy_input:
-        name: What is the name of your form?
-      forms_daily_submission_batch_input:
+      forms_batch_submissions_input:
         send_daily_submission_batch_options:
           '1': Get a daily CSV of completed forms
+      forms_copy_input:
+        name: What is the name of your form?
       forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
@@ -1088,7 +1088,7 @@ en:
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
-      forms_daily_submission_batch_input:
+      forms_batch_submissions_input:
         send_daily_submission_batch: Do you want to get a daily CSV of the previous day’s completed forms?
       forms_submission_attachments_input:
         submission_format: Do you want to get a CSV or JSON file of each completed form?
