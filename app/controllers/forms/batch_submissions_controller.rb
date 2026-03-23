@@ -1,5 +1,5 @@
 module Forms
-  class DailySubmissionBatchController < FormsController
+  class BatchSubmissionsController < FormsController
     def new
       authorize current_form, :can_edit_form?
       @batch_submissions_input = Forms::BatchSubmissionsInput.new(form: current_form).assign_form_values

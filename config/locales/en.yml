@@ -380,7 +380,7 @@ en:
     copy_to_clipboard: Copy URL to clipboard
     form_url: Form URL
   forms:
-    daily_submission_batch:
+    batch_submissions:
       new:
         body_html: |
           <p>You can get a daily email with all the answers from the previous day’s completed forms collected into a CSV file.</p>

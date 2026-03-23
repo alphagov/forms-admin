@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "forms/daily_submission_batch/new.html.erb" do
+describe "forms/batch_submissions/new.html.erb" do
   let(:send_daily_submission_batch) { true }
   let(:form) { build(:form, id: 1, send_daily_submission_batch:) }
   let(:batch_submissions_input) { Forms::BatchSubmissionsInput.new(form:).assign_form_values }

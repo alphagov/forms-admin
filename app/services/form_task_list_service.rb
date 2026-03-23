@@ -116,7 +116,7 @@ private
   def daily_submission_batch_task
     {
       task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch"),
-      path: daily_submission_batch_path(@form.id),
+      path: batch_submissions_path(@form.id),
       status: @task_statuses[:daily_submission_batch_status],
     }
   end
