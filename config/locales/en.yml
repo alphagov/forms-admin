@@ -1189,6 +1189,12 @@ en:
         <p>
           After you have made your form live, completed forms will be sent to <span class="govuk-!-text-break-word">%{submission_email}</span>.
         </p>
+  make_your_changes_to_english_live:
+    body_html: |
+      <p>You’ve updated your English form.<p>
+      <p>The English and Welsh versions must match before you can make your changes live.</p>
+      <p>If necessary, you can archive the Welsh version to take it offline until you have new translations.</p>
+    continue_editing_link_text: Continue editing your form
   mark_complete:
     'false': No, I’ll come back later
     hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make changes if you need to.
@@ -1448,6 +1454,7 @@ en:
     make_archived_draft_live: Make your form live again
     make_changes_live: Make your changes live
     make_live: Make your form live
+    make_your_changes_to_english_live: Make the changes to your English form live
     missing_draft_question: There’s a problem with this page
     mou_signature_confirmation: You’ve agreed to the MOU
     mou_signature_new: GOV.UK Forms Memorandum of Understanding
