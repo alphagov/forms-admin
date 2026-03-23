@@ -297,7 +297,7 @@ describe FormTaskListService do
 
       it "has link to the daily submission batch page" do
         expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
-        expect(section_rows.second[:path]).to eq "/forms/#{form.id}/daily-submission-csv"
+        expect(section_rows.second[:path]).to eq "/forms/#{form.id}/batch-submissions"
       end
     end
 

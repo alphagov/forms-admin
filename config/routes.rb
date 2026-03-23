@@ -76,8 +76,8 @@ Rails.application.routes.draw do
     get "/welsh-translation-download" => "forms/welsh_translation#download", as: :welsh_translation_download
     get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
     post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
-    get "/daily-submission-csv" => "forms/batch_submissions#new", as: :batch_submissions
-    post "/daily-submission-csv" => "forms/batch_submissions#create", as: :batch_submissions_create
+    get "/batch-submissions" => "forms/batch_submissions#new", as: :batch_submissions
+    post "/batch-submissions" => "forms/batch_submissions#create", as: :batch_submissions_create
     get "/metrics" => "forms/metrics#metrics_csv", as: :metrics_csv
 
     scope "/pages-by-external-id/:page_external_id" do
