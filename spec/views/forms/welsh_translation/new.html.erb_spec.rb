@@ -99,7 +99,7 @@ describe "forms/welsh_translation/new.html.erb" do
     end
 
     it "renders text inputs for all the support contact fields" do
-      expect(rendered).to have_field("Enter email address for Welsh support", type: "text")
+      expect(rendered).to have_field("Enter email address for Welsh support", type: "email")
       expect(rendered).to have_field("Enter phone information for Welsh support", type: "textarea")
       expect(rendered).to have_field("Enter an online contact link for Welsh support", type: "text")
       expect(rendered).to have_field("Enter text to describe the contact link for Welsh support", type: "text")

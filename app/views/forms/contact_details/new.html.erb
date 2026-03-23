@@ -22,7 +22,7 @@
 
       <%= f.govuk_check_boxes_fieldset :contact_details_supplied, legend: { text: t('contact_details.new.title') }, hint: { text: t('contact_details.new.hint') } do %>
         <%= f.govuk_check_box :contact_details_supplied, :supply_email, checked: @contact_details_input.check_email? do %>
-          <%= f.govuk_text_field :email %>
+          <%= f.govuk_email_field :email %>
         <% end %>
 
         <%= f.govuk_check_box :contact_details_supplied, :supply_phone, checked: @contact_details_input.check_phone? do %>

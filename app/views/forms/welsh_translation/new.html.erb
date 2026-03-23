@@ -27,7 +27,7 @@
           <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
           table.with_head(**@table_presenter.two_column_headers) %>
 
-        <%= table.with_body do |body|
+          <%= table.with_body do |body|
           body.with_row do |row|
             row.with_cell(text: @welsh_translation_input.form.name, classes: "govuk-!-text-break-word")
             row.with_cell do
@@ -35,39 +35,39 @@
             end
           end
         end %>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <div class="govuk-!-margin-bottom-9">
-      <% if @welsh_translation_input.page_translations.any? %>
-        <%= f.fields_for :page_translations, @welsh_translation_input.page_translations do |page_form| %>
-          <%= page_form.hidden_field :id %>
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.page_translations.any? %>
+          <%= f.fields_for :page_translations, @welsh_translation_input.page_translations do |page_form| %>
+            <%= page_form.hidden_field :id %>
 
-          <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) do %>
-            <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
-              <%= table.with_caption(size: 'm', text: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) %>
-              <%= table.with_head(**@table_presenter.three_column_headers) %>
+            <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) do %>
+              <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
+                <%= table.with_caption(size: 'm', text: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) %>
+                <%= table.with_head(**@table_presenter.three_column_headers) %>
 
-              <%= table.with_body do |body| %>
-                <% if page_form.object.page_has_page_heading_and_guidance_markdown? %>
-                  <%= body.with_row do |row| %>
-                    <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.page_heading")) %>
-                    <%= row.with_cell(text: page_form.object.page.page_heading, classes: "govuk-!-text-break-word") %>
-                    <%= row.with_cell do |cell| %>
-                      <%= page_form.govuk_text_field :page_heading_cy,
+                <%= table.with_body do |body| %>
+                  <% if page_form.object.page_has_page_heading_and_guidance_markdown? %>
+                    <%= body.with_row do |row| %>
+                      <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.page_heading")) %>
+                      <%= row.with_cell(text: page_form.object.page.page_heading, classes: "govuk-!-text-break-word") %>
+                      <%= row.with_cell do |cell| %>
+                        <%= page_form.govuk_text_field :page_heading_cy,
                         id: page_form.object.form_field_id(:page_heading_cy),
                         label: { text: t("helpers.label.forms_welsh_page_translation_input.page_heading_cy_html", question_number: page_form.object.page.position), for: page_form.object.form_field_id(:page_heading_cy) },
                         lang: "cy"
                       %>
-                  <% end %>
-                <% end %>
-                <%= body.with_row do |row| %>
-                  <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.guidance_markdown")) %>
-                  <%= row.with_cell(classes: "govuk-!-text-break-word") do %>
-                    <pre class="app-translation-table__markdown-preview"><%= page_form.object.page.guidance_markdown %></pre>
-                  <% end %>
-                  <%= row.with_cell do |cell| %>
-                    <%= render MarkdownEditorComponent::View.new(:guidance_markdown_cy,
+                      <% end %>
+                    <% end %>
+                    <%= body.with_row do |row| %>
+                      <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.guidance_markdown")) %>
+                      <%= row.with_cell(classes: "govuk-!-text-break-word") do %>
+                        <pre class="app-translation-table__markdown-preview"><%= page_form.object.page.guidance_markdown %></pre>
+                      <% end %>
+                      <%= row.with_cell do |cell| %>
+                        <%= render MarkdownEditorComponent::View.new(:guidance_markdown_cy,
                       form_builder: page_form,
                       render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
                       preview_html: nil,
@@ -75,110 +75,110 @@
                       label: t("helpers.label.forms_welsh_page_translation_input.guidance_markdown_cy_html", question_number: page_form.object.page.position),
                       lang: "cy",
                       label_heading: false) %>
-                <% end %>
-              <% end %>
-            <% end %>
-            <%= body.with_row do |row| %>
-              <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.question_text")) %>
-              <%= row.with_cell(text: page_form.object.page.question_text, classes: "govuk-!-text-break-word") %>
-              <%= row.with_cell do |cell| %>
-                <%= page_form.govuk_text_field :question_text_cy,
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                  <%= body.with_row do |row| %>
+                    <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.question_text")) %>
+                    <%= row.with_cell(text: page_form.object.page.question_text, classes: "govuk-!-text-break-word") %>
+                    <%= row.with_cell do |cell| %>
+                      <%= page_form.govuk_text_field :question_text_cy,
                   id: page_form.object.form_field_id(:question_text_cy),
                   label: { text: t("helpers.label.forms_welsh_page_translation_input.question_text_cy_html", question_number: page_form.object.page.position), for: page_form.object.form_field_id(:question_text_cy) },
                   lang: "cy"
                 %>
-            <% end %>
-          <% end %>
-          <% if page_form.object.page_has_hint_text? %>
-            <%= body.with_row do |row| %>
-              <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.hint_text")) %>
-              <%= row.with_cell(text: page_form.object.page.hint_text, classes: "govuk-!-text-break-word") %>
-              <%= row.with_cell do |cell| %>
-                <%= page_form.govuk_text_area :hint_text_cy,
+                    <% end %>
+                  <% end %>
+                  <% if page_form.object.page_has_hint_text? %>
+                    <%= body.with_row do |row| %>
+                      <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.hint_text")) %>
+                      <%= row.with_cell(text: page_form.object.page.hint_text, classes: "govuk-!-text-break-word") %>
+                      <%= row.with_cell do |cell| %>
+                        <%= page_form.govuk_text_area :hint_text_cy,
                   id: page_form.object.form_field_id(:hint_text_cy),
                   label: { text: t("helpers.label.forms_welsh_page_translation_input.hint_text_cy_html", question_number: page_form.object.page.position), for: page_form.object.form_field_id(:hint_text_cy) },
                   lang: "cy"
                 %>
-            <% end %>
-          <% end %>
-        <% end %>
-        <% if page_form.object.page_has_none_of_the_above_question? %>
-          <%= body.with_row do |row| %>
-            <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.none_of_the_above_question")) %>
-            <%= row.with_cell(text: page_form.object.page.answer_settings&.none_of_the_above_question&.question_text, classes: "govuk-!-text-break-word") %>
-            <%= row.with_cell do |cell| %>
-              <%= page_form.govuk_text_area :none_of_the_above_question_cy,
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                  <% if page_form.object.page_has_none_of_the_above_question? %>
+                    <%= body.with_row do |row| %>
+                      <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.none_of_the_above_question")) %>
+                      <%= row.with_cell(text: page_form.object.page.answer_settings&.none_of_the_above_question&.question_text, classes: "govuk-!-text-break-word") %>
+                      <%= row.with_cell do |cell| %>
+                        <%= page_form.govuk_text_area :none_of_the_above_question_cy,
                 id: page_form.object.form_field_id(:none_of_the_above_question_cy),
                 label: { text: t("helpers.label.forms_welsh_page_translation_input.none_of_the_above_question_cy_html", question_number: page_form.object.page.position), for: page_form.object.form_field_id(:none_of_the_above_question_cy) },
                 lang: "cy"
               %>
-          <% end %>
-        <% end %>
-      <% end %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
 
-      <% end %>
-    <% end %>
-  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
 
-  <% if page_form.object.page_has_selection_options? %>
-    <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.section_headings.selection_options", question_number: page_form.object.page.position)) do %>
-      <%= page_form.govuk_fieldset legend: nil, described_by: ["selection_options_cy_table_caption"] do %>
-      <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
-        <%= table.with_caption(size: 's',
+            <% if page_form.object.page_has_selection_options? %>
+              <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.section_headings.selection_options", question_number: page_form.object.page.position)) do %>
+                <%= page_form.govuk_fieldset legend: nil, described_by: ["selection_options_cy_table_caption"] do %>
+                  <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
+                    <%= table.with_caption(size: 's',
                                text: t("forms.welsh_translation.new.section_headings.selection_options", question_number: page_form.object.page.position),
                                html_attributes:{ id: "selection_options_cy_table_caption"})
         table.with_head(**@table_presenter.two_column_headers) %>
 
-      <%= table.with_body do |body| %>
-        <% page_form.fields_for :selection_options_cy, page_form.object.selection_options_cy do |selection_options_form| %>
-        <%= body.with_row do |row| %>
-          <%= row.with_cell(text: page_form.object.page.answer_settings.selection_options[selection_options_form.index].name) %>
-            <%= row.with_cell do %>
-              <%= selection_options_form.hidden_field :id %>
-              <%= selection_options_form.govuk_text_field :name_cy,
+                    <%= table.with_body do |body| %>
+                      <% page_form.fields_for :selection_options_cy, page_form.object.selection_options_cy do |selection_options_form| %>
+                        <%= body.with_row do |row| %>
+                          <%= row.with_cell(text: page_form.object.page.answer_settings.selection_options[selection_options_form.index].name) %>
+                          <%= row.with_cell do %>
+                            <%= selection_options_form.hidden_field :id %>
+                            <%= selection_options_form.govuk_text_field :name_cy,
                 id: selection_options_form.object.form_field_id(:name_cy),
                 label: {
                   text: t("helpers.label.forms_welsh_page_translation_input.selection_options_cy_html", question_number: page_form.object.page.position, option_number: selection_options_form.index + 1), for: selection_options_form.object.form_field_id(:name_cy),
                   lang: "cy"
                 }
               %>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
             <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-<% end %>
-<% end %>
 
-  <% if page_form.object.condition_translations.present? %>
-    <%= page_form.fields_for :condition_translations, page_form.object.condition_translations do |condition_form| %>
-      <%= condition_form.hidden_field :id %>
-      <% if condition_form.object.condition_has_exit_page? %>
-        <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) do %>
-          <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
-            <%= table.with_caption(size: 's', text: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) %>
-            <%= table.with_head(**@table_presenter.three_column_headers) %>
+            <% if page_form.object.condition_translations.present? %>
+              <%= page_form.fields_for :condition_translations, page_form.object.condition_translations do |condition_form| %>
+                <%= condition_form.hidden_field :id %>
+                <% if condition_form.object.condition_has_exit_page? %>
+                  <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) do %>
+                    <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
+                      <%= table.with_caption(size: 's', text: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) %>
+                      <%= table.with_head(**@table_presenter.three_column_headers) %>
 
-            <%= table.with_body do |body| %>
-              <%= body.with_row do |row| %>
-                <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_heading")) %>
-                <%= row.with_cell(text: condition_form.object.condition.exit_page_heading, classes: "govuk-!-text-break-word") %>
-                <%= row.with_cell do |cell| %>
-                  <%= condition_form.govuk_text_field :exit_page_heading_cy,
+                      <%= table.with_body do |body| %>
+                        <%= body.with_row do |row| %>
+                          <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_heading")) %>
+                          <%= row.with_cell(text: condition_form.object.condition.exit_page_heading, classes: "govuk-!-text-break-word") %>
+                          <%= row.with_cell do |cell| %>
+                            <%= condition_form.govuk_text_field :exit_page_heading_cy,
                     id: condition_form.object.form_field_id(:exit_page_heading_cy),
                     label: { text: t("helpers.label.forms_welsh_condition_translation_input.exit_page_heading_cy_html", question_number: page_form.object.page.position), for: condition_form.object.form_field_id(:exit_page_heading_cy) },
                     lang: "cy"
                   %>
-              <% end %>
-            <% end %>
-            <%= body.with_row do |row| %>
-              <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_markdown")) %>
-              <%= row.with_cell(classes: "govuk-!-text-break-word") do %>
-                <pre class="app-translation-table__markdown-preview"><%= condition_form.object.condition.exit_page_markdown %></pre>
-              <% end %>
-              <%= row.with_cell do |cell| %>
-                <%= render MarkdownEditorComponent::View.new(:exit_page_markdown_cy,
+                          <% end %>
+                        <% end %>
+                        <%= body.with_row do |row| %>
+                          <%= row.with_cell(header: true, text: t("forms.welsh_translation.new.exit_page_markdown")) %>
+                          <%= row.with_cell(classes: "govuk-!-text-break-word") do %>
+                            <pre class="app-translation-table__markdown-preview"><%= condition_form.object.condition.exit_page_markdown %></pre>
+                          <% end %>
+                          <%= row.with_cell do |cell| %>
+                            <%= render MarkdownEditorComponent::View.new(:exit_page_markdown_cy,
                   form_builder: condition_form,
                   render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
                   preview_html: nil,
@@ -186,26 +186,26 @@
                   label: t("helpers.label.forms_welsh_condition_translation_input.exit_page_markdown_cy_html", question_number: page_form.object.page.position),
                   label_heading: false,
                   lang: "cy") %>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
             <% end %>
+
           <% end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.pages") %></h2>
+          <p><%= t(".no_pages_added") %></p>
         <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-<% end %>
-    <% end %>
+      </div>
 
-  <% end %>
-<% else %>
-  <h2 class="govuk-heading-m"><%= t(".section_headings.pages") %></h2>
-  <p><%= t(".no_pages_added") %></p>
-<% end %>
-    </div>
-
-    <div class="govuk-!-margin-bottom-9">
-      <% if @welsh_translation_input.form_has_declaration? %>
-        <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.declaration")) do %>
-          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_declaration? %>
+          <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.declaration")) do %>
+            <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
             table.with_caption(size: 'm', text: t(".section_headings.declaration"))
             table.with_head(**@table_presenter.two_column_headers)
 
@@ -227,27 +227,27 @@
               end
             end
           end %>
+          <% end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.declaration") %></h2>
+          <p><%= t(".no_declaration_added") %></p>
         <% end %>
-      <% else %>
-        <h2 class="govuk-heading-m"><%= t(".section_headings.declaration") %></h2>
-        <p><%= t(".no_declaration_added") %></p>
-      <% end %>
-    </div>
+      </div>
 
-    <div class="govuk-!-margin-bottom-9">
-      <% if @welsh_translation_input.form_has_what_happens_next? %>
-        <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.declaration")) do %>
-          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
-            <% table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))%>
-            <% table.with_head(**@table_presenter.two_column_headers) %>
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_what_happens_next? %>
+          <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.declaration")) do %>
+            <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
+              <% table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))%>
+              <% table.with_head(**@table_presenter.two_column_headers) %>
 
-            <% table.with_body do |body|%>
-              <%  body.with_row do |row|%>
-                <% row.with_cell(classes: "govuk-!-text-break-word") do %>
-                  <pre class="app-translation-table__markdown-preview"><%= @welsh_translation_input.form.what_happens_next_markdown %></pre>
-                <%end %>
-                <% row.with_cell do %>
-                  <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown_cy,
+              <% table.with_body do |body|%>
+                <%  body.with_row do |row|%>
+                  <% row.with_cell(classes: "govuk-!-text-break-word") do %>
+                    <pre class="app-translation-table__markdown-preview"><%= @welsh_translation_input.form.what_happens_next_markdown %></pre>
+                  <%end %>
+                  <% row.with_cell do %>
+                    <%= render MarkdownEditorComponent::View.new(:what_happens_next_markdown_cy,
                     form_builder: f,
                     render_preview_path: welsh_translation_render_preview_path(@welsh_translation_input.form.id),
                     preview_html: nil,
@@ -255,21 +255,21 @@
                     label: t("helpers.label.forms_welsh_translation_input.what_happens_next_markdown_cy"),
                     lang: "cy",
                     label_heading: false) %>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
           <% end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.what_happens_next") %></h2>
+          <p><%= t(".no_what_happens_next_added") %></p>
         <% end %>
-      <% else %>
-        <h2 class="govuk-heading-m"><%= t(".section_headings.what_happens_next") %></h2>
-        <p><%= t(".no_what_happens_next_added") %></p>
-      <% end %>
-    </div>
+      </div>
 
-    <div class="govuk-!-margin-bottom-9">
-      <% if @welsh_translation_input.form_has_privacy_information? %>
-        <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.privacy_information")) do %>
-          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_privacy_information? %>
+          <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.privacy_information")) do %>
+            <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
             table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
             table.with_head(**@table_presenter.two_column_headers)
 
@@ -282,16 +282,16 @@
               end
             end
           end %>
+          <% end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.privacy_information") %></h2>
+          <p><%= t(".no_privacy_information_added") %></p>
         <% end %>
-      <% else %>
-        <h2 class="govuk-heading-m"><%= t(".section_headings.privacy_information") %></h2>
-        <p><%= t(".no_privacy_information_added") %></p>
-      <% end %>
-    </div>
+      </div>
 
-    <% if @welsh_translation_input.form_has_payment_url? %>
-      <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.payment_link")) do %>
-        <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
+      <% if @welsh_translation_input.form_has_payment_url? %>
+        <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.payment_link")) do %>
+          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
           table.with_caption(text: t(".section_headings.payment_link"))
           table.with_head(**@table_presenter.two_column_headers)
 
@@ -304,13 +304,13 @@
             end
           end
         end %>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <div class="govuk-!-margin-bottom-9">
-      <% if @welsh_translation_input.form_has_support_information? %>
-        <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.support_information")) do %>
-          <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
+      <div class="govuk-!-margin-bottom-9">
+        <% if @welsh_translation_input.form_has_support_information? %>
+          <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.support_information")) do %>
+            <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
             table.with_caption(size: 'm', text: t(".section_headings.support_information"))
             table.with_head(**@table_presenter.three_column_headers)
 
@@ -320,7 +320,7 @@
                   row.with_cell(header: true, text: t("forms.welsh_translation.new.support_email"))
                   row.with_cell(text: @welsh_translation_input.form.support_email, classes: "govuk-!-text-break-word")
                   row.with_cell do
-                    f.govuk_text_field :support_email_cy, lang: "cy"
+                    f.govuk_email_field :support_email_cy, lang: "cy"
                   end
                 end
               end
@@ -354,12 +354,12 @@
               end
             end
           end %>
+          <% end %>
+        <% else %>
+          <h2 class="govuk-heading-m"><%= t(".section_headings.support_information") %></h2>
+          <p><%= t(".no_support_information_added") %></p>
         <% end %>
-      <% else %>
-        <h2 class="govuk-heading-m"><%= t(".section_headings.support_information") %></h2>
-        <p><%= t(".no_support_information_added") %></p>
-      <% end %>
-    </div>
+      </div>
     </div>
   </div>
 
