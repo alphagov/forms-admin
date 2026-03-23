@@ -28,7 +28,7 @@ class TaskStatusService
       privacy_policy_status:,
       support_contact_details_status:,
       submission_attachments_status:,
-      daily_submission_batch_status:,
+      batch_submissions_status:,
       share_preview_status:,
       make_live_status:,
       welsh_language_status:,
@@ -93,7 +93,7 @@ private
     :optional
   end
 
-  def daily_submission_batch_status
+  def batch_submissions_status
     return :completed if @form.send_daily_submission_batch
 
     :optional

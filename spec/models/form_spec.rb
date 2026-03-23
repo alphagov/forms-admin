@@ -994,7 +994,7 @@ RSpec.describe Form, type: :model do
         privacy_policy_status: :completed,
         payment_link_status: :optional,
         submission_attachments_status: :optional,
-        daily_submission_batch_status: :optional,
+        batch_submissions_status: :optional,
         support_contact_details_status: :completed,
         welsh_language_status: :optional,
         share_preview_status: :completed,

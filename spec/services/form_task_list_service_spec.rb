@@ -38,7 +38,7 @@ describe FormTaskListService do
         what_happens_next_status: :completed,
         payment_link_status: :optional,
         submission_attachments_status: :optional,
-        daily_submission_batch_status: :optional,
+        batch_submissions_status: :optional,
         share_preview_status: :completed,
       }
     end
