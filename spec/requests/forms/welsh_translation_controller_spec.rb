@@ -240,4 +240,33 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
       end
     end
   end
+
+  describe "#download" do
+    let(:form) { create(:form, :with_welsh_translation, name: "A form with Welsh") }
+
+    before do
+      get welsh_translation_download_path(id)
+    end
+
+    context "when the user is not authorized" do
+      let(:current_user) { build :user }
+
+      it "returns 403" do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    it "downloads a CSV file" do
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
+      expect(response.headers["content-disposition"]).to match("attachment; filename=a_form_with_welsh.csv")
+    end
+
+    it "returns a CSV with a header row and and content" do
+      csv = CSV.parse(response.body)
+
+      expect(csv.first).to eq(["", "English content", "Welsh content"])
+      expect(csv.second).to eq(["Form name", "A form with Welsh", "Welsh A form with Welsh"])
+    end
+  end
 end
