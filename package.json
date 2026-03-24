@@ -23,7 +23,7 @@
   "devDependencies": {
     "@testing-library/dom": "^10.4.1",
     "autoprefixer": "^10.4.27",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.0",
     "postcss": "^8.5.8",
     "regenerator-runtime": "^0.14.1",
     "sass": "^1.97.3",
