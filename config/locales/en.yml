@@ -228,6 +228,11 @@ en:
       exit_page_deleted: Your exit page has been deleted
       exit_page_updated: Your exit page has been saved
       form:
+        batch_submissions:
+          daily_and_weekly_enabled: You’ll get daily and weekly batches of form submissions
+          daily_enabled: You’ll get a daily batch of form submissions
+          disabled: You will not get a daily or weekly batch of form submissions
+          weekly_enabled: You’ll get a weekly batch of form submissions
         change_name: Your form name has been saved
         copied: Your form has been copied
         daily_submission_batch_disabled: You will not get a daily CSV of the previous day’s completed forms
