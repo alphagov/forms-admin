@@ -93,7 +93,7 @@ private
   def how_you_get_completed_forms_optional_subsection
     rows = []
     rows << submission_attachments_task if @form.email?
-    rows << daily_submission_batch_task
+    rows << batch_submissions_task
 
     return nil if rows.empty?
 
@@ -113,11 +113,11 @@ private
     }
   end
 
-  def daily_submission_batch_task
+  def batch_submissions_task
     {
       task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch"),
-      path: daily_submission_batch_path(@form.id),
-      status: @task_statuses[:daily_submission_batch_status],
+      path: batch_submissions_path(@form.id),
+      status: @task_statuses[:batch_submissions_status],
     }
   end
 
@@ -248,7 +248,7 @@ private
   def remove_optional_statuses(statuses)
     statuses.delete(:payment_link_status)
     statuses.delete(:submission_attachments_status)
-    statuses.delete(:daily_submission_batch_status)
+    statuses.delete(:batch_submissions_status)
   end
 
   def can_enter_submission_email_code

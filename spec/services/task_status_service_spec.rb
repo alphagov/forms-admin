@@ -195,14 +195,14 @@ describe TaskStatusService do
       end
     end
 
-    describe "daily_submission_batch_status" do
+    describe "batch_submissions_status" do
       let(:form) { build(:form, :new_form, :with_group, group:, send_daily_submission_batch:) }
 
       context "with send_daily_submission_batch set to true" do
         let(:send_daily_submission_batch) { true }
 
         it "returns completed" do
-          expect(task_status_service.task_statuses[:daily_submission_batch_status]).to eq :completed
+          expect(task_status_service.task_statuses[:batch_submissions_status]).to eq :completed
         end
       end
 
@@ -210,7 +210,7 @@ describe TaskStatusService do
         let(:send_daily_submission_batch) { false }
 
         it "returns optional" do
-          expect(task_status_service.task_statuses[:daily_submission_batch_status]).to eq :optional
+          expect(task_status_service.task_statuses[:batch_submissions_status]).to eq :optional
         end
       end
     end
@@ -462,7 +462,7 @@ describe TaskStatusService do
         welsh_language_status: :optional,
         make_live_status: :completed,
         submission_attachments_status: :optional,
-        daily_submission_batch_status: :optional,
+        batch_submissions_status: :optional,
         share_preview_status: :completed,
       }
       expect(task_status_service.task_statuses).to eq expected_hash

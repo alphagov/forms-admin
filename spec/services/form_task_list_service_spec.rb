@@ -38,7 +38,7 @@ describe FormTaskListService do
         what_happens_next_status: :completed,
         payment_link_status: :optional,
         submission_attachments_status: :optional,
-        daily_submission_batch_status: :optional,
+        batch_submissions_status: :optional,
         share_preview_status: :completed,
       }
     end
@@ -297,7 +297,7 @@ describe FormTaskListService do
 
       it "has link to the daily submission batch page" do
         expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
-        expect(section_rows.second[:path]).to eq "/forms/#{form.id}/daily-submission-csv"
+        expect(section_rows.second[:path]).to eq "/forms/#{form.id}/batch-submissions"
       end
     end
 

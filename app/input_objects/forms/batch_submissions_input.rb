@@ -1,4 +1,4 @@
-class Forms::DailySubmissionBatchInput < BaseInput
+class Forms::BatchSubmissionsInput < BaseInput
   attr_accessor :form, :send_daily_submission_batch
 
   def submit

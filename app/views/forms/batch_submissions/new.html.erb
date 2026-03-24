@@ -1,14 +1,14 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.daily_submission_batch"), @daily_submission_batch_input.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(form_path(@daily_submission_batch_input.form.id), t("back_link.form_create")) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.daily_submission_batch"), @batch_submissions_input.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(form_path(@batch_submissions_input.form.id), t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @daily_submission_batch_input, url: daily_submission_batch_create_path(@daily_submission_batch_input.form.id)) do |f| %>
-      <% if @daily_submission_batch_input&.errors.any? %>
+    <%= form_with(model: @batch_submissions_input, url: batch_submissions_create_path(@batch_submissions_input.form.id)) do |f| %>
+      <% if @batch_submissions_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
-      <span class="govuk-caption-l"><%= @daily_submission_batch_input.form.name %></span>
+      <span class="govuk-caption-l"><%= @batch_submissions_input.form.name %></span>
       <h1 class="govuk-heading-l">
         <%= t("page_titles.daily_submission_batch") %>
       </h1>
