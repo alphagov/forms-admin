@@ -19,7 +19,7 @@ module Forms
   private
 
     def batch_submissions_input_params
-      params.require(:forms_batch_submissions_input).permit(:send_daily_submission_batch).merge(form: current_form)
+      params.require(:forms_batch_submissions_input).permit(batch_frequencies: []).merge(form: current_form)
     end
 
     def success_message(form)

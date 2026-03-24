@@ -36,12 +36,10 @@ RSpec.describe Forms::BatchSubmissionsController, type: :request do
   end
 
   describe "#create" do
-    let(:send_batch_submissions_input_value) { "1" }
-    let(:params) { { forms_batch_submissions_input: { send_daily_submission_batch: send_batch_submissions_input_value } } }
+    let(:batch_frequencies) { %w[daily] }
+    let(:params) { { forms_batch_submissions_input: { batch_frequencies: } } }
 
-    context "when the checkbox is checked" do
-      let(:send_batch_submissions_input_value) { "1" }
-
+    context "when the daily batch checkbox is checked" do
       it "updates the form send_daily_submission_batch flag to true" do
         expect {
           post(batch_submissions_create_path(form_id: form.id), params:)
@@ -59,9 +57,9 @@ RSpec.describe Forms::BatchSubmissionsController, type: :request do
       end
     end
 
-    context "when the checkbox is not checked" do
+    context "when the daily batch checkbox is not checked" do
       let(:send_daily_submission_batch_original_value) { true }
-      let(:send_batch_submissions_input_value) { "0" }
+      let(:batch_frequencies) { [] }
 
       it "updates the form send_daily_submission_batch flag to false" do
         expect {
@@ -77,7 +75,7 @@ RSpec.describe Forms::BatchSubmissionsController, type: :request do
 
     context "when the setting is unchanged" do
       let(:send_daily_submission_batch_original_value) { true }
-      let(:send_batch_submissions_input_value) { "1" }
+      let(:batch_frequencies) { %w[daily] }
 
       it "does not display a flash message" do
         post(batch_submissions_create_path(form_id: form.id), params:)
