@@ -442,7 +442,7 @@ describe TaskStatusService do
       let(:form) { build(:form, :new_form, :with_group, group:) }
 
       it "returns a set of keys related to missing fields" do
-        expect(task_status_service.incomplete_tasks).to match_array(%i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
+        expect(task_status_service.incomplete_tasks).to match_array(%i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed missing_submission_email])
       end
     end
   end
@@ -464,8 +464,40 @@ describe TaskStatusService do
         submission_attachments_status: :optional,
         daily_submission_batch_status: :optional,
         share_preview_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
       }
       expect(task_status_service.task_statuses).to eq expected_hash
+    end
+  end
+
+  describe "#incomplete_email_tasks" do
+    context "when mandatory tasks are complete" do
+      let(:form) { create :form, :live }
+
+      it "returns no incomplete tasks" do
+        expect(task_status_service.incomplete_email_tasks).to be_empty
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:form) { create :form, :new_form }
+
+      it "returns a set of keys related to missing fields" do
+        expect(task_status_service.incomplete_email_tasks).to match_array(%i[missing_submission_email])
+      end
+    end
+  end
+
+  describe "#email_task_statuses" do
+    let(:form) { create :form, :live }
+
+    it "returns a hash with each of the email task statuses" do
+      expected_hash = {
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
+      }
+      expect(task_status_service.email_task_statuses).to eq expected_hash
     end
   end
 end

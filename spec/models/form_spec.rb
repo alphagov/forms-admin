@@ -942,17 +942,12 @@ RSpec.describe Form, type: :model do
 
   describe "#all_ready_for_live?" do
     before do
-      email_task_status_service = instance_double(EmailTaskStatusService)
-      allow(EmailTaskStatusService).to receive(:new).and_return(email_task_status_service)
-      allow(email_task_status_service).to receive(:ready_for_live?).and_return(email_tasks_completed)
-
       task_status_service = instance_double(TaskStatusService)
       allow(TaskStatusService).to receive(:new).and_return(task_status_service)
       allow(task_status_service).to receive(:mandatory_tasks_completed?).and_return(mandatory_tasks_completed)
     end
 
     context "when not all mandatory tasks have been completed" do
-      let(:email_tasks_completed) { true }
       let(:mandatory_tasks_completed) { false }
 
       it "returns false" do
@@ -960,17 +955,7 @@ RSpec.describe Form, type: :model do
       end
     end
 
-    context "when not all submission emails tasks have been completed" do
-      let(:email_tasks_completed) { false }
-      let(:mandatory_tasks_completed) { true }
-
-      it "returns false" do
-        expect(form.all_ready_for_live?).to be false
-      end
-    end
-
     context "when all mandatory tasks have been completed" do
-      let(:email_tasks_completed) { true }
       let(:mandatory_tasks_completed) { true }
 
       it "returns true" do

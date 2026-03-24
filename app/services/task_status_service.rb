@@ -15,6 +15,7 @@ class TaskStatusService
       missing_contact_details: support_contact_details_status,
       share_preview_not_completed: share_preview_status,
       missing_welsh_translations: welsh_language_status,
+      missing_submission_email: submission_email_status,
     }.reject { |_k, v| %i[completed optional].include?(v) }.keys
   end
 
@@ -32,6 +33,21 @@ class TaskStatusService
       share_preview_status:,
       make_live_status:,
       welsh_language_status:,
+      submission_email_status:,
+      confirm_submission_email_status:,
+    }
+  end
+
+  def incomplete_email_tasks
+    {
+      missing_submission_email: submission_email_status,
+    }.reject { |_k, v| v == :completed }.keys
+  end
+
+  def email_task_statuses
+    {
+      submission_email_status:,
+      confirm_submission_email_status:,
     }
   end
 
@@ -122,5 +138,23 @@ private
       translation_input = Forms::WelshTranslationInput.new(form: @form, mark_complete: true).assign_form_values
       translation_input.invalid?
     end
+  end
+
+  def submission_email_status
+    {
+      email_set_without_confirmation: :completed,
+      not_started: :not_started,
+      sent: :in_progress,
+      confirmed: :completed,
+    }[@form.email_confirmation_status]
+  end
+
+  def confirm_submission_email_status
+    {
+      email_set_without_confirmation: :completed,
+      not_started: :cannot_start,
+      sent: :not_started,
+      confirmed: :completed,
+    }[@form.email_confirmation_status]
   end
 end

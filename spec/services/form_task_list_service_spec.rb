@@ -40,19 +40,15 @@ describe FormTaskListService do
         submission_attachments_status: :optional,
         daily_submission_batch_status: :optional,
         share_preview_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :not_started,
       }
     end
     let(:form) { create(:form) }
-    let(:email_task_status_service) { instance_double(EmailTaskStatusService) }
     let(:task_status_service) { instance_double(TaskStatusService) }
 
     before do
-      allow(EmailTaskStatusService).to receive(:new).and_return(email_task_status_service)
       allow(TaskStatusService).to receive(:new).and_return(task_status_service)
-      allow(email_task_status_service).to receive(:email_task_statuses).and_return({
-        submission_email_status: :completed,
-        confirm_submission_email_status: :not_started,
-      })
       allow(task_status_service).to receive(:task_statuses).and_return(statuses)
     end
 
@@ -63,7 +59,6 @@ describe FormTaskListService do
         result = described_class.new(form:, current_user:)
 
         expected_hash = { completed: 6, total: 10 }
-        expect(EmailTaskStatusService).to have_received(:new)
         expect(result.task_counts).to eq expected_hash
       end
     end
@@ -75,7 +70,6 @@ describe FormTaskListService do
         result = described_class.new(form:, current_user:)
 
         expected_hash = { completed: 5, total: 8 }
-        expect(EmailTaskStatusService).to have_received(:new)
 
         expect(result.task_counts).to eq expected_hash
       end
