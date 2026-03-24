@@ -508,6 +508,7 @@ en:
         email: Set the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
         optional_subsection:
+          batch_submissions: Get a daily or weekly batch of completed forms
           daily_submission_batch: Get a daily CSV of the previous day’s completed forms
           submission_attachments: Get a CSV or JSON file of each completed form
         title: Set up how you get completed forms
@@ -553,6 +554,7 @@ en:
         email: Edit the email address completed forms will be sent to
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
         optional_subsection:
+          batch_submissions: Get a daily or weekly batch of completed forms
           daily_submission_batch: Get a daily CSV of the previous day’s completed forms
           submission_attachments: Get a CSV or JSON file of each completed form
         title: Change how you get completed forms
