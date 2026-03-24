@@ -3,8 +3,12 @@ class TaskStatusService
     @form = form
   end
 
-  def mandatory_tasks_completed?
-    incomplete_tasks.empty?
+  def mandatory_tasks_completed?(ignore_missing_welsh: false)
+    if ignore_missing_welsh
+      incomplete_tasks.reject { |task| task == :missing_welsh_translations }.empty?
+    else
+      incomplete_tasks.empty?
+    end
   end
 
   def incomplete_tasks
@@ -130,7 +134,12 @@ private
   end
 
   def make_live_status_for_draft
-    mandatory_tasks_completed? ? :not_started : :cannot_start
+    # If the form has a live Welsh version, we ignore missing Welsh translations
+    # and show the make live task and link. In this case, we will show a warning
+    # message on the make live page asking the user to update the Welsh before
+    # the form can be made live.
+    ignore_missing_welsh = @form.live_welsh_form_document.present?
+    mandatory_tasks_completed?(ignore_missing_welsh:) ? :not_started : :cannot_start
   end
 
   def welsh_translations_invalid
