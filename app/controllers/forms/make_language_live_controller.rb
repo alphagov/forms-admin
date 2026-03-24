@@ -3,8 +3,7 @@ module Forms
     def new
       authorize current_form, :can_make_language_live?
       @make_language_live_input = MakeLiveInput.new(form: current_form)
-
-      render "new", status:, locals: { current_form: }
+      render_new
     end
 
     def create
@@ -32,6 +31,10 @@ module Forms
 
     def make_language_live_input_params
       params.require(:forms_make_live_input).permit(:confirm).merge(form: current_form)
+    end
+
+    def render_new(status: :ok)
+      render "new", status:, locals: { current_form:, language: params[:language] }
     end
   end
 end
