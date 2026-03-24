@@ -436,6 +436,12 @@ en:
       draft_create: Create a draft to edit
       draft_edit: Edit the draft of this form
       how_you_get_completed_forms:
+        batch_submissions:
+          daily_and_weekly_enabled: You are getting daily and weekly batches of completed forms.
+          daily_enabled: You are getting a daily batch of completed forms.
+          disabled: You have not opted to get a daily or weekly batch of completed forms.
+          title: Daily and weekly CSVs
+          weekly_enabled: You are getting a weekly batch of completed forms.
         csv_and_json: CSV and JSON
         daily_csv:
           disabled: You have not opted to get a daily CSV of the previous day’s completed forms.

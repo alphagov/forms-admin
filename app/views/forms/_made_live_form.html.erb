@@ -151,11 +151,24 @@
       <p><%= t(".how_you_get_completed_forms.submission_format.email.#{submission_format}_html") %></p>
     <% end %>
 
-    <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.daily_csv.title") %></h4>
-    <% if form_document.send_daily_submission_batch %>
-      <p><%= t(".how_you_get_completed_forms.daily_csv.enabled") %></p>
+    <% if FeatureService.enabled?(:weekly_submission_emails_enabled) %>
+      <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.batch_submissions.title") %></h4>
+      <% if form_document.send_daily_submission_batch && form_document.send_weekly_submission_batch %>
+        <p><%= t(".how_you_get_completed_forms.batch_submissions.daily_and_weekly_enabled") %></p>
+      <% elsif form_document.send_daily_submission_batch %>
+        <p><%= t(".how_you_get_completed_forms.batch_submissions.daily_enabled") %></p>
+      <% elsif form_document.send_weekly_submission_batch %>
+        <p><%= t(".how_you_get_completed_forms.batch_submissions.weekly_enabled") %></p>
+      <% else %>
+        <p><%= t(".how_you_get_completed_forms.batch_submissions.disabled") %></p>
+      <% end %>
     <% else %>
-      <p><%= t(".how_you_get_completed_forms.daily_csv.disabled") %></p>
+      <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.daily_csv.title") %></h4>
+      <% if form_document.send_daily_submission_batch %>
+        <p><%= t(".how_you_get_completed_forms.daily_csv.enabled") %></p>
+      <% else %>
+        <p><%= t(".how_you_get_completed_forms.daily_csv.disabled") %></p>
+      <% end %>
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
