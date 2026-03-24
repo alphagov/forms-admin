@@ -50,7 +50,7 @@ private
 
   def rows
     rows = forms.sort_by { |form| [form.name.downcase, form.created_at] }.map do |form|
-      row = [{ text: form_name_link(form) },
+      row = [{ text: form_name_link(form) + welsh_status(form) },
              { text: find_creator_name(form) },
              { text: form_status_tags(form), numeric: true }]
 
@@ -72,6 +72,16 @@ private
       edit_group_form_path(group, id: form.id),
       visually_hidden_suffix: I18n.t("home.for", form_name: form.name),
     )
+  end
+
+  def welsh_status(form)
+    if form.live_welsh_form_document.present?
+      "<p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh Version</p>".html_safe
+    elsif form.archived_welsh_form_document.present?
+      "<p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With archived Welsh version</p>".html_safe
+    elsif form.available_languages.include? "cy"
+      "<p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh draft</p>".html_safe
+    end
   end
 
   def form_status_tags(form)
