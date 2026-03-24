@@ -30,6 +30,13 @@ class FormPolicy
     false
   end
 
+  def can_make_language_live?
+    # TODO: make this available to org and group admins when the feature is ready
+    return can_view_form? if form.group&.active? && user.super_admin?
+
+    false
+  end
+
   def can_administer_group?
     user.super_admin? || user.is_organisations_admin?(form.group&.organisation) || user.is_group_admin?(form.group)
   end
