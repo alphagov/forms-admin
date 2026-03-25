@@ -19,12 +19,34 @@ module Forms
 
       @go_to_make_welsh_live_input = GoToMakeWelshLiveInput.new
 
+      redirect_to make_language_live_show_confirmation_path
+    end
+
+    def show_confirmation
+      authorize current_form, :can_make_language_live?
+
+      @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:, language: params[:language])
+
+      @go_to_make_welsh_live_input = GoToMakeWelshLiveInput.new
+
       render "confirmation", locals: {
         current_form:,
         confirmation_page_title: @make_form_live_service.page_title,
         confirmation_page_body: @make_form_live_service.confirmation_page_body,
         language: params[:language],
       }
+    end
+
+    def submit_confirmation
+      authorize current_form, :can_make_language_live?
+
+      @go_to_make_welsh_live_input = GoToMakeWelshLiveInput.new(**go_to_make_welsh_live_input_params)
+
+      if @go_to_make_welsh_live_input.confirmed?
+        redirect_to make_language_live_path(language: "cy")
+      else
+        redirect_to form_path
+      end
     end
 
   private
@@ -35,6 +57,10 @@ module Forms
 
     def render_new(status: :ok)
       render "new", status:, locals: { current_form:, language: params[:language] }
+    end
+
+    def go_to_make_welsh_live_input_params
+      params.require(:forms_go_to_make_welsh_live_input).permit(:confirm)
     end
   end
 end
