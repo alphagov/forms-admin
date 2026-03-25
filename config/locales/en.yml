@@ -11,7 +11,7 @@ en:
         publishing:
           list_item_1: get help with designing, structuring and writing your form and its questions
           list_item_2: prepare the starting point on GOV.UK to link to the form
-          preamble: 'Speak with your organisation’s GOV.UK publishing or content team to:'
+          preamble: "Speak with your organisation’s GOV.UK publishing or content team to:"
         section_1: The platform is designed to help you make forms that are easy to use and accessible, but this also depends on the design, structure and content of your questions.
         section_2: When you create a form, follow government standards and guidance to make sure the form is easy to use and accessible.
         section_3: Read %{good_forms_link} for information about making forms accessible and links to further guidance.
@@ -31,7 +31,7 @@ en:
             list_item_1: a secure work-managed device
             list_item_2: a secure individual work email address that’s protected with multi-factor authentication (MFA)
             list_item_3: a trusted internet connection - do not sign in using an untrusted public wifi network
-            preamble: 'You must sign in to GOV.UK Forms using:'
+            preamble: "You must sign in to GOV.UK Forms using:"
         heading: Security
         receiving_completed_form_data:
           heading: Receiving completed form data
@@ -52,8 +52,8 @@ en:
         section_2_link_text: check if you need a service assessment
         section_3: Contact the people in your organisation who are responsible for service assurance for help with this.
       summary:
-        first_published: 'First published: 13 September 2024'
-        last_updated: 'Last updated: 13 September 2024'
+        first_published: "First published: 13 September 2024"
+        last_updated: "Last updated: 13 September 2024"
         section_1: These terms apply to the way you use GOV.UK Forms.
         section_2: You must accept these terms to continue to use GOV.UK Forms.
         section_3: If you do not keep to these terms, we may deactivate your account and remove your forms.
@@ -357,7 +357,7 @@ en:
       cannot_route_to_next_page: Question %{question_number}’s route %{route_number} is not skipping any questions - edit or delete this route
       goto_page_doesnt_exist: The question you’re taking the person to no longer exists - edit question %{question_number}’s route
       route_number_for_any_other_answer: for any other answer
-    prefix: 'Error:'
+    prefix: "Error:"
   exit_page:
     no_content_added_html: "<p>No content added</p>"
   footer:
@@ -924,22 +924,22 @@ en:
           single_line: Ask the question the way you would in person. For example, ‘What’s your reference number?’
       pages_question_input:
         is_optional_options:
-          'true': We’ll add ‘(optional)’ to the end of the question text.
+          "true": We’ll add ‘(optional)’ to the end of the question text.
         is_repeatable: Select ‘Yes’ if you want to let someone add more than one answer - for example, listing all their current household members.
         is_repeatable_options:
-          'true': After adding their first answer we’ll ask if they need to add another - up to a maximum of 50.
+          "true": After adding their first answer we’ll ask if they need to add another - up to a maximum of 50.
       pages_selection_bulk_options_input:
         include_none_of_the_above: If you select ‘Yes’ we’ll add ‘None of the above’ to the end of your list of options.
       pages_selection_none_of_the_above_input:
         is_optional_options:
-          'true': We’ll add ‘(optional)’ to the end of the question or label.
+          "true": We’ll add ‘(optional)’ to the end of the question or label.
         question_text: For example, if you asked them to select the country they live in, you could use ‘Enter the country you live in’.
       pages_selection_options_input:
         include_none_of_the_above: If you select ‘Yes’ we’ll add ‘None of the above’ to the end of your list of options.
       pages_selection_type_input:
         only_one_option_options:
-          'false': Your list can have up to 30 options
-          'true': Your list can have up to 3,000 options
+          "false": Your list can have up to 30 options
+          "true": Your list can have up to 3,000 options
     label:
       account_name_input:
         name: Enter your full name
@@ -947,13 +947,17 @@ en:
         organisation_id: Select your organisation
       account_terms_of_use_input:
         agreed_options:
-          '1': I agree to these terms
+          "1": I agree to these terms
       forms_batch_submissions_input:
         batch_frequencies_options:
           daily: Get a daily CSV of submissions
           weekly: Get a weekly CSV of submissions
       forms_copy_input:
         name: What is the name of your form?
+      forms_go_to_make_welsh_live_input:
+        confirm_options:
+          "no": No, I’ll do that later
+          "yes": "Yes"
       forms_make_changes_live:
         confirm: Are you sure you want to make your draft live?
       forms_make_live_input:
@@ -991,17 +995,17 @@ en:
             uk_and_international_addresses: UK and international addresses
         answer_type_options:
           descriptions:
-            address: ''
-            date: ''
-            email: ''
+            address: ""
+            date: ""
+            email: ""
             file: People will only be able to upload one file
-            name: ''
-            national_insurance_number: ''
+            name: ""
+            national_insurance_number: ""
             number: People will only be able to enter whole or decimal numbers
-            organisation_name: ''
-            phone_number: ''
+            organisation_name: ""
+            phone_number: ""
             selection: You’ll be able to create a list of options for people to select from
-            text: ''
+            text: ""
           input_type: Input type
           names:
             address: Address
@@ -1016,21 +1020,21 @@ en:
             selection: Selection from a list of options
             text: Text
           optional: Optional
-          optional_no: 'No'
-          optional_yes: 'Yes'
+          optional_no: "No"
+          optional_yes: "Yes"
           title: Answer type
         date_settings_options:
           input_types:
-            date_of_birth: 'Yes'
-            other_date: 'No'
+            date_of_birth: "Yes"
+            other_date: "No"
           names:
-            date_of_birth: 'Yes'
-            other_date: 'No'
+            date_of_birth: "Yes"
+            other_date: "No"
         name_settings_options:
           hints:
-            first_and_last_name: ''
+            first_and_last_name: ""
             first_middle_and_last_name: Middle name will not be mandatory
-            full_name: ''
+            full_name: ""
             input_type: A single box for the full name is easiest for people to complete - only ask for names separately if you need the individual parts of the name.
             title: Only ask for a title if you really need it. People will be able to enter their preferred title.
           input_types:
@@ -1041,23 +1045,23 @@ en:
             input_type: How do you need to collect the name?
             title: Do you need the person’s title?
           names:
-            'false': 'No'
+            "false": "No"
             first_and_last_name: First and last names in separate boxes
             first_middle_and_last_name: First, middle and last names in separate boxes
             full_name: Full name in a single box
-            'true': 'Yes'
+            "true": "Yes"
           title_needed:
-            'false': 'No'
+            "false": "No"
             name: Title needed
-            'true': 'Yes'
+            "true": "Yes"
         text_settings_options:
           names:
             long_text: More than a single line of text
             single_line: Single line of text
       pages/change_order_input:
         options:
-          'no': No, discard my changes
-          'yes': Yes, save this question order
+          "no": No, discard my changes
+          "yes": Yes, save this question order
       pages_conditions_input:
         default_answer_value: Select an answer
         default_goto_page_id: Select a question or page
@@ -1080,11 +1084,11 @@ en:
           details_title: What files can people upload?
         hint_text: Hint text (optional)
         is_optional_options:
-          'false': Mandatory
-          'true': Optional
+          "false": Mandatory
+          "true": Optional
         is_repeatable_options:
-          'false': No - this question can only be answered once
-          'true': 'Yes'
+          "false": No - this question can only be answered once
+          "true": "Yes"
         question_text:
           default: Question text
           file: Ask for a file
@@ -1095,28 +1099,30 @@ en:
         routing_page_id: Select the last question you want them to answer before they skip
       pages_selection_bulk_options_input:
         include_none_of_the_above_options:
-          'no': 'No'
-          'yes': 'Yes'
+          "no": "No"
+          "yes": "Yes"
           yes_with_question: Yes, and let people provide a different answer
       pages_selection_none_of_the_above_input:
         is_optional_options:
-          'false': Mandatory
-          'true': Optional
+          "false": Mandatory
+          "true": Optional
         question_text: Enter a question or label for the text box
       pages_selection_options_input:
         include_none_of_the_above_options:
-          'no': 'No'
-          'yes': 'Yes'
+          "no": "No"
+          "yes": "Yes"
           yes_with_question: Yes, and let people provide a different answer
       pages_selection_type_input:
         only_one_option_options:
-          'false': One or more options
-          'true': One option only
+          "false": One or more options
+          "true": One option only
     legend:
       account_terms_of_use_input:
         agreed: Do you agree to these terms?
       forms_batch_submissions_input:
         batch_frequencies: Do you want to get a daily or weekly CSV of submissions to this form?
+      forms_go_to_make_welsh_live_input:
+        confirm: Do you want to make your Welsh form live now?
       forms_submission_attachments_input:
         submission_format: Do you want to get a CSV or JSON file of each completed form?
       forms_submission_type_input:
@@ -1187,6 +1193,7 @@ en:
     welsh_reminder: Remember to make sure that the English and Welsh versions of your form match.
   make_live:
     confirmation:
+      back_to_draft_link_html: <a href="%{url}">Go back to your draft</a> to edit the Welsh version and make it live.
       body_html: |
         <p>
           The form will not be indexed by search engines, so people will not be able to find it easily.
@@ -1196,12 +1203,18 @@ en:
         <p>
           The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV⁠.⁠UK publishing team to publish links to your form on GOV⁠.⁠UK so people can find it.
         </p>
-      continue_link: Continue to form details
+      body_individual_language_html: |
+        <p>
+          The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.
+        </p>
+      continue_link: Continue to the live form’s details
       copy_english_url_to_clipboard: Copy English URL to clipboard
       copy_welsh_url_to_clipboard: Copy Welsh URL to clipboard
       english_form: English form
       english_form_url: English form URL
       form_name: Form name
+      form_name_cy: Welsh form name
+      form_name_en: English form name
       welsh_form: Welsh form
       welsh_form_url: Welsh form URL
     new:
@@ -1223,10 +1236,10 @@ en:
       <p>If necessary, you can <a href="%{archive_welsh_link}">archive the Welsh version</a> to take it offline until you have new translations.</p>
     continue_editing_link_text: Continue editing your form
   mark_complete:
-    'false': No, I’ll come back later
+    "false": No, I’ll come back later
     hint: Selecting ‘Yes’ will mark this task as complete. You’ll still be able to make changes if you need to.
     legend: Do you want to mark this task as complete?
-    'true': 'Yes'
+    "true": "Yes"
   markdown_editor:
     edit_markdown_link: Edit markdown
     formatting_help:
@@ -1250,7 +1263,7 @@ en:
       links:
         example: "[Link text](https://www.gov.uk/link-text-url)"
         heading: Links and URLs
-        instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. Make sure there are no spaces between the two sets of brackets. For example:'
+        instructions: "To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. Make sure there are no spaces between the two sets of brackets. For example:"
       new_lines_and_paragraphs:
         heading: New lines and paragraphs
         instructions: |
@@ -1270,11 +1283,11 @@ en:
       second_level_headings:
         example: "## This is a second-level heading"
         heading: Second-level headings
-        instructions: 'To add a second-level heading (H2), use 2 hashtags followed by a space. For example:'
+        instructions: "To add a second-level heading (H2), use 2 hashtags followed by a space. For example:"
       third_level_headings:
         example: "### This is a third-level heading"
         heading: Third-level headings
-        instructions: 'To add a third-level heading (H3), use 3 hashtags followed by a space. For example:'
+        instructions: "To add a third-level heading (H3), use 3 hashtags followed by a space. For example:"
     no_markdown_content_html: "<p>No content added</p>"
     preview:
       description: Below is a preview of how your markdown content will be shown to the person completing your form.
@@ -1327,7 +1340,7 @@ en:
       no_submissions_html: "<p>No-one has started or submitted this form in the past 7 days.</p>\n"
     forms_started_but_not_completed: Forms started but not completed
     forms_submitted: Forms submitted
-    heading_with_dates: 'Form metrics for the past %{number_of_days} days: %{formatted_date_range}'
+    heading_with_dates: "Form metrics for the past %{number_of_days} days: %{formatted_date_range}"
     heading_with_single_date: Form metrics for %{date}
     heading_without_dates: Form metrics
     percentage: "%{number}%"
@@ -1432,13 +1445,13 @@ en:
     selection:
       how_many_selections: How many options can people select
       include_none_of_the_above: Include an option for ‘None of the above’
-      'no': 'No'
+      "no": "No"
       none_of_the_above_question: If ‘None of the above’ is selected
       none_of_the_above_question_optional: "%{question_text} (optional)"
       options: Options
       options_count: "%{number_of_options} options:"
       options_summary: Show %{number_of_options} options
-      'yes': 'Yes'
+      "yes": "Yes"
     text:
       length: Length
   page_titles:
@@ -1468,7 +1481,7 @@ en:
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?
     edit_exit_page: Edit exit page
     email_code_sent: Confirmation code sent
-    error_prefix: 'Error: '
+    error_prefix: "Error: "
     exit_page_new: Add exit page
     forbidden: You cannot view this page
     group_confirm_upgrade_request: Request to upgrade this trial group
@@ -1489,7 +1502,7 @@ en:
     move_form: Move this form to a different group
     name_settings: Ask for a person’s name
     new_page: Edit question
-    new_secondary_skip: 'Route for any other answer: set questions to skip'
+    new_secondary_skip: "Route for any other answer: set questions to skip"
     non_crown_agreement_confirmation: You’ve agreed to the GOV.UK Forms agreement
     non_crown_agreement_new: GOV.UK Forms agreement
     not_found: Page not found
@@ -1501,7 +1514,7 @@ en:
     routing_page_caption: Question %{question_number}’s routes
     routing_page_delete: Delete question %{question_number}’s route
     routing_page_edit: Edit route %{route_number}
-    routing_page_new: 'Add route %{route_number}: select an answer and where to skip to'
+    routing_page_new: "Add route %{route_number}: select an answer and where to skip to"
     selection_none_of_the_above: Ask for an answer if someone selects ‘None of the above’
     selection_options: Create a list of options
     selection_type: How many options should people be able to select?
@@ -1518,7 +1531,9 @@ en:
     welsh_translation: Add a Welsh version of your form
     what_happens_next: Add information about what happens next
     your_changes_are_live: Your changes are live
+    your_english_form_is_live: Your English form is live
     your_form_is_live: Your form is live
+    your_welsh_form_is_live: Your Welsh form is live
   pages:
     answer_settings: Answer settings
     change_order:
@@ -1772,9 +1787,9 @@ en:
         organisation: Organisation
         question_text: Question text
       values:
-        'no': 'No'
+        "no": "No"
         no_follow_up_question: No follow-up question
-        'yes': 'Yes'
+        "yes": "Yes"
     forms_that_are_copies:
       download_csv: Download data about all %{tag} forms that are copies as a CSV file
       empty: There are no %{tag} forms that are copies
@@ -2061,10 +2076,10 @@ en:
       title: Edit user
     has_access:
       any: Any access
-      'false':
+      "false":
         description: Cannot use GOV.UK Forms
         name: Denied
-      'true':
+      "true":
         description: Can use GOV.UK Forms
         name: Permitted
     index:
