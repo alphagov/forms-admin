@@ -111,7 +111,7 @@ class Form < ApplicationRecord
   end
 
   def all_ready_for_live?
-    ready_for_live && email_task_status_service.ready_for_live?
+    ready_for_live
   end
 
   delegate :incomplete_tasks, to: :task_status_service
@@ -141,11 +141,11 @@ class Form < ApplicationRecord
   end
 
   def all_incomplete_tasks
-    incomplete_tasks.concat(email_task_status_service.incomplete_email_tasks)
+    incomplete_tasks
   end
 
   def all_task_statuses
-    task_statuses.merge(email_task_status_service.email_task_statuses)
+    task_statuses
   end
 
   def page_number(page)
@@ -239,12 +239,6 @@ private
 
   def group_form
     GroupForm.find_by_form_id(id)
-  end
-
-  def email_task_status_service
-    # TODO: refactor this in favour of dependency injection
-    # it can also lead to use of `allow_any_instance_of` in testing
-    @email_task_status_service ||= EmailTaskStatusService.new(form: self)
   end
 
   def steps

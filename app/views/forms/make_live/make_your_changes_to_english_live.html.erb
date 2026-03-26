@@ -1,0 +1,16 @@
+<% set_page_title(t('page_titles.make_your_changes_to_english_live')) %>
+<% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_edit")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= @current_form.name %></span>
+        <%= t("page_titles.make_your_changes_to_english_live") %>
+      </h1>
+
+      <%= t("make_your_changes_to_english_live.body_html", archive_welsh_link: archive_welsh_path) %>
+
+      <p> <%= govuk_link_to t("make_your_changes_to_english_live.continue_editing_link_text"), form_path %> </p>
+  </div>
+</div>
+

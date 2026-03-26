@@ -387,6 +387,18 @@ describe TaskStatusService do
         expect(task_status_service.mandatory_tasks_completed?).to be true
       end
     end
+
+    context "when missing_welsh_translations is present" do
+      let(:form) { build(:form, :ready_for_live, :with_welsh_translation, welsh_completed: false) }
+
+      it "when ignore_missing_welsh is true returns true" do
+        expect(task_status_service.mandatory_tasks_completed?(ignore_missing_welsh: true)).to be true
+      end
+
+      it "without ignore_missing_welsh returns false" do
+        expect(task_status_service.mandatory_tasks_completed?).to be false
+      end
+    end
   end
 
   describe "#incomplete_tasks" do
@@ -453,7 +465,7 @@ describe TaskStatusService do
       let(:form) { build(:form, :new_form, :with_group, group:) }
 
       it "returns a set of keys related to missing fields" do
-        expect(task_status_service.incomplete_tasks).to match_array(%i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed])
+        expect(task_status_service.incomplete_tasks).to match_array(%i[missing_pages missing_privacy_policy_url missing_contact_details missing_what_happens_next share_preview_not_completed missing_submission_email])
       end
     end
   end
@@ -475,8 +487,70 @@ describe TaskStatusService do
         submission_attachments_status: :optional,
         batch_submissions_status: :optional,
         share_preview_status: :completed,
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
       }
       expect(task_status_service.task_statuses).to eq expected_hash
+    end
+
+    context "when the form has a live Welsh version" do
+      let(:form) { create(:form, :live_with_draft, :with_welsh_translation, welsh_completed: true) }
+
+      context "and an incomplete welsh translation" do
+        before do
+          # Add new content requiring Welsh translation
+          form.update!(declaration_markdown: "I declare this is correct", share_preview_completed: true)
+        end
+
+        it "make live_status is not_started" do
+          expect(task_status_service.task_statuses).to include(make_live_status: :not_started)
+        end
+      end
+    end
+
+    context "when the form does not have a live Welsh version" do
+      let(:form) { create(:form, :with_welsh_translation, welsh_completed: true) }
+
+      context "and an incomplete welsh translation" do
+        before do
+          # Add new content requiring Welsh translation
+          form.update!(declaration_markdown: "I declare this is correct", share_preview_completed: true)
+        end
+
+        it "make live_status is cannot_start" do
+          expect(task_status_service.task_statuses).to include(make_live_status: :cannot_start)
+        end
+      end
+    end
+  end
+
+  describe "#incomplete_email_tasks" do
+    context "when mandatory tasks are complete" do
+      let(:form) { create :form, :live }
+
+      it "returns no incomplete tasks" do
+        expect(task_status_service.incomplete_email_tasks).to be_empty
+      end
+    end
+
+    context "when a form is incomplete and should still be in draft state" do
+      let(:form) { create :form, :new_form }
+
+      it "returns a set of keys related to missing fields" do
+        expect(task_status_service.incomplete_email_tasks).to match_array(%i[missing_submission_email])
+      end
+    end
+  end
+
+  describe "#email_task_statuses" do
+    let(:form) { create :form, :live }
+
+    it "returns a hash with each of the email task statuses" do
+      expected_hash = {
+        submission_email_status: :completed,
+        confirm_submission_email_status: :completed,
+      }
+      expect(task_status_service.email_task_statuses).to eq expected_hash
     end
   end
 end

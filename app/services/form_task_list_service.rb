@@ -200,13 +200,20 @@ private
         status: @task_statuses[:share_preview_status],
         active: @form.pages.any?,
       },
-      {
-        task_name: live_task_name,
-        path: live_path,
-        status: @task_statuses[:make_live_status],
-        active: @form.all_ready_for_live?,
-      },
+      make_live_task,
     ]
+  end
+
+  def make_live_task
+    status = @task_statuses[:make_live_status]
+    can_make_form_live = status == :not_started
+
+    {
+      task_name: live_task_name,
+      path: can_make_form_live ? make_live_path(@form.id) : "",
+      status: status,
+      active: can_make_form_live,
+    }
   end
 
   def live_title_name
@@ -223,12 +230,6 @@ private
     return I18n.t("forms.task_list_create.make_form_live_section.make_live") if @form.is_archived?
 
     I18n.t("forms.task_list_#{create_or_edit}.make_form_live_section.make_live")
-  end
-
-  def live_path
-    return "" unless @form.all_ready_for_live?
-
-    make_live_path(@form.id)
   end
 
   def statuses_by_user

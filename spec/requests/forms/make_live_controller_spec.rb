@@ -17,16 +17,16 @@ RSpec.describe Forms::MakeLiveController, :feature_org_admin_alerts_enabled, typ
       GroupForm.create!(form_id: form.id, group_id: group.id)
 
       login_as user
-
-      get make_live_path(form_id: form.id)
     end
 
     it "returns 200" do
+      get make_live_path(form_id: form.id)
       expect(response).to have_http_status(:ok)
     end
 
     context "when the form is being created for the first time" do
       it "renders make your form live" do
+        get make_live_path(form_id: form.id)
         expect(response).to render_template("make_your_form_live")
       end
     end
@@ -35,6 +35,7 @@ RSpec.describe Forms::MakeLiveController, :feature_org_admin_alerts_enabled, typ
       let(:form) { create(:form, :live) }
 
       it "renders make your changes live" do
+        get make_live_path(form_id: form.id)
         expect(response).to render_template("make_your_changes_live")
       end
     end
@@ -43,6 +44,7 @@ RSpec.describe Forms::MakeLiveController, :feature_org_admin_alerts_enabled, typ
       let(:form) { create(:form, :archived_with_draft) }
 
       it "renders make your changes live" do
+        get make_live_path(form_id: form.id)
         expect(response).to render_template("make_archived_draft_live")
       end
     end
@@ -51,7 +53,49 @@ RSpec.describe Forms::MakeLiveController, :feature_org_admin_alerts_enabled, typ
       let(:group_role) { :editor }
 
       it "is forbidden" do
+        get make_live_path(form_id: form.id)
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context "when the form has an existing live welsh form document" do
+      let(:form) do
+        create(:form, :with_welsh_translation,
+               support_email: "english@example.gov.uk",
+               support_email_cy: "welsh@example.gov.uk",
+               what_happens_next_markdown: "English what happens next",
+               what_happens_next_markdown_cy: "Welsh what happens next",
+               question_section_completed: true,
+               declaration_section_completed: true,
+               share_preview_completed: true,
+               privacy_policy_url: "https://www.gov.uk/english-privacy",
+               privacy_policy_url_cy: "https://www.gov.uk/welsh-privacy",
+               welsh_completed: true,
+               pages: [build(:page, question_text: "English question", question_text_cy: "Welsh question")])
+      end
+
+      before do
+        # Create the en and cy live FormDocuments
+        form.make_live!
+      end
+
+      context "and a complete welsh translations" do
+        it "renders make your changes live" do
+          get make_live_path(form_id: form.id)
+          expect(response).to render_template("make_your_changes_live")
+        end
+      end
+
+      context "and in progress welsh translations" do
+        before do
+          # Add a declaration in English only to the draft form
+          form.update!(declaration_markdown: "English declaration", share_preview_completed: true)
+        end
+
+        it "renders make your changes to english live" do
+          get make_live_path(form_id: form.id)
+          expect(response).to render_template("make_your_changes_to_english_live")
+        end
       end
     end
   end

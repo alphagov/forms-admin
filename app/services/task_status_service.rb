@@ -3,8 +3,12 @@ class TaskStatusService
     @form = form
   end
 
-  def mandatory_tasks_completed?
-    incomplete_tasks.empty?
+  def mandatory_tasks_completed?(ignore_missing_welsh: false)
+    if ignore_missing_welsh
+      incomplete_tasks.reject { |task| task == :missing_welsh_translations }.empty?
+    else
+      incomplete_tasks.empty?
+    end
   end
 
   def incomplete_tasks
@@ -15,6 +19,7 @@ class TaskStatusService
       missing_contact_details: support_contact_details_status,
       share_preview_not_completed: share_preview_status,
       missing_welsh_translations: welsh_language_status,
+      missing_submission_email: submission_email_status,
     }.reject { |_k, v| %i[completed optional].include?(v) }.keys
   end
 
@@ -32,6 +37,21 @@ class TaskStatusService
       share_preview_status:,
       make_live_status:,
       welsh_language_status:,
+      submission_email_status:,
+      confirm_submission_email_status:,
+    }
+  end
+
+  def incomplete_email_tasks
+    {
+      missing_submission_email: submission_email_status,
+    }.reject { |_k, v| v == :completed }.keys
+  end
+
+  def email_task_statuses
+    {
+      submission_email_status:,
+      confirm_submission_email_status:,
     }
   end
 
@@ -114,7 +134,12 @@ private
   end
 
   def make_live_status_for_draft
-    mandatory_tasks_completed? ? :not_started : :cannot_start
+    # If the form has a live Welsh version, we ignore missing Welsh translations
+    # and show the make live task and link. In this case, we will show a warning
+    # message on the make live page asking the user to update the Welsh before
+    # the form can be made live.
+    ignore_missing_welsh = @form.live_welsh_form_document.present?
+    mandatory_tasks_completed?(ignore_missing_welsh:) ? :not_started : :cannot_start
   end
 
   def welsh_translations_invalid
@@ -122,5 +147,23 @@ private
       translation_input = Forms::WelshTranslationInput.new(form: @form, mark_complete: true).assign_form_values
       translation_input.invalid?
     end
+  end
+
+  def submission_email_status
+    {
+      email_set_without_confirmation: :completed,
+      not_started: :not_started,
+      sent: :in_progress,
+      confirmed: :completed,
+    }[@form.email_confirmation_status]
+  end
+
+  def confirm_submission_email_status
+    {
+      email_set_without_confirmation: :completed,
+      not_started: :cannot_start,
+      sent: :not_started,
+      confirmed: :completed,
+    }[@form.email_confirmation_status]
   end
 end
