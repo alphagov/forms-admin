@@ -261,4 +261,12 @@ class Forms::WelshPageTranslationInput < BaseInput
 
     answer_settings_cloned
   end
+
+  def all_fields_empty?
+    attributes.except!("id").values.all?(&:blank?)
+  end
+
+  def blanked?
+    all_fields_empty? && condition_translations.all?(&:all_fields_empty?) && selection_options_cy.all?(&:all_fields_empty?)
+  end
 end
