@@ -1,4 +1,6 @@
-<% set_page_title(title_with_error_prefix(t("page_titles.daily_submission_batch"), @batch_submissions_input.errors.any?)) %>
+<% weekly_enabled = FeatureService.enabled?(:weekly_submission_emails_enabled) %>
+<% page_title = weekly_enabled ? t("page_titles.submission_batches") : t("page_titles.daily_submission_batch") %>
+<% set_page_title(title_with_error_prefix(page_title, @batch_submissions_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path(@batch_submissions_input.form.id), t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
@@ -10,13 +12,24 @@
 
       <span class="govuk-caption-l"><%= @batch_submissions_input.form.name %></span>
       <h1 class="govuk-heading-l">
-        <%= t("page_titles.daily_submission_batch") %>
+        <%= page_title %>
       </h1>
 
-      <%= t(".body_html") %>
+      <% if weekly_enabled %>
+        <%= t(".body_html") %>
+      <% else %>
+        <%= t(".weekly_disabled_body_html") %>
+      <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :send_daily_submission_batch, multiple: false, legend: { tag: 'h2', size: 'm'} do %>
-        <%= f.govuk_check_box :send_daily_submission_batch, 1, 0, multiple: false, link_errors: true %>
+      <% if weekly_enabled %>
+        <%= f.govuk_check_boxes_fieldset :batch_frequencies, legend: { tag: 'h2', size: 'm' } do %>
+          <%= f.govuk_check_box :batch_frequencies, "daily" %>
+          <%= f.govuk_check_box :batch_frequencies, "weekly" %>
+        <% end %>
+      <% else %>
+        <%= f.govuk_check_boxes_fieldset :batch_frequencies, legend: { tag: 'h2', size: 'm', text: t(".weekly_disabled_fieldset_legend") } do %>
+          <%= f.govuk_check_box :batch_frequencies, "daily", label: { text: t(".weekly_disabled_checkbox_label") } %>
+        <% end %>
       <% end %>
 
       <%= f.govuk_submit t("save_and_continue") %>

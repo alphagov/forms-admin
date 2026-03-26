@@ -19,16 +19,24 @@ module Forms
   private
 
     def batch_submissions_input_params
-      params.require(:forms_batch_submissions_input).permit(:send_daily_submission_batch).merge(form: current_form)
+      params.require(:forms_batch_submissions_input).permit(batch_frequencies: []).merge(form: current_form)
     end
 
     def success_message(form)
-      return nil unless form.send_daily_submission_batch_previously_changed?
+      return nil unless form.send_daily_submission_batch_previously_changed? || form.send_weekly_submission_batch_previously_changed?
 
-      if form.send_daily_submission_batch
-        t("banner.success.form.daily_submission_batch_enabled")
+      unless FeatureService.enabled?(:weekly_submission_emails_enabled)
+        return form.send_daily_submission_batch ? t("banner.success.form.daily_submission_batch_enabled") : t("banner.success.form.daily_submission_batch_disabled")
+      end
+
+      if form.send_daily_submission_batch && form.send_weekly_submission_batch
+        t("banner.success.form.batch_submissions.daily_and_weekly_enabled")
+      elsif form.send_daily_submission_batch
+        t("banner.success.form.batch_submissions.daily_enabled")
+      elsif form.send_weekly_submission_batch
+        t("banner.success.form.batch_submissions.weekly_enabled")
       else
-        t("banner.success.form.daily_submission_batch_disabled")
+        t("banner.success.form.batch_submissions.disabled")
       end
     end
   end

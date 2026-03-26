@@ -23,6 +23,7 @@ describe "Settings" do
     features = settings[:features]
 
     include_examples expected_value_test, :org_admin_alerts_enabled, features, false
+    include_examples expected_value_test, :weekly_submission_emails_enabled, features, false
   end
 
   describe "forms_api" do

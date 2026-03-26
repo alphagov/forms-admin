@@ -94,7 +94,7 @@ private
   end
 
   def batch_submissions_status
-    return :completed if @form.send_daily_submission_batch
+    return :completed if @form.send_daily_submission_batch || @form.send_weekly_submission_batch
 
     :optional
   end

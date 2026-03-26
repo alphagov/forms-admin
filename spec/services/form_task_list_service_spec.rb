@@ -295,9 +295,18 @@ describe FormTaskListService do
         end
       end
 
-      it "has link to the daily submission batch page" do
-        expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
-        expect(section_rows.second[:path]).to eq "/forms/#{form.id}/batch-submissions"
+      context "when the weekly submission emails feature flag is disabled", feature_weekly_submission_emails_enabled: false do
+        it "has link to the daily submission batch page" do
+          expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
+          expect(section_rows.second[:path]).to eq "/forms/#{form.id}/batch-submissions"
+        end
+      end
+
+      context "when the weekly submission emails feature flag is enabled", :feature_weekly_submission_emails_enabled do
+        it "has link to the batch submissions page" do
+          expect(section_rows.second[:task_name]).to eq I18n.t("forms.task_list_create.how_you_get_completed_forms_section.optional_subsection.batch_submissions")
+          expect(section_rows.second[:path]).to eq "/forms/#{form.id}/batch-submissions"
+        end
       end
     end
 

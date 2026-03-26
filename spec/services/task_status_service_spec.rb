@@ -196,18 +196,29 @@ describe TaskStatusService do
     end
 
     describe "batch_submissions_status" do
-      let(:form) { build(:form, :new_form, :with_group, group:, send_daily_submission_batch:) }
+      let(:form) { build(:form, :new_form, :with_group, group:, send_daily_submission_batch:, send_weekly_submission_batch:) }
 
       context "with send_daily_submission_batch set to true" do
         let(:send_daily_submission_batch) { true }
+        let(:send_weekly_submission_batch) { false }
 
         it "returns completed" do
           expect(task_status_service.task_statuses[:batch_submissions_status]).to eq :completed
         end
       end
 
-      context "with send_daily_submission_batch set to false" do
+      context "with send_weekly_submission_batch set to true" do
         let(:send_daily_submission_batch) { false }
+        let(:send_weekly_submission_batch) { true }
+
+        it "returns completed" do
+          expect(task_status_service.task_statuses[:batch_submissions_status]).to eq :completed
+        end
+      end
+
+      context "with send daily and weekly batches set to false" do
+        let(:send_daily_submission_batch) { false }
+        let(:send_weekly_submission_batch) { false }
 
         it "returns optional" do
           expect(task_status_service.task_statuses[:batch_submissions_status]).to eq :optional
