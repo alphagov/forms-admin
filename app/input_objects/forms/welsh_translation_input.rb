@@ -123,6 +123,10 @@ class Forms::WelshTranslationInput < Forms::MarkCompleteInput
     self
   end
 
+  def blanked?
+    all_fields_empty? && page_translations.all?(&:blanked?)
+  end
+
   def all_fields_empty?
     attributes.except!("mark_complete").values.all?(&:blank?)
   end

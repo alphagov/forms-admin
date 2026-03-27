@@ -700,4 +700,38 @@ RSpec.describe Forms::WelshTranslationInput, type: :model do
       end
     end
   end
+
+  describe "#blanked?" do
+    let(:page_translation) { Forms::WelshPageTranslationInput.new(page:) }
+    let(:new_input_data) do
+      {
+        form:,
+        mark_complete:,
+        name_cy: "",
+        what_happens_next_markdown_cy: "",
+        declaration_markdown_cy: "",
+        support_email_cy: "",
+        support_phone_cy: "",
+        support_url_cy: "",
+        support_url_text_cy: "",
+        privacy_policy_url_cy: "",
+        payment_url_cy: "",
+        page_translations: [page_translation],
+      }
+    end
+
+    context "when the welsh translation fields are all blank" do
+      it "returns true" do
+        expect(welsh_translation_input.blanked?).to be true
+      end
+    end
+
+    context "when the pages are not all blank" do
+      let(:page_translation) { Forms::WelshPageTranslationInput.new(page:, question_text_cy: "Some question text") }
+
+      it "returns false" do
+        expect(welsh_translation_input.blanked?).to be false
+      end
+    end
+  end
 end

@@ -222,4 +222,20 @@ RSpec.describe Forms::WelshConditionTranslationInput, type: :model do
       expect(welsh_condition_translation_input.form_field_id(:exit_page_heading_cy)).to eq "forms_welsh_condition_translation_input_#{condition.id}_condition_translations_exit_page_heading_cy"
     end
   end
+
+  describe "#all_fields_empty?" do
+    context "when the welsh condition fields are not empty" do
+      it "returns false" do
+        expect(welsh_condition_translation_input.all_fields_empty?).to be false
+      end
+    end
+
+    context "when the welsh condition fields are all empty" do
+      let(:new_input_data) { { condition:, exit_page_markdown_cy: "", exit_page_heading_cy: "" } }
+
+      it "returns true" do
+        expect(welsh_condition_translation_input.all_fields_empty?).to be true
+      end
+    end
+  end
 end

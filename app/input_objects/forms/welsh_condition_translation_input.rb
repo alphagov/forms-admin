@@ -83,4 +83,8 @@ class Forms::WelshConditionTranslationInput < BaseInput
   def page
     @page ||= condition.routing_page
   end
+
+  def all_fields_empty?
+    attributes.except!("id").values.all?(&:blank?)
+  end
 end

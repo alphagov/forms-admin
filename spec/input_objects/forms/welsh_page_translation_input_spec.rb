@@ -632,4 +632,79 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
       end
     end
   end
+
+  describe "#all_fields_empty?" do
+    context "when the welsh page fields are not empty" do
+      it "returns false" do
+        expect(welsh_page_translation_input.all_fields_empty?).to be false
+      end
+    end
+
+    context "when the welsh page fields are all empty" do
+      let(:new_input_data) { { page:, question_text_cy: "", hint_text_cy: "", page_heading_cy: "", guidance_markdown_cy: "" } }
+
+      it "returns true" do
+        expect(welsh_page_translation_input.all_fields_empty?).to be true
+      end
+    end
+  end
+
+  describe "#blanked?" do
+    let(:page) do
+      create_page(answer_type: "selection",
+                  answer_settings: { only_one_option: "true", selection_options: [{ name: "Option 1", value: "Option 1" }, { name: "Option 2", value: "Option 2" }] })
+    end
+    let(:new_input_data) do
+      super().merge(
+        question_text_cy: "",
+        hint_text_cy: "",
+        page_heading_cy: "",
+        guidance_markdown_cy: "",
+        condition_translations: [condition_translation],
+        selection_options_cy_attributes: {
+          "0" => { "id" => "0", "name_cy" => "" },
+          "1" => { "id" => "1", "name_cy" => "" },
+        },
+      )
+    end
+    let(:condition_translation) { Forms::WelshConditionTranslationInput.new(condition: condition, exit_page_heading_cy: "", exit_page_markdown_cy: "") }
+    let(:selection_options_cy) { welsh_page_translation_input.selection_options_cy.map(&:as_selection_option) }
+
+    it "returns true when all fields are blank" do
+      expect(welsh_page_translation_input.blanked?).to be true
+    end
+
+    context "when the welsh page fields are not all blank" do
+      let(:new_input_data) { super().merge(question_text_cy: "New question text") }
+
+      it "returns false" do
+        expect(welsh_page_translation_input.blanked?).to be false
+      end
+    end
+
+    context "when the condition is not blank" do
+      let(:condition_translation) { Forms::WelshConditionTranslationInput.new(condition: condition, exit_page_heading_cy: "Heading", exit_page_markdown_cy: "markdown") }
+
+      it "returns false" do
+        expect(welsh_page_translation_input.blanked?).to be false
+      end
+    end
+
+    context "when the selection optiosn are not all blank" do
+      let(:new_input_data) do
+        super().merge(
+          question_text_cy: "New question text",
+          condition_translations: [],
+          selection_options_cy_attributes: {
+            "0" => { "id" => "0", "name_cy" => "welsh option 1" },
+            "1" => { "id" => "1", "name_cy" => "" },
+          },
+        )
+      end
+
+      it "returns false" do
+        expect(welsh_page_translation_input.blanked?).to be false
+      end
+    end
+  end
 end

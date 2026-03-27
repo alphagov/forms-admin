@@ -13,7 +13,7 @@ module Forms
       @welsh_translation_input = WelshTranslationInput.new(welsh_translation_params)
       @table_presenter = Forms::TranslationTablePresenter.new
 
-      if @welsh_translation_input.all_fields_empty?
+      if @welsh_translation_input.blanked?
         # if all fields are empty we delete the welsh translation
         @delete_welsh_translation_input = Forms::DeleteWelshTranslationInput.new(form: current_form)
         if @delete_welsh_translation_input.submit_without_confirm

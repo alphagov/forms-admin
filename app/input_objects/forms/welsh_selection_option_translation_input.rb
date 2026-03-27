@@ -42,6 +42,10 @@ class Forms::WelshSelectionOptionTranslationInput < BaseInput
     page.position
   end
 
+  def all_fields_empty?
+    name_cy.blank?
+  end
+
 private
 
   def name_present?

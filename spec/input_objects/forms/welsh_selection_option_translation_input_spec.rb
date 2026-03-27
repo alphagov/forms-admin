@@ -93,4 +93,18 @@ RSpec.describe Forms::WelshSelectionOptionTranslationInput, type: :model do
       end
     end
   end
+
+  describe "#all_fields_empty?" do
+    it "returns false when fields are not empty" do
+      expect(welsh_selection_option_translation_input.all_fields_empty?).to be false
+    end
+
+    context "when the welsh selection option fields are all empty" do
+      let(:new_input_data) { { selection_option: selection_option_cy, page:, id: "1", name_cy: "" } }
+
+      it "returns true" do
+        expect(welsh_selection_option_translation_input.all_fields_empty?).to be true
+      end
+    end
+  end
 end

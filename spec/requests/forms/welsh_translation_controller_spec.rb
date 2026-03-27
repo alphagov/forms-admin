@@ -95,6 +95,7 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
     end
 
     context "when 'Yes' is selected and all fields are empty" do
+      let(:condition_translations_attributes) { { "0" => { "id" => condition.id, exit_page_heading_cy: "", exit_page_markdown_cy: "" } } }
       let(:page_translations_attributes) { { "0" => { "id" => form.pages.first.id, question_text_cy: "", condition_translations_attributes: } } }
       let(:params) { { forms_welsh_translation_input: { form:, mark_complete:, name_cy: "", privacy_policy_url_cy: "", page_translations_attributes: } } }
 
