@@ -114,6 +114,25 @@ describe FormListPresenter do
           expect(rows[3][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/2\">b</a>")
         end
       end
+
+      context "when a welsh version of the form exists" do
+        let(:forms) do
+          [
+            create(:form, :live, :with_welsh_translation, id: 1, name: "form with a live Welsh Version"),
+            create(:form, :archived, :with_welsh_translation, id: 2, name: "form with an archived Welsh version"),
+            create(:form, id: 3, name: "form with Welsh draft", available_languages: %w[cy en]),
+            create(:form, id: 4, name: "form with no Welsh version"),
+          ]
+        end
+
+        it "appends the correct text" do
+          rows = presenter.data[:rows]
+          expect(rows[0][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/1/live\">form with a live Welsh Version</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh Version</p>")
+          expect(rows[1][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/2/archived\">form with an archived Welsh version</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With archived Welsh version</p>")
+          expect(rows[2][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/4\">form with no Welsh version</a>")
+          expect(rows[3][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/3\">form with Welsh draft</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh draft</p>")
+        end
+      end
     end
   end
 end
