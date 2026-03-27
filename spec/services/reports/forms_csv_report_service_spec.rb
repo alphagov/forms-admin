@@ -23,7 +23,8 @@ RSpec.describe Reports::FormsCsvReportService do
   end
   let(:form) do
     create(:form, :live, :with_support, submission_type: "email", submission_format: %w[csv json],
-                                        payment_url: "https://www.gov.uk/payments/organisation/service", send_daily_submission_batch: true, pages: [
+                                        payment_url: "https://www.gov.uk/payments/organisation/service", send_daily_submission_batch: true,
+                                        send_weekly_submission_batch: true, pages: [
                                           create(:page, :with_address_settings, is_repeatable: true),
                                           create(:page, :with_date_settings),
                                           create(:page, answer_type: "email"),
@@ -73,6 +74,7 @@ RSpec.describe Reports::FormsCsvReportService do
         form.what_happens_next_markdown,
         "email",
         "csv json",
+        "true",
         "true",
       )
     end

@@ -16,6 +16,7 @@ class Reports::FeatureReportService
       forms_with_csv_submission_email_attachments: 0,
       forms_with_json_submission_email_attachments: 0,
       forms_with_daily_submission_csv: 0,
+      forms_with_weekly_submission_csv: 0,
       forms_with_s3_submissions: 0,
       forms_with_answer_type: HashWithIndifferentAccess.new,
       steps_with_answer_type: HashWithIndifferentAccess.new,
@@ -33,6 +34,7 @@ class Reports::FeatureReportService
       report[:forms_with_csv_submission_email_attachments] += 1 if Reports::FormDocumentsService.has_csv_submission_email_attachments(form)
       report[:forms_with_json_submission_email_attachments] += 1 if Reports::FormDocumentsService.has_json_submission_email_attachments(form)
       report[:forms_with_daily_submission_csv] += 1 if Reports::FormDocumentsService.has_daily_submission_csv(form)
+      report[:forms_with_weekly_submission_csv] += 1 if Reports::FormDocumentsService.has_weekly_submission_csv(form)
       report[:forms_with_s3_submissions] += 1 if Reports::FormDocumentsService.has_s3_submissions(form)
       report[:forms_with_exit_pages] += 1 if Reports::FormDocumentsService.has_exit_pages?(form)
       report[:forms_with_welsh_translation] += 1 if Reports::FormDocumentsService.has_welsh_translation(form)
@@ -161,6 +163,11 @@ class Reports::FeatureReportService
   def forms_with_daily_submission_csv
     form_documents
       .select { |form| Reports::FormDocumentsService.has_daily_submission_csv(form) }
+  end
+
+  def forms_with_weekly_submission_csv
+    form_documents
+      .select { |form| Reports::FormDocumentsService.has_weekly_submission_csv(form) }
   end
 
   def forms_with_s3_submissions

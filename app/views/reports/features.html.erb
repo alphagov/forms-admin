@@ -47,6 +47,10 @@
         <%= row.with_value(text: govuk_link_to(data[:forms_with_daily_submission_csv], report_forms_with_daily_submission_csv_path, no_visited_state: true)) %>
       <% end %>
       <%= summary_list.with_row do |row| %>
+        <%= row.with_key(text: t(".features.forms_with_weekly_submission_csv", tag: tag_label(tag)).upcase_first) %>
+        <%= row.with_value(text: govuk_link_to(data[:forms_with_weekly_submission_csv], report_forms_with_weekly_submission_csv_path, no_visited_state: true)) %>
+      <% end %>
+      <%= summary_list.with_row do |row| %>
         <%= row.with_key(text: t(".features.forms_with_s3_submissions", tag: tag_label(tag)).upcase_first) %>
         <%= row.with_value(text: govuk_link_to(data[:forms_with_s3_submissions], report_forms_with_s3_submissions_path, no_visited_state: true)) %>
       <% end %>
