@@ -28,6 +28,7 @@ class Reports::FormsCsvReportService
     "Submission type",
     "Submission formats",
     "Daily submissions CSV enabled",
+    "Weekly submissions CSV enabled",
   ].freeze
 
   attr_reader :form_documents
@@ -77,6 +78,7 @@ private
       form["content"]["submission_type"],
       form["content"]["submission_format"]&.sort&.join(" "),
       form["content"]["send_daily_submission_batch"],
+      form["content"]["send_weekly_submission_batch"],
     ]
   end
 end
