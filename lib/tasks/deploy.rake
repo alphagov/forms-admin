@@ -14,7 +14,7 @@ namespace :pipeline do
       puts "Will use Git commit: #{git_hash}"
       puts "Checking commit has been pushed..."
 
-      resp = Net::HTTP.get_response URI("https://api.github.com/repos/alphagov/forms-admin/commits/#{git_hash}")
+      resp = Net::HTTP.get_response URI("https://api.github.com/repos/govuk-forms/forms-admin/commits/#{git_hash}")
       if resp.code != "200"
         puts "Commit has not been pushed. The pipelines will not be able to find it."
         puts "Push the commit and run the command again."
