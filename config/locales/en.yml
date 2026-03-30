@@ -1757,6 +1757,7 @@ en:
         forms_with_payments: "%{tag} forms with payments"
         forms_with_routes: "%{tag} forms with routes"
         forms_with_s3_submissions: "%{tag} forms with S3 submissions"
+        forms_with_weekly_submission_csv: "%{tag} forms getting a weekly CSV of completed forms"
         forms_with_welsh_translation: "%{tag} forms with Welsh translation"
         heading: Feature usage
         total_forms: Total %{tag} forms
@@ -1811,6 +1812,10 @@ en:
       download_csv: Download data about all %{tag} forms with S3 submissions enabled (as a CSV)
       empty: There are no %{tag} forms with S3 submissions enabled
       heading: "%{tag} forms with S3 submissions enabled"
+    forms_with_weekly_submission_csv:
+      download_csv: Download data about all %{tag} forms getting a weekly CSV of completed forms (as a CSV)
+      empty: There are no %{tag} forms getting a weekly CSV of completed forms
+      heading: "%{tag} forms getting a weekly CSV of completed forms"
     forms_with_welsh_translation:
       download_csv: Download data about all %{tag} forms with a Welsh translation (as a CSV)
       empty: There are no %{tag} forms with a Welsh translation
