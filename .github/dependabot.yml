@@ -34,6 +34,10 @@ updates:
       sentry:
         patterns:
           - "sentry-*"
+      vite_ruby:
+        patterns:
+          - "vite_rails"
+          - "vite_ruby"
 
   # Maintain dependencies for npm
   - package-ecosystem: npm
