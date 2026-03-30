@@ -7,7 +7,8 @@ import {
   sendPageViewEvent,
   attachExternalLinkTracker,
   setDefaultConsent,
-  attachQuestionXsRoutesTracker
+  attachQuestionXsRoutesTracker,
+  attachOptionalLinkTracker
 } from '../google-tag'
 import { describe, afterEach, it, expect, beforeEach } from 'vitest'
 
@@ -151,7 +152,7 @@ describe('google_tag.mjs', () => {
       data: 'Some existing data in the dataLayer'
     }
 
-    const preventDefault = event => {
+    const preventDefault = (event) => {
       event.preventDefault()
     }
 
@@ -241,6 +242,118 @@ describe('google_tag.mjs', () => {
           expect(window.dataLayer).toEqual([existingDataLayerObject])
         })
       })
+    })
+  })
+
+  describe('attachOptionalLinkTracker', () => {
+    const preventDefault = (event) => {
+      event.preventDefault()
+    }
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <a id="externalHTTP" href="http://example.com/" data-track-link>A link to example.com</a>
+        <a id="noTrack" href="http://example.com/">A link to example.com</a>
+        <a id="externalHTTPS" href="https://example.com/" data-track-link>A secure link to example.com</a>
+        <a id="internal" href="a_csv_file.csv" data-track-link>Dpwnload a CSV file</a>
+        <a id="mailto" href="mailto:example@example.com" data-track-link>A link to example@example.com</a>
+      `
+      window.dataLayer = []
+
+      // stop link clicks from navigating, since jsdom can't do navigation
+      document.querySelector('a').addEventListener('click', preventDefault)
+    })
+
+    afterEach(() => {
+      document.querySelector('a').removeEventListener('click', preventDefault)
+      window.dataLayer = []
+    })
+
+    it('tracks clicks on external HTTP link with data-track-link attribute', () => {
+      attachOptionalLinkTracker()
+
+      const externalLink = document.getElementById('externalHTTP')
+      externalLink.click()
+      expect(window.dataLayer).toEqual([
+        {
+          event: 'event_data',
+          event_data: {
+            event_name: 'navigation',
+            external: true,
+            method: 'primary click',
+            text: 'A link to example.com',
+            type: 'generic link',
+            url: 'http://example.com/'
+          }
+        }
+      ])
+    })
+
+    it('tracks clicks on external HTTPS link with data-track-link attribute', () => {
+      attachOptionalLinkTracker()
+
+      const externalLink = document.getElementById('externalHTTPS')
+      externalLink.click()
+      expect(window.dataLayer).toEqual([
+        {
+          event: 'event_data',
+          event_data: {
+            event_name: 'navigation',
+            external: true,
+            method: 'primary click',
+            text: 'A secure link to example.com',
+            type: 'generic link',
+            url: 'https://example.com/'
+          }
+        }
+      ])
+    })
+
+    it('tracks clicks on internal link with data-track-link attribute', () => {
+      attachOptionalLinkTracker()
+
+      const internalLink = document.getElementById('internal')
+      internalLink.click()
+      expect(window.dataLayer).toEqual([
+        {
+          event: 'event_data',
+          event_data: {
+            event_name: 'navigation',
+            external: false,
+            method: 'primary click',
+            text: 'Dpwnload a CSV file',
+            type: 'generic link',
+            url: 'http://localhost:3000/a_csv_file.csv'
+          }
+        }
+      ])
+    })
+
+    it('does not track clicks on links without data-track-link attribute', () => {
+      attachOptionalLinkTracker()
+
+      const link = document.getElementById('noTrack')
+      link.click()
+      expect(window.dataLayer).toEqual([])
+    })
+
+    it('tracks clicks on mailto link with data-track-link attribute', () => {
+      attachOptionalLinkTracker()
+
+      const link = document.getElementById('mailto')
+      link.click()
+      expect(window.dataLayer).toEqual([
+        {
+          event: 'event_data',
+          event_data: {
+            event_name: 'navigation',
+            external: false,
+            method: 'primary click',
+            text: 'A link to example@example.com',
+            type: 'generic link',
+            url: 'mailto:example@example.com'
+          }
+        }
+      ])
     })
   })
 })

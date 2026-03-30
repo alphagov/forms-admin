@@ -7,14 +7,15 @@ import {
   installAnalyticsScript,
   sendPageViewEvent,
   attachExternalLinkTracker,
-  attachQuestionXsRoutesTracker
+  attachQuestionXsRoutesTracker,
+  attachOptionalLinkTracker
 } from '../javascript/google-tag'
 import { saveConsentStatus } from '../javascript/utils/cookie-consent'
 import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
 
 document
   .querySelectorAll('[data-module="copy-to-clipboard"]')
-  .forEach(element => {
+  .forEach((element) => {
     copyToClipboard(
       element,
       element.querySelector('[data-copy-target]'),
@@ -24,7 +25,7 @@ document
 
 document
   .querySelectorAll('[data-module="markdown-editor-toolbar"]')
-  .forEach(element => {
+  .forEach((element) => {
     markdownEditorToolbar(
       element,
       JSON.parse(element.getAttribute('data-i18n')),
@@ -35,7 +36,7 @@ document
 
 document
   .querySelectorAll('[data-module="ajax-markdown-preview"]')
-  .forEach(element => {
+  .forEach((element) => {
     ajaxMarkdownPreview(
       element.querySelector('[data-ajax-markdown-target]'),
       element.querySelector('[data-ajax-markdown-source]'),
@@ -50,6 +51,7 @@ if (document.body.dataset.googleAnalyticsEnabled === 'true') {
   sendPageViewEvent()
   attachExternalLinkTracker()
   attachQuestionXsRoutesTracker()
+  attachOptionalLinkTracker()
 }
 
 initAll()
