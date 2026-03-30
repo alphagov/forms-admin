@@ -11,7 +11,7 @@ GIT
       view_component
 
 GIT
-  remote: https://github.com/alphagov/govuk-forms-markdown.git
+  remote: https://github.com/govuk-forms/govuk-forms-markdown.git
   revision: 62bcbf4390aa4998390c1390debcbf250aa90ec0
   tag: 0.8.0
   specs:
