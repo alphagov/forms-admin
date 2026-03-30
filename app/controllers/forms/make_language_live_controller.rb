@@ -15,7 +15,7 @@ module Forms
       return redirect_to form_path(@make_language_live_input.form.id) unless @make_language_live_input.confirmed?
 
       @make_form_live_service = MakeFormLiveService.call(current_form:, current_user:, language: params[:language])
-      # TODO: actually make the language live
+      @make_form_live_service.make_language_live
 
       @go_to_make_welsh_live_input = GoToMakeWelshLiveInput.new
 

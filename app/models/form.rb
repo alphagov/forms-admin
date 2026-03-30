@@ -267,6 +267,30 @@ private
     FormDocumentSyncService.new(self).synchronize_live_form
   end
 
+  def before_make_english_live
+    before_make_live
+  end
+
+  def after_make_english_live
+    FormDocumentSyncService.new(self).synchronize_live_english_form
+  end
+
+  def can_make_english_version_live?
+    ready_for_live && live_welsh_form_document.blank?
+  end
+
+  def before_make_welsh_live
+    before_make_live
+  end
+
+  def after_make_welsh_live
+    FormDocumentSyncService.new(self).synchronize_live_welsh_form
+  end
+
+  def can_make_welsh_version_live?
+    ready_for_live && live_form_document.present?
+  end
+
   def after_archive
     FormDocumentSyncService.new(self).synchronize_archived_form
   end
