@@ -190,7 +190,7 @@ if (HostingEnvironment.local_development? || HostingEnvironment.review?) && User
         question_text: "Selection from a list of options",
         answer_type: "selection",
         answer_settings: {
-          "only_one_option": "0", # TODO: investigate why we set this to "0"
+          "only_one_option": "false",
           "selection_options": [
             { "name": "Option 1", value: "Option 1" },
             { "name": "Option 2", value: "Option 2" },
