@@ -18,8 +18,8 @@ RSpec.describe ReportHelper, type: :helper do
 
   let(:questions) do
     [
-      { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },
-      { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "organisation_name" => "Ministry of Tests" } },
+      { "type" => "question", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => "live", "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },
+      { "type" => "question", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => "live", "content" => { "name" => "Branch route form" }, "organisation_name" => "Ministry of Tests" } },
     ]
   end
 
