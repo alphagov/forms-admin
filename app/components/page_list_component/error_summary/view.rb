@@ -12,6 +12,7 @@ module PageListComponent
 
       def self.generate_error_message(error_name, condition:, page:)
         # TODO: route_number is hardcoded as 1 here because we know there can be only two conditions. It will need to change in future
+        # https://trello.com/c/BfkZEIgM/3446-set-route-count-dynamically-instead-of-hard-coding-it
         route_number = condition.secondary_skip? ? I18n.t("errors.page_conditions.route_number_for_any_other_answer") : 1
 
         interpolation_variables = { question_number: page.position, route_number: }

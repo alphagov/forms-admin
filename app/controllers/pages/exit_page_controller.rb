@@ -13,6 +13,7 @@ class Pages::ExitPageController < PagesController
 
     if exit_page_input.submit
       # TODO: Route number is hardcoded whilst we can only have one value for it
+      # https://trello.com/c/BfkZEIgM/3446-set-route-count-dynamically-instead-of-hard-coding-it
       redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.exit_page_created")
     else
       render template: "pages/exit_page/new", locals: { exit_page_input:, preview_html: preview_html(exit_page_input), check_preview_validation: true }, status: :unprocessable_content

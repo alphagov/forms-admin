@@ -31,6 +31,7 @@ class Pages::ConditionsController < PagesController
         redirect_to new_exit_page_path(current_form.id, page.id, answer_value: condition_input.answer_value)
       else
         # TODO: Route number is hardcoded whilst we can only have one value for it
+        # https://trello.com/c/BfkZEIgM/3446-set-route-count-dynamically-instead-of-hard-coding-it
         redirect_to show_routes_path(form_id: current_form.id, page_id: page.id), success: t("banner.success.route_created", route_number: 1)
       end
     else
