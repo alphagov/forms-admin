@@ -18,10 +18,10 @@
 
               <div class="govuk-button-group form-action-group app-page-list__button-group">
                 <% if show_up_button(index) %>
-                  <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.position), secondary: true, name: 'move_direction[up]', value: page.id %>
+                  <%= f.govuk_submit t("forms.form_overview.move_up_html", title: page.position), secondary: true, name: "move_direction[up]", value: page.id %>
                 <% end %>
                 <% if show_down_button(index)  %>
-                  <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page.position), secondary: true, name: 'move_direction[down]', value: page.id %>
+                  <%= f.govuk_submit t("forms.form_overview.move_down_html", title: page.position), secondary: true, name: "move_direction[down]", value: page.id %>
                 <% end %>
               </div>
 
@@ -33,9 +33,9 @@
           </div>
 
           <%  page.routing_conditions.each do |condition| %>
-            <% condition_page = self.condition_page(condition) %>
-            <% condition_page_position = self.condition_page_position(condition) %>
-            <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names( "govuk-form-group--error": condition.has_routing_errors?) %>">
+            <% condition_page = condition_page(condition) %>
+            <% condition_page_position = condition_page_position(condition) %>
+            <div id="<%= PageListComponent::ErrorSummary::View.error_id(condition.id) %>" class="govuk-summary-list__row app-page-list__row <%= class_names("govuk-form-group--error": condition.has_routing_errors?) %>">
               <dt class="govuk-summary-list__key govuk-summary-list__key app-page-list__key">
                 <%= t("page_conditions.condition_name", question_number: condition_page_position) %>
               </dt>

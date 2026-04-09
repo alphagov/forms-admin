@@ -18,7 +18,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta property="og:image" content="<%= vite_asset_path "#{govuk_assets_path}/images/govuk-opengraph-image.png" %>">
 
-    <%= vite_stylesheet_tag 'application.scss' %>
+    <%= vite_stylesheet_tag "application.scss" %>
   </head>
 
   <%= tag.body(
@@ -59,7 +59,7 @@
     <%= yield :footer %>
 
     <%= vite_client_tag %>
-    <%= vite_javascript_tag 'application' %>
+    <%= vite_javascript_tag "application" %>
 
     <% if AnalyticsService.analytics_events.present? && @current_user&.collect_analytics? %>
       <script data-analytics-events type="module">

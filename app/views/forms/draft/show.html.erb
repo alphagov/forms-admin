@@ -37,7 +37,7 @@
     <% end %>
 
     <%= render TaskListComponent::View.new(completed_task_count: @task_status_counts[:completed],
-                                           total_task_count: @task_status_counts[:total] ,
+                                           total_task_count: @task_status_counts[:total],
                                            sections: @task_list)
     %>
 

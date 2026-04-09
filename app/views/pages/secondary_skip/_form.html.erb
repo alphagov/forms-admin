@@ -1,5 +1,5 @@
 <%= form_with(model: secondary_skip_input, url: submit_path) do |f| %>
-  <% if  secondary_skip_input&.errors.any? %>
+  <% if  secondary_skip_input&.errors&.any? %>
     <%= f.govuk_error_summary %>
   <% end %>
 
@@ -7,8 +7,8 @@
 
   <%= govuk_summary_list(actions: false) do |summary_list|
     summary_list.with_row do |row|
-      row.with_key { t("page_route_card.question_name_short", question_number:  secondary_skip_input.page.position) }
-      row.with_value { "#{secondary_skip_input.page.question_text}" }
+      row.with_key { t("page_route_card.question_name_short", question_number: secondary_skip_input.page.position) }
+      row.with_value { secondary_skip_input.page.question_text.to_s }
     end;
   end %>
 
@@ -24,7 +24,7 @@
     end;
   end %>
 
-  <%= t('secondary_skip.new.explanation_html', route_number: 1, question_number: secondary_skip_input.next_page_number) %>
+  <%= t("secondary_skip.new.explanation_html", route_number: 1, question_number: secondary_skip_input.next_page_number) %>
 
   <%= f.govuk_collection_select :routing_page_id, secondary_skip_input.routing_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_routing_page_id") } %>
   <%= f.govuk_collection_select :goto_page_id, secondary_skip_input.goto_page_options, :id, :question_text, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_secondary_skip_input.default_goto_page_id") } %>

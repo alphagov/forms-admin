@@ -3,8 +3,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @change_order_input, url: change_order_create_path(@change_order_input.form.id), method: 'POST') do |f| %>
-      <% if @change_order_input&.errors.any? %>
+    <%= form_with(model: @change_order_input, url: change_order_create_path(@change_order_input.form.id), method: "POST") do |f| %>
+      <% if @change_order_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
@@ -42,11 +42,11 @@
         <% end %>
       </dl>
 
-      <%= f.govuk_submit t("pages.change_order.preview_button"), secondary: true, name: 'preview', value: "true" %>
+      <%= f.govuk_submit t("pages.change_order.preview_button"), secondary: true, name: "preview", value: "true" %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
-        Pages::ChangeOrderInput::RADIO_OPTIONS.keys, ->(option) { option }, ->(option) { t('helpers.label.pages/change_order_input.options.' + "#{option}") },
-        legend: { text: t('pages.change_order.radios_legend'), size: 'm' }
+        Pages::ChangeOrderInput::RADIO_OPTIONS.keys, ->(option) { option }, ->(option) { t("helpers.label.pages/change_order_input.options.#{option}") },
+        legend: { text: t("pages.change_order.radios_legend"), size: "m" }
       %>
 
       <%= f.govuk_submit t("save_and_continue") %>

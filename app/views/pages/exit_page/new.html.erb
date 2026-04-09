@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with model: exit_page_input, url: create_exit_page_path(exit_page_input.form.id, exit_page_input.page.id), method: 'POST' do |f| %>
+    <%= form_with model: exit_page_input, url: create_exit_page_path(exit_page_input.form.id, exit_page_input.page.id), method: "POST" do |f| %>
       <%= f.govuk_error_summary %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t("page_titles.routing_page_caption", question_number: exit_page_input.page.position) %></span>
@@ -12,7 +12,7 @@
         <%= t("page_titles.add_exit_page") %>
       </h1>
 
-      <%= f.govuk_text_field( :exit_page_heading, label: { size: 'm' })  %>
+      <%= f.govuk_text_field(:exit_page_heading, label: { size: "m" })  %>
 
       <%= render MarkdownEditorComponent::View.new(:exit_page_markdown,
         form_builder: f,
@@ -27,7 +27,7 @@
       
       <div class="govuk-button-group">
         <%= f.govuk_submit t("save_and_continue") %>
-        <%= govuk_link_to t('cancel'), new_condition_path(exit_page_input.form.id, exit_page_input.page.id) %>
+        <%= govuk_link_to t("cancel"), new_condition_path(exit_page_input.form.id, exit_page_input.page.id) %>
       </div>
     <% end %>
   </div>

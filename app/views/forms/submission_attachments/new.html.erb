@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @submission_attachments_input, url: submission_attachments_create_path) do |f| %>
-      <% if @submission_attachments_input&.errors.any? %>
+      <% if @submission_attachments_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
@@ -15,7 +15,7 @@
 
       <%= t(".body_html") %>
 
-      <%= f.govuk_check_boxes_fieldset :submission_format, legend: { tag: 'h2', size: 'm' } do %>
+      <%= f.govuk_check_boxes_fieldset :submission_format, legend: { tag: "h2", size: "m" } do %>
         <%= f.govuk_check_box :submission_format, "csv" %>
         <%= f.govuk_check_box :submission_format, "json" %>
       <% end %>

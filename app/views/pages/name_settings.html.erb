@@ -6,7 +6,7 @@
     <%= form_with model: [current_form, @name_settings_input], url: @name_settings_path do |f| %>
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l"><span class="govuk-caption-l"><%= "#{t("pages.question")} #{current_form.page_number(@page)}" %></span>
+      <h1 class="govuk-heading-l"><span class="govuk-caption-l"><%= "#{t('pages.question')} #{current_form.page_number(@page)}" %></span>
         <%= t("page_titles.name_settings") %>
       </h1>
 
@@ -14,8 +14,8 @@
             :input_type,
             Pages::NameSettingsInput::INPUT_TYPES,
             ->(option) { option },
-            ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
-            ->(option) { t('helpers.label.page.name_settings_options.hints.' + option) },
+            ->(option) { t("helpers.label.page.name_settings_options.names.#{option}") },
+            ->(option) { t("helpers.label.page.name_settings_options.hints.#{option}") },
             legend: { text: t("helpers.label.page.name_settings_options.legends.input_type") },
             hint: { text: t("helpers.label.page.name_settings_options.hints.input_type") },
             bold_labels: false,
@@ -24,15 +24,15 @@
             :title_needed,
             Pages::NameSettingsInput::TITLE_NEEDED,
             ->(option) { option },
-            ->(option) { t('helpers.label.page.name_settings_options.names.' + option) },
+            ->(option) { t("helpers.label.page.name_settings_options.names.#{option}") },
             legend: { text: t("helpers.label.page.name_settings_options.legends.title") },
             hint: { text: t("helpers.label.page.name_settings_options.hints.title") },
             )  %>
-      <%= f.govuk_submit t('continue') %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>

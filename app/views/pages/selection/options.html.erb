@@ -11,7 +11,7 @@
         Browsers use the first submit button in a form when the enter key is pressed, so we have to put this hidden button here,
         otherwise pressing the enter key will delete the first item in the list instead of submnitting the form.
       %>
-      <%= f.submit t('save_and_continue'), hidden: true %>
+      <%= f.submit t("save_and_continue"), hidden: true %>
 
       <span class="govuk-caption-l"><%= t("pages.question") %> <%= current_form.page_number(@page) %></span>
       <h1 class="govuk-heading-l"><%= t("page_titles.selection_options") %></h1>
@@ -51,13 +51,13 @@
         <% end %>
       </div>
 
-      <%= f.govuk_collection_radio_buttons :include_none_of_the_above, @selection_options_input.include_none_of_the_above_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+      <%= f.govuk_collection_radio_buttons :include_none_of_the_above, @selection_options_input.include_none_of_the_above_options, :id, :name, :description, legend: { size: "m", tag: "h2" }, bold_labels: false %>
 
-      <%= f.govuk_submit t('continue') %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>

@@ -40,7 +40,7 @@
 
     <% if status == :live %>
       <% if form_document.has_welsh_translation? %>
-        <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live), heading_text: t(".live_form_url_multilingual.en"), heading_level: 3 )%>
+        <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live), heading_text: t(".live_form_url_multilingual.en"), heading_level: 3)%>
 
         <%= render FormUrlComponent::View.new(runner_link: link_to_runner(Settings.forms_runner.url, form_document.id, form_document.form_slug, mode: :live, locale: "cy"), heading_text: t(".live_form_url_multilingual.cy"), heading_level: 3) %>
       <% else %>
@@ -56,14 +56,14 @@
       <% end %>
     <% end %>
 
-    <h3 class="govuk-heading-m"><%= t('.questions') %></h3>
-    <p><%= govuk_link_to t('.questions_link', count: form_document.steps.count), questions_path %></p>
+    <h3 class="govuk-heading-m"><%= t(".questions") %></h3>
+    <p><%= govuk_link_to t(".questions_link", count: form_document.steps.count), questions_path %></p>
 
     <% if form_document.declaration_markdown.present? %>
       <% if form_document.has_welsh_translation? %>
-        <%= govuk_summary_card(title: t('.declaration')) do |card| %>
+        <%= govuk_summary_card(title: t(".declaration")) do |card| %>
           <%= govuk_table do |table| %>
-            <%= table.with_caption(size: 'm', text: t(".declaration"), classes:"govuk-visually-hidden")
+            <%= table.with_caption(size: "m", text: t(".declaration"), classes: "govuk-visually-hidden")
           table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
 
             <%= table.with_body do |body|
@@ -77,21 +77,21 @@
             end
           end %>
           <% end %>
-          <%= govuk_details(summary_text: t('.what_is_declaration'), text: t('.declaration_description')) %>
+          <%= govuk_details(summary_text: t(".what_is_declaration"), text: t(".declaration_description")) %>
         <% end %>
       <% else %>
-        <h3 class="govuk-heading-m"><%= t('.declaration') %></h3>
+        <h3 class="govuk-heading-m"><%= t(".declaration") %></h3>
         <div class="app-preview-area">
           <%= GovukFormsMarkdown.render(form_document.declaration_markdown, locale: "en").html_safe %>
         </div>
-        <%= govuk_details(summary_text: t('.what_is_declaration'), text: t('.declaration_description')) %>
+        <%= govuk_details(summary_text: t(".what_is_declaration"), text: t(".declaration_description")) %>
       <% end %>
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
-      <%= govuk_summary_card(title: t('.what_happens_next')) do |card| %>
+      <%= govuk_summary_card(title: t(".what_happens_next")) do |card| %>
         <%= govuk_table do |table| %>
-          <%= table.with_caption(size: 'm', text: t(".what_happens_next"), classes:"govuk-visually-hidden")
+          <%= table.with_caption(size: "m", text: t(".what_happens_next"), classes: "govuk-visually-hidden")
           table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
 
           <%= table.with_body do |body|
@@ -105,21 +105,21 @@
             end
           end %>
         <% end %>
-        <%= govuk_details(summary_text: t('.what_is_what_happens_next'), text: t('.what_happens_next_description')) %>
+        <%= govuk_details(summary_text: t(".what_is_what_happens_next"), text: t(".what_happens_next_description")) %>
       <% end %>
     <% else %>
-      <h3 class="govuk-heading-m"><%= t('.what_happens_next') %></h3>
+      <h3 class="govuk-heading-m"><%= t(".what_happens_next") %></h3>
       <div class="app-preview-area">
         <%= GovukFormsMarkdown.render(form_document.what_happens_next_markdown, locale: "en").html_safe %>
       </div>
-      <%= govuk_details(summary_text: t('.what_is_what_happens_next'), text: t('.what_happens_next_description')) %>
+      <%= govuk_details(summary_text: t(".what_is_what_happens_next"), text: t(".what_happens_next_description")) %>
     <% end %>
 
     <% if form_document.respond_to?(:payment_url) && form_document.payment_url.present? %>
       <% if form_document.has_welsh_translation? %>
-        <%= govuk_summary_card(title: t('.payment_link')) do |card| %>
+        <%= govuk_summary_card(title: t(".payment_link")) do |card| %>
           <%= govuk_table do |table| %>
-            <%= table.with_caption(size: 'm', text: t(".payment_link"), classes:"govuk-visually-hidden")
+            <%= table.with_caption(size: "m", text: t(".payment_link"), classes: "govuk-visually-hidden")
           table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
 
             <%= table.with_body do |body|
@@ -142,7 +142,7 @@
 
     <h3 class="govuk-heading-m"><%= t(".how_you_get_completed_forms.title") %></h3>
 
-    <h4 class="govuk-heading-s"><%= t('.how_you_get_completed_forms.submission_email') %></h4>
+    <h4 class="govuk-heading-s"><%= t(".how_you_get_completed_forms.submission_email") %></h4>
     <p class="govuk-!-text-break-word"><%= form_document.submission_email %></p>
 
     <% if form_document.submission_type == "email" %>
@@ -172,9 +172,9 @@
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
-      <%= govuk_summary_card(title: t('.privacy_policy_link')) do |card| %>
+      <%= govuk_summary_card(title: t(".privacy_policy_link")) do |card| %>
         <%= govuk_table do |table| %>
-          <%= table.with_caption(size: 'm', text: t(".privacy_policy_link"), classes:"govuk-visually-hidden")
+          <%= table.with_caption(size: "m", text: t(".privacy_policy_link"), classes: "govuk-visually-hidden")
           table.with_head(**Forms::TranslationTablePresenter.new.two_column_headers) %>
 
           <%= table.with_body do |body|
@@ -190,21 +190,21 @@
         <% end %>
       <% end %>
     <% else %>
-      <h3 class="govuk-heading-m"><%= t('.privacy_policy_link') %></h3>
+      <h3 class="govuk-heading-m"><%= t(".privacy_policy_link") %></h3>
       <p><%= govuk_link_to(form_document.privacy_policy_url, form_document.privacy_policy_url) %></p>
     <% end %>
 
     <% if form_document.has_welsh_translation? %>
-      <%= govuk_summary_card(title: t('.contact_details')) do |card| %>
+      <%= govuk_summary_card(title: t(".contact_details")) do |card| %>
         <%= govuk_table do |table| %>
-          <%= table.with_caption(size: 'm', text: t(".contact_details"), classes:"govuk-visually-hidden")
+          <%= table.with_caption(size: "m", text: t(".contact_details"), classes: "govuk-visually-hidden")
           table.with_head(**Forms::TranslationTablePresenter.new.three_column_headers) %>
 
           <%= table.with_body do |body|
             if form_document.support_email
               body.with_row do |row|
                 row.with_cell(header: true) do
-                  t('forms.made_live_form.support_email')
+                  t("forms.made_live_form.support_email")
                 end
                 row.with_cell do
                   form_document.support_email
@@ -217,7 +217,7 @@
             if form_document.support_phone
               body.with_row do |row|
                 row.with_cell(header: true) do
-                  t('forms.made_live_form.support_phone')
+                  t("forms.made_live_form.support_phone")
                 end
                 row.with_cell do
                   form_document.support_phone
@@ -230,7 +230,7 @@
             if form_document.support_url
               body.with_row do |row|
                 row.with_cell(header: true) do
-                  t('forms.made_live_form.support_url')
+                  t("forms.made_live_form.support_url")
                 end
                 row.with_cell do
                   govuk_link_to form_document.support_url_text, form_document.support_url
@@ -244,19 +244,19 @@
         <% end %>
       <% end %>
     <% else %>
-      <h3 class="govuk-heading-m"><%= t('.contact_details') %></h3>
+      <h3 class="govuk-heading-m"><%= t(".contact_details") %></h3>
       <% if form_document.support_email %>
-        <h4 class="govuk-heading-s"><%= t('.support_email') %></h4>
+        <h4 class="govuk-heading-s"><%= t(".support_email") %></h4>
         <p class="govuk-!-text-break-word"><%= form_document.support_email %></p>
       <% end %>
 
       <% if form_document.support_phone %>
-        <h4 class="govuk-heading-s"><%= t('.support_phone') %></h4>
+        <h4 class="govuk-heading-s"><%= t(".support_phone") %></h4>
         <p><%= form_document.support_phone %></p>
       <% end %>
 
       <% if form_document.support_url %>
-        <h4 class="govuk-heading-s"><%= t('.support_url') %></h4>
+        <h4 class="govuk-heading-s"><%= t(".support_url") %></h4>
         <p><%= govuk_link_to form_document.support_url_text, form_document.support_url %></p>
       <% end %>
     <% end %>
@@ -268,7 +268,7 @@
     <div class="govuk-button-group">
       <%# i18n-tasks-use t('.draft_create') %>
       <%# i18n-tasks-use t('.draft_edit') %>
-      <%= govuk_button_link_to t(".draft_#{ form_metadata.has_draft_version ? 'edit': 'create'}"), form_path(form_document.id) %>
+      <%= govuk_button_link_to t(".draft_#{form_metadata.has_draft_version ? 'edit' : 'create'}"), form_path(form_document.id) %>
       <% if status == :live %>
         <%= govuk_button_link_to t(".archive_this_form"), archive_form_path(form_document.id), warning: true %>
         <%= govuk_button_link_to("Make a copy of this form", copy_form_path(form_metadata.id, "live"), secondary: true) %>

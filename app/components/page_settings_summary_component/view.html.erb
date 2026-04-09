@@ -8,10 +8,10 @@
   <% end %>
 
   <% if show_selection_settings_summary %>
-    <%= summary_list.with_row(classes: class_names("govuk-form-group--error": @errors&.has_key?(:selection_options))) do |row| %>
+    <%= summary_list.with_row(classes: class_names("govuk-form-group--error": @errors&.key?(:selection_options))) do |row| %>
       <%= row.with_key(text: t("page_settings_summary.selection.options")) %>
       <%= row.with_value do %>
-        <% if @errors&.has_key?(:selection_options) %>
+        <% if @errors&.key?(:selection_options) %>
           <p id="pages-question-input-selection-options-field-error" class="govuk-error-message">
             <span class="govuk-visually-hidden"><%= t("errors.prefix") %></span> <%= @errors.messages_for(:selection_options).first %>
           </p>

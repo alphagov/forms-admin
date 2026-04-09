@@ -15,11 +15,11 @@
         <%= render "non_crown_agreement_version_current" %>
       <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: 'h2', size: 'm', text: t("helpers.legend.mou_signature.#{@agreement_type}_agreed") } do %>
+      <%= f.govuk_check_boxes_fieldset :agreed, multiple: false, legend: { tag: "h2", size: "m", text: t("helpers.legend.mou_signature.#{@agreement_type}_agreed") } do %>
         <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true, label: { text: t("helpers.label.mou_signature.#{@agreement_type}_agreed") } %>
       <% end %>
 
-      <%= f.govuk_submit t('save_and_continue') %>
+      <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>
 </div>

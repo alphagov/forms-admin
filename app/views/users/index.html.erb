@@ -3,17 +3,17 @@
 <h1 class="govuk-heading-l"><%= t("users.index.title") %></h1>
 
 <div class="app-filter govuk-grid-row">
-  <%= form_with(model: @filter_input, scope: :filter, url: users_path, method: 'get', local: true, class: 'govuk-clearfix') do |f| %>
+  <%= form_with(model: @filter_input, scope: :filter, url: users_path, method: "get", local: true, class: "govuk-clearfix") do |f| %>
     <div class="govuk-grid-row govuk-!-padding-left-3 govuk-!-padding-right-3">
       <div class="govuk-grid-column-one-third">
         <%= f.govuk_text_field :name,
-          label: { text: t('users.index.filter.name.label'), size: 's' },
-          hint: { text: t('users.index.filter.name.hint') } %>
+          label: { text: t("users.index.filter.name.label"), size: "s" },
+          hint: { text: t("users.index.filter.name.hint") } %>
       </div>
       <div class="govuk-grid-column-one-third">
         <%= f.govuk_text_field :email,
-          label: { text: t('users.index.filter.email.label'), size: 's' },
-          hint: { text: t('users.index.filter.email.hint') } %>
+          label: { text: t("users.index.filter.email.label"), size: "s" },
+          hint: { text: t("users.index.filter.email.hint") } %>
       </div>
       <div class="govuk-grid-column-one-third">
         <%= render DfE::Autocomplete::View.new(
@@ -23,9 +23,9 @@
             Organisation.with_users.order(:name),
             :id,
             :name_with_abbreviation,
-            options: { prompt: t('users.index.filter.organisation.search_prompt') },
-            label: { text: t('users.index.filter.organisation.label'), size: 's' },
-            hint: { text: t('users.index.filter.organisation.hint') },
+            options: { prompt: t("users.index.filter.organisation.search_prompt") },
+            label: { text: t("users.index.filter.organisation.label"), size: "s" },
+            hint: { text: t("users.index.filter.organisation.hint") },
           ),
         ) %>
       </div>
@@ -37,8 +37,8 @@
           :value,
           :label,
           class: ["govuk-!-width-full"],
-          label: { text: t('users.index.filter.role.label'), size: 's' },
-          hint: { text: t('users.index.filter.role.hint'), size: 's' } %>
+          label: { text: t("users.index.filter.role.label"), size: "s" },
+          hint: { text: t("users.index.filter.role.hint"), size: "s" } %>
       </div>
       <div class="govuk-grid-column-one-third">
         <%= f.govuk_collection_select :has_access,
@@ -46,8 +46,8 @@
           :value,
           :label,
           class: ["govuk-!-width-full"],
-          label: { text: t('users.index.filter.has_access.label'), size: 's' },
-          hint: { text: t('users.index.filter.has_access.hint') } %>
+          label: { text: t("users.index.filter.has_access.label"), size: "s" },
+          hint: { text: t("users.index.filter.has_access.hint") } %>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
         <div class="govuk-button-group">
           <%= f.govuk_submit(t("users.index.filter.submit")) %>
           <% if @filter_input.has_filters? %>
-            <%= govuk_link_to t('users.index.filter.clear_filter'), users_path, no_visited_state: true %>
+            <%= govuk_link_to t("users.index.filter.clear_filter"), users_path, no_visited_state: true %>
           <% end %>
         </div>
       </div>
@@ -67,9 +67,9 @@
 <% if @users.any? %>
 
   <% if @filter_input.has_filters? %>
-    <p><%= govuk_link_to t('users.index.download_filtered'), @filtered_download_path, no_visited_state: true %></p>
+    <p><%= govuk_link_to t("users.index.download_filtered"), @filtered_download_path, no_visited_state: true %></p>
   <% else %>
-    <p><%= govuk_link_to t('users.index.download_all'), download_users_path, no_visited_state: true %></p>
+    <p><%= govuk_link_to t("users.index.download_all"), download_users_path, no_visited_state: true %></p>
   <% end %>
 
   <%= govuk_pagination(pagy: @pagy) %>
@@ -98,9 +98,11 @@
             row.with_cell(text: user.organisation&.name || t("users.index.organisation_blank"))
             row.with_cell(text: t("users.roles.#{user.role}.name"))
             row.with_cell(text: t("users.has_access.#{user.has_access}.name"))
-            row.with_cell do
-              govuk_button_to(t("users.act_as_user_html", user_email: user.email), act_as_user_start_path(user.id), method: :post, secondary: true) unless user.super_admin? || !user.has_access?
-            end if Settings.act_as_user_enabled
+            if Settings.act_as_user_enabled
+              row.with_cell do
+                govuk_button_to(t("users.act_as_user_html", user_email: user.email), act_as_user_start_path(user.id), method: :post, secondary: true) unless user.super_admin? || !user.has_access?
+              end
+            end
           end
         end
       end %>

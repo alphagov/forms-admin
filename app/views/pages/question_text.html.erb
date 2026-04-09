@@ -5,12 +5,12 @@
   <div class="govuk-grid-column-two-thirds">
     <%= form_with model: [current_form, @question_text_input], url: @question_text_path do |f| %>
       <%= f.govuk_error_summary %>
-      <%= f.govuk_text_field :question_text, label: { tag: 'h1', size: 'l' }, hint: { text: t("helpers.hint.page.question_text.checkbox") } %>
-      <%= f.govuk_submit t('continue') %>
+      <%= f.govuk_text_field :question_text, label: { tag: "h1", size: "l" }, hint: { text: t("helpers.hint.page.question_text.checkbox") } %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>

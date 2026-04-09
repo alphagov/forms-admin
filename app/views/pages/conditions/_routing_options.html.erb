@@ -1,7 +1,7 @@
 <% hint_text = t("routing_page.legend_hint_text") %>
 
-<%= form_with(model: routing_page_input, url: set_routing_page_path(form.id), method: 'POST') do |f| %>
-  <% if routing_page_input&.errors.any? %>
+<%= form_with(model: routing_page_input, url: set_routing_page_path(form.id), method: "POST") do |f| %>
+  <% if routing_page_input&.errors&.any? %>
     <%= f.govuk_error_summary %>
   <% end %>
 
@@ -16,14 +16,14 @@
     <%= f.govuk_collection_radio_buttons :routing_page_id,
           form.qualifying_route_pages,
           :id, :question_with_number,
-          legend: { text: t("routing_page.legend_text"), size: 'm' },
+          legend: { text: t("routing_page.legend_text"), size: "m" },
           hint: { text: hint_text }
     %>
   <% else %>
     <%= f.govuk_collection_select :routing_page_id,
       form.qualifying_route_pages,
       :id, :question_with_number,
-      label: { text: t("routing_page.legend_text"), size: 'm' },
+      label: { text: t("routing_page.legend_text"), size: "m" },
       options: { include_blank: t("routing_page.dropdown_default_text") },
       hint: { text: hint_text }
 

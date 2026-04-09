@@ -36,11 +36,11 @@
               <% end %>
 
               <% if Pundit.policy(@current_user, membership).update? && !membership.group_admin? %>
-                <%= govuk_button_to(t(".make_group_admin"), membership_path(membership), method: :patch, params: { membership: { role: Membership.roles[:group_admin] }}, secondary: true) %>
+                <%= govuk_button_to(t(".make_group_admin"), membership_path(membership), method: :patch, params: { membership: { role: Membership.roles[:group_admin] } }, secondary: true) %>
               <% end %>
 
               <% if Pundit.policy(@current_user, membership).update? && !membership.editor? %>
-                <%= govuk_button_to(t(".make_editor"), membership_path(membership), method: :patch, params: { membership: { role: Membership.roles[:editor] }}, secondary: true) %>
+                <%= govuk_button_to(t(".make_editor"), membership_path(membership), method: :patch, params: { membership: { role: Membership.roles[:editor] } }, secondary: true) %>
               <% end %>
 
             <% end %>

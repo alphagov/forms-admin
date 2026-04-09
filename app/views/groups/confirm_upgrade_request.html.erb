@@ -1,16 +1,16 @@
-<% set_page_title(t('page_titles.group_confirm_upgrade_request')) %>
+<% set_page_title(t("page_titles.group_confirm_upgrade_request")) %>
 
 <% content_for :back_link, govuk_back_link_to(@group, t("back_link.group", group_name: @group.name)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(url: request_upgrade_group_path(@group), method: 'POST') do |form| %>
+    <%= form_with(url: request_upgrade_group_path(@group), method: "POST") do |form| %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= @group.name %></span>
-        <%= t('page_titles.group_confirm_upgrade_request') %>
+        <%= t("page_titles.group_confirm_upgrade_request") %>
       </h1>
 
-      <%= t("groups.confirm_upgrade_request.body_html", organisation_admin_emails:  format_admin_emails_as_html_list(@group.organisation.admin_users.map(&:email))) %>
+      <%= t("groups.confirm_upgrade_request.body_html", organisation_admin_emails: format_admin_emails_as_html_list(@group.organisation.admin_users.map(&:email))) %>
 
       <%= govuk_inset_text do %>
         <%= t("groups.confirm_upgrade_request.inset_text") %>

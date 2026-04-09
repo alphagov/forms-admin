@@ -1,5 +1,5 @@
 <% set_page_title(title_with_error_prefix(t(".title"), @group.errors.any?)) %>
-<% content_for :back_link, govuk_back_link_to(groups_path,t("back_link.groups")) %>
+<% content_for :back_link, govuk_back_link_to(groups_path, t("back_link.groups")) %>
 
 <%= form_with(model: @group) do |f| %>
 <div class="govuk-grid-row">
@@ -12,7 +12,7 @@
 
     <%= t(".body_html") %>
 
-    <%= f.govuk_text_field :name, label: {  tag: 'h2', size: 'm' } %>
+    <%= f.govuk_text_field :name, label: { tag: "h2", size: "m" } %>
 
     <%= f.govuk_submit t("save_and_continue") %>
   <% end %>

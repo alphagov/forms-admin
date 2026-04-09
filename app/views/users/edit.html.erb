@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(@user.name.present? ? @user.name : @user.email, @user.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(@user.name.presence || @user.email, @user.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(users_path) %>
 
 <div class="govuk-grid-row">
@@ -10,7 +10,7 @@
 
       <% unless @user.current_org_has_mou? %>
         <%= govuk_notification_banner(title_text: t("banner.default.title")) do |banner| %>
-          <% banner.with_heading(text: t('users.edit.mou_banner'), tag: "p") %>
+          <% banner.with_heading(text: t("users.edit.mou_banner"), tag: "p") %>
         <% end %>
       <% end %>
 
@@ -21,65 +21,65 @@
       <h2 class="govuk-heading-m"><%= t("users.edit.caption") %></h2>
       <%= govuk_summary_list(actions: false) do |summary_list|
         summary_list.with_row do |row|
-          row.with_key { t('users.index.table_headings.name') }
+          row.with_key { t("users.index.table_headings.name") }
           row.with_value { @user.name || t("users.index.name_blank") }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.index.table_headings.email') }
+          row.with_key { t("users.index.table_headings.email") }
           row.with_value { @user.email }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.index.table_headings.signon_organisation') }
+          row.with_key { t("users.index.table_headings.signon_organisation") }
           row.with_value { @user.organisation_slug || t("users.index.organisation_blank") }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.index.table_headings.organisation') }
+          row.with_key { t("users.index.table_headings.organisation") }
           row.with_value { @user.organisation&.name || t("users.index.organisation_blank") }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.index.table_headings.role') }
+          row.with_key { t("users.index.table_headings.role") }
           row.with_value { t("users.roles.#{@user.role}.name") }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.edit.first_signed_in') }
+          row.with_key { t("users.edit.first_signed_in") }
           row.with_value { @user.created_at.to_date.to_fs }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.edit.last_signed_in') }
+          row.with_key { t("users.edit.last_signed_in") }
           row.with_value { date_last_signed_in_at @user }
         end
 
         summary_list.with_row do |row|
-          row.with_key { t('users.edit.has_access') }
+          row.with_key { t("users.edit.has_access") }
           row.with_value { t("users.has_access.#{@user.has_access}.name") }
         end
       end %>
 
-      <%= f.govuk_text_field :name, label: { size: 'm', tag: 'h2' }, autocomplete: :name, spellcheck: false %>
+      <%= f.govuk_text_field :name, label: { size: "m", tag: "h2" }, autocomplete: :name, spellcheck: false %>
 
       <%= render DfE::Autocomplete::View.new(
         f,
         attribute_name: :organisation_id,
         form_field: f.govuk_collection_select(:organisation_id, Organisation.order(:name), :id, :name_with_abbreviation,
-                                              class: ['govuk-!-width-three-quarters'],
-                                              options: { prompt: t('users.edit.organisation_prompt') },
-                                              label: { text: t('users.edit.organisation'), size: 'm', tag: 'h2' })
+                                              class: ["govuk-!-width-three-quarters"],
+                                              options: { prompt: t("users.edit.organisation_prompt") },
+                                              label: { text: t("users.edit.organisation"), size: "m", tag: "h2" })
       ) %>
 
       <%= f.govuk_collection_radio_buttons :role, user_role_options, :value, :label, :description,
-        legend: { text: t('users.edit.role'), size: 'm', tag: 'h2' } %>
+        legend: { text: t("users.edit.role"), size: "m", tag: "h2" } %>
 
       <%= f.govuk_collection_radio_buttons :has_access, user_access_options, :value, :label, :description,
-        legend: { text: t('users.edit.access'), size: 'm', tag: 'h2' } %>
+        legend: { text: t("users.edit.access"), size: "m", tag: "h2" } %>
 
-      <%= f.govuk_submit t('users.save') do
-        govuk_button_link_to t('users.cancel'), users_path, secondary: true
+      <%= f.govuk_submit t("users.save") do
+        govuk_button_link_to t("users.cancel"), users_path, secondary: true
       end %>
 
     <% end %>

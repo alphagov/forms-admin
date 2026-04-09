@@ -9,15 +9,15 @@
             :input_type,
             Pages::DateSettingsInput::INPUT_TYPES,
             ->(option) { option },
-            ->(option) { t('helpers.label.page.date_settings_options.names.' + option) },
-            legend: { text: t('page_titles.date_settings'), size: 'l', tag: 'h1' },
-            caption: { text: "#{t("pages.question")} #{current_form.page_number(@page)}" , size: 'l' },
+            ->(option) { t("helpers.label.page.date_settings_options.names.#{option}") },
+            legend: { text: t("page_titles.date_settings"), size: "l", tag: "h1" },
+            caption: { text: "#{t('pages.question')} #{current_form.page_number(@page)}", size: "l" },
           )  %>
-      <%= f.govuk_submit t('continue') %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>

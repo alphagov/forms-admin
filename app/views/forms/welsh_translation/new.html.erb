@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.welsh_translation'), @welsh_translation_input.errors.present?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.welsh_translation"), @welsh_translation_input.errors.present?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path(@welsh_translation_input.form), t("back_link.form_create")) %>
 
 <%= form_with(model: @welsh_translation_input, url: welsh_translation_create_path(@welsh_translation_input.form)) do |f| %>
@@ -24,7 +24,7 @@
     <div class="govuk-grid-column-full">
       <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.form_name")) do %>
         <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
-          <%= table.with_caption(size: 'm', text: t(".section_headings.form_name"))
+          <%= table.with_caption(size: "m", text: t(".section_headings.form_name"))
           table.with_head(**@table_presenter.two_column_headers) %>
 
           <%= table.with_body do |body|
@@ -45,7 +45,7 @@
 
             <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) do %>
               <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
-                <%= table.with_caption(size: 'm', text: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) %>
+                <%= table.with_caption(size: "m", text: t("forms.welsh_translation.new.question_number", question_number: page_form.object.page.position)) %>
                 <%= table.with_head(**@table_presenter.three_column_headers) %>
 
                 <%= table.with_body do |body| %>
@@ -122,11 +122,11 @@
 
             <% if page_form.object.page_has_selection_options? %>
               <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.section_headings.selection_options", question_number: page_form.object.page.position)) do %>
-                <%= page_form.govuk_fieldset legend: nil, described_by: ["selection_options_cy_table_caption"] do %>
+                <%= page_form.govuk_fieldset legend: nil, described_by: %w[selection_options_cy_table_caption] do %>
                   <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
-                    <%= table.with_caption(size: 's',
+                    <%= table.with_caption(size: "s",
                                text: t("forms.welsh_translation.new.section_headings.selection_options", question_number: page_form.object.page.position),
-                               html_attributes:{ id: "selection_options_cy_table_caption"})
+                               html_attributes: { id: "selection_options_cy_table_caption" })
         table.with_head(**@table_presenter.two_column_headers) %>
 
                     <%= table.with_body do |body| %>
@@ -138,7 +138,8 @@
                             <%= selection_options_form.govuk_text_field :name_cy,
                 id: selection_options_form.object.form_field_id(:name_cy),
                 label: {
-                  text: t("helpers.label.forms_welsh_page_translation_input.selection_options_cy_html", question_number: page_form.object.page.position, option_number: selection_options_form.index + 1), for: selection_options_form.object.form_field_id(:name_cy),
+                  text: t("helpers.label.forms_welsh_page_translation_input.selection_options_cy_html", question_number: page_form.object.page.position, option_number: selection_options_form.index + 1), 
+for: selection_options_form.object.form_field_id(:name_cy),
                   lang: "cy"
                 }
               %>
@@ -157,7 +158,7 @@
                 <% if condition_form.object.condition_has_exit_page? %>
                   <%= render ScrollingWrapperComponent::View.new(aria_label: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) do %>
                     <%= govuk_table(classes: @table_presenter.three_column_classes) do |table| %>
-                      <%= table.with_caption(size: 's', text: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) %>
+                      <%= table.with_caption(size: "s", text: t("forms.welsh_translation.new.condition.heading", question_number: page_form.object.page.position)) %>
                       <%= table.with_head(**@table_presenter.three_column_headers) %>
 
                       <%= table.with_body do |body| %>
@@ -206,7 +207,7 @@
         <% if @welsh_translation_input.form_has_declaration? %>
           <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.declaration")) do %>
             <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
-            table.with_caption(size: 'm', text: t(".section_headings.declaration"))
+            table.with_caption(size: "m", text: t(".section_headings.declaration"))
             table.with_head(**@table_presenter.two_column_headers)
 
             table.with_body do |body|
@@ -238,7 +239,7 @@
         <% if @welsh_translation_input.form_has_what_happens_next? %>
           <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.declaration")) do %>
             <%= govuk_table(classes: @table_presenter.two_column_classes) do |table| %>
-              <% table.with_caption(size: 'm', text: t(".section_headings.what_happens_next"))%>
+              <% table.with_caption(size: "m", text: t(".section_headings.what_happens_next"))%>
               <% table.with_head(**@table_presenter.two_column_headers) %>
 
               <% table.with_body do |body|%>
@@ -270,7 +271,7 @@
         <% if @welsh_translation_input.form_has_privacy_information? %>
           <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.privacy_information")) do %>
             <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
-            table.with_caption(size: 'm', text: t(".section_headings.privacy_information"))
+            table.with_caption(size: "m", text: t(".section_headings.privacy_information"))
             table.with_head(**@table_presenter.two_column_headers)
 
             table.with_body do |body|
@@ -311,7 +312,7 @@
         <% if @welsh_translation_input.form_has_support_information? %>
           <%= render ScrollingWrapperComponent::View.new(aria_label: t(".section_headings.support_information")) do %>
             <%= govuk_table(classes: @table_presenter.two_column_classes) do |table|
-            table.with_caption(size: 'm', text: t(".section_headings.support_information"))
+            table.with_caption(size: "m", text: t(".section_headings.support_information"))
             table.with_head(**@table_presenter.three_column_headers)
 
             table.with_body do |body|

@@ -31,7 +31,7 @@ RSpec.describe PageSettingsSummaryComponent::View, type: :component do
   let(:new_selection_none_of_the_above_path) { selection_none_of_the_above_new_path(form_id: draft_question.form_id) }
 
   before do
-    allow(errors).to receive(:has_key?).with(:selection_options).and_return(selection_options_error_messages.present?)
+    allow(errors).to receive(:key?).with(:selection_options).and_return(selection_options_error_messages.present?)
     allow(errors).to receive(:messages_for).with(:selection_options).and_return(selection_options_error_messages)
     render_inline(described_class.new(draft_question:, errors:))
   end

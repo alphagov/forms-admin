@@ -1,11 +1,11 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.contact_details'), @contact_details_input&.errors&.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.contact_details"), @contact_details_input&.errors&.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path, t("back_link.form_create")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <%= form_with(model: @contact_details_input, url: contact_details_create_path(@contact_details_input.form.id)) do |f| %>
-      <% if @contact_details_input&.errors.any? %>
+      <% if @contact_details_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
@@ -20,7 +20,7 @@
         <%= t("contact_details.new.email_confirmation_hint_html") %>
       </p>
 
-      <%= f.govuk_check_boxes_fieldset :contact_details_supplied, legend: { text: t('contact_details.new.title') }, hint: { text: t('contact_details.new.hint') } do %>
+      <%= f.govuk_check_boxes_fieldset :contact_details_supplied, legend: { text: t("contact_details.new.title") }, hint: { text: t("contact_details.new.hint") } do %>
         <%= f.govuk_check_box :contact_details_supplied, :supply_email, checked: @contact_details_input.check_email? do %>
           <%= f.govuk_email_field :email %>
         <% end %>
@@ -35,7 +35,7 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_submit t('save_and_continue' )%>
+      <%= f.govuk_submit t("save_and_continue")%>
     <% end %>
   </div>
 </div>

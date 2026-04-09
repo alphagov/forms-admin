@@ -1,5 +1,5 @@
 <% if render_counter? %>
-  <%= tag.p(class:"app-task-list__summary") do %>
+  <%= tag.p(class: "app-task-list__summary") do %>
     You’ve completed <%= completed_task_count %> of <%= total_task_count %> tasks.
   <% end %>
 <% end %>
@@ -23,7 +23,7 @@
         <%= govuk_task_list(id_prefix: section.title.gsub(" ", "-").downcase) do |task_list| %>
           <% section.rows.each do |row| %>
             <% task_list.with_item do |item| %>
-              <% item.with_title(text: row.task_name, href: row.get_path, hint: row.hint_text&.html_safe ) %>
+              <% item.with_title(text: row.task_name, href: row.get_path, hint: row.hint_text&.html_safe) %>
               <% item.with_status(text: row.get_status_tag, cannot_start_yet: row.cannot_start?) %>
             <% end %>
           <% end %>

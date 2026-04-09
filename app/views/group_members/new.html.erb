@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <%= form_with(model: @group_member_input, url: group_members_path(@group)) do |f| %>
-      <% if @group_member_input&.errors.any? %>
+      <% if @group_member_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
@@ -25,7 +25,7 @@
 
       <%= t(".body_html") %>
 
-      <%= f.govuk_email_field :member_email_address, label: {  tag: 'h2', size: 'm' } %>
+      <%= f.govuk_email_field :member_email_address, label: { tag: "h2", size: "m" } %>
 
       <% if show_role_options %>
         <%= f.govuk_collection_radio_buttons(
@@ -34,7 +34,7 @@
               ->(option) { option },
               ->(option) { t("helpers.label.group_member_input.roles.#{option}.name") },
               ->(option) { t("helpers.label.group_member_input.roles.#{option}.description") },
-              legend: { text: t('helpers.label.group_member_input.role'), size: 'm', tag: 'h2' },
+              legend: { text: t("helpers.label.group_member_input.role"), size: "m", tag: "h2" },
             )  %>
       <% end %>
       <%= f.govuk_submit t(".submit") %>

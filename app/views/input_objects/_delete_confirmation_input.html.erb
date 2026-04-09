@@ -1,11 +1,11 @@
-<%= form_with(model: delete_confirmation_input, url:, method: 'delete') do |f| %>
-  <% if delete_confirmation_input&.errors.any? %>
+<%= form_with(model: delete_confirmation_input, url:, method: "delete") do |f| %>
+  <% if delete_confirmation_input&.errors&.any? %>
     <%= f.govuk_error_summary %>
   <% end %>
   <%
     options = {
-      legend: { text: legend_text, size: 'l', tag: 'h1' },
-      caption: {text: caption_text, size: 'l'}
+      legend: { text: legend_text, size: "l", tag: "h1" },
+      caption: { text: caption_text, size: "l" }
     }
 
     if local_assigns.key?(:hint_text) && hint_text.present?
@@ -13,7 +13,7 @@
     end
   %>
   <%= f.govuk_collection_radio_buttons :confirm,
-                                       delete_confirmation_input.values, ->(option) { option }, ->(option) { t('helpers.label.confirm_action_input.options.' + "#{option}") },
+                                       delete_confirmation_input.values, ->(option) { option }, ->(option) { t("helpers.label.confirm_action_input.options.#{option}") },
                                        **options
                                        %>
 

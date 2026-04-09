@@ -1,4 +1,4 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.unarchive_form'), @make_live_input.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.unarchive_form"), @make_live_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(archived_form_path(current_form.id), t("back_link.form_view")) %>
 
 <div class="govuk-grid-row">
@@ -16,9 +16,9 @@
       <%= t("unarchive.new.body_html", submission_email: @make_live_input.form.submission_email) %>
 
       <%= f.govuk_collection_radio_buttons :confirm,
-                                           @make_live_input.values, ->(option) { option }, ->(option) { t('helpers.label.forms_make_live_input.options.' + "#{option}") },
-                                           legend: { text: t('helpers.label.forms_make_live_input.confirm'),
-                                                     size: 'm'}, inline: true %>
+                                           @make_live_input.values, ->(option) { option }, ->(option) { t("helpers.label.forms_make_live_input.options.#{option}") },
+                                           legend: { text: t("helpers.label.forms_make_live_input.confirm"),
+                                                     size: "m" }, inline: true %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
   </div>

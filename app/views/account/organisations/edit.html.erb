@@ -1,8 +1,8 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.account_organisation'), @organisation_input.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.account_organisation"), @organisation_input.errors.any?)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_with(model: @organisation_input , url: account_organisation_path, method: :patch) do |f| %>
-      <% if @organisation_input &.errors.any? %>
+    <%= form_with(model: @organisation_input, url: account_organisation_path, method: :patch) do |f| %>
+      <% if @organisation_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
@@ -13,17 +13,17 @@
                                               Organisation.not_closed.order(:name),
                                               :id,
                                               :name_with_abbreviation,
-                                              class: ['govuk-!-width-three-quarters'],
-                                              options: { prompt: t('users.edit.organisation_prompt') },
-                                              label: { size: 'xl', tag: 'h1' },
+                                              class: ["govuk-!-width-three-quarters"],
+                                              options: { prompt: t("users.edit.organisation_prompt") },
+                                              label: { size: "xl", tag: "h1" },
                                              ),
-      html_attributes: { 'data-show-all-values' => 'true'},
+      html_attributes: { "data-show-all-values" => "true" },
       )%>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
 
-  <%= govuk_section_break(visible:true, size: "l") %>
-  <%= govuk_details(summary_text: t('account.organisation_details_summary'), text: t('account.organisation_text_html', contact_link: contact_link)) %>
+  <%= govuk_section_break(visible: true, size: "l") %>
+  <%= govuk_details(summary_text: t("account.organisation_details_summary"), text: t("account.organisation_text_html", contact_link: contact_link)) %>
   </div>
 </div>
 

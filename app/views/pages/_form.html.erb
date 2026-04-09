@@ -2,22 +2,22 @@
   <%= f.govuk_error_summary %>
 
   <% if question_input.answer_type == "file" %>
-    <p class="govuk-body"><%= t('helpers.label.pages_question_input.file.body_html') %></p>
+    <p class="govuk-body"><%= t("helpers.label.pages_question_input.file.body_html") %></p>
 
-    <%= govuk_details(summary_text: "#{t('helpers.label.pages_question_input.file.details_title')}") do %>
-      <%= t('helpers.label.pages_question_input.file.details_body_html') %>
+    <%= govuk_details(summary_text: t("helpers.label.pages_question_input.file.details_title").to_s) do %>
+      <%= t("helpers.label.pages_question_input.file.details_body_html") %>
     <% end %>
 
   <% end %>
 
   <%= f.govuk_text_field :question_text,
-    label: { size: 'm', text: question_text_label(draft_question.answer_type, draft_question.answer_settings) },
+    label: { size: "m", text: question_text_label(draft_question.answer_type, draft_question.answer_settings) },
     hint: { text: hint_for_edit_page_field("question_text", draft_question.answer_type, draft_question.answer_settings) }
   %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <%= f.govuk_text_area :hint_text, label: { size: 'm' }, hint: { text: hint_for_edit_page_field("hint_text", draft_question.answer_type, draft_question.answer_settings) } %>
+  <%= f.govuk_text_area :hint_text, label: { size: "m" }, hint: { text: hint_for_edit_page_field("hint_text", draft_question.answer_type, draft_question.answer_settings) } %>
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
@@ -34,18 +34,18 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
-  <% if question_input.answer_type == 'selection' %>
+  <% if question_input.answer_type == "selection" %>
     <%= f.hidden_field :is_optional %>
   <% else %>
-    <%= f.govuk_collection_radio_buttons :is_optional, question_input.default_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+    <%= f.govuk_collection_radio_buttons :is_optional, question_input.default_options, :id, :name, :description, legend: { size: "m", tag: "h2" }, bold_labels: false %>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
-  <% if question_input.answer_type == "selection" || question_input.answer_type == "file" %>
+  <% if %w[selection file].include?(question_input.answer_type) %>
     <%= f.hidden_field :is_repeatable, value: false %>
   <% else %>
-    <%= f.govuk_collection_radio_buttons :is_repeatable, question_input.repeatable_options, :id, :name, :description, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
-    <%= govuk_details(summary_text: t('repeatable.summary_text'), text: t('repeatable.summary_content_html')) %>
+    <%= f.govuk_collection_radio_buttons :is_repeatable, question_input.repeatable_options, :id, :name, :description, legend: { size: "m", tag: "h2" }, bold_labels: false %>
+    <%= govuk_details(summary_text: t("repeatable.summary_text"), text: t("repeatable.summary_content_html")) %>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <% end %>
 
@@ -54,11 +54,11 @@
 
   <ul class="govuk-list govuk-list--spaced">
     <li>
-      <%= f.govuk_submit t('pages.submit_save'), class: "govuk-!-margin-bottom-3", name: "submit_type", value: "save" %>
+      <%= f.govuk_submit t("pages.submit_save"), class: "govuk-!-margin-bottom-3", name: "submit_type", value: "save" %>
     </li>
     <% unless is_new_page %>
       <li>
-        <%= govuk_button_link_to t('pages.delete_question'), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true %>
+        <%= govuk_button_link_to t("pages.delete_question"), delete_page_path(form_id: form_object.id, page_id: page_object.id), warning: true %>
       </li>
       <% if page_object.has_next_page? %>
         <li>
@@ -71,7 +71,7 @@
       <% end %>
     <% end %>
     <li>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(form_object.id) %>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(form_object.id) %>
     </li>
   </ul>
 <% end %>

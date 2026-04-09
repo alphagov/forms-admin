@@ -1,9 +1,9 @@
-<% set_page_title(title_with_error_prefix(t('page_titles.set_email'), @submission_email_input.errors.any?)) %>
+<% set_page_title(title_with_error_prefix(t("page_titles.set_email"), @submission_email_input.errors.any?)) %>
 <% content_for :back_link, govuk_back_link_to(form_path(@submission_email_input.form.id), t("back_link.form_create")) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @submission_email_input, url: submission_email_input_path) do |f| %>
-      <% if @submission_email_input&.errors.any? %>
+      <% if @submission_email_input&.errors&.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
 
@@ -13,8 +13,8 @@
       </h1>
 
       <%= t("set_email.new.body_html") %>
-      <%= f.hidden_field :notify_response_id, id: 'notification-id' %>
-      <%= f.govuk_email_field :temporary_submission_email, label: {  tag: 'h2', size: 'm' } %>
+      <%= f.hidden_field :notify_response_id, id: "notification-id" %>
+      <%= f.govuk_email_field :temporary_submission_email, label: { tag: "h2", size: "m" } %>
       <%= f.govuk_submit t("save_and_continue") %>
     <% end %>
 

@@ -15,15 +15,15 @@
         <p><%= t("selection_none_of_the_above.preamble") %></p>
       <% end %>
 
-      <%= f.govuk_text_field :question_text, label: { tag: 'h2', size: 'm' } %>
+      <%= f.govuk_text_field :question_text, label: { tag: "h2", size: "m" } %>
 
-      <%= f.govuk_collection_radio_buttons :is_optional, @none_of_the_above_input.is_optional_options, :id, legend: { size: 'm', tag: 'h2' }, bold_labels: false %>
+      <%= f.govuk_collection_radio_buttons :is_optional, @none_of_the_above_input.is_optional_options, :id, legend: { size: "m", tag: "h2" }, bold_labels: false %>
 
-      <%= f.govuk_submit t('continue') %>
+      <%= f.govuk_submit t("continue") %>
     <% end %>
 
     <p>
-      <%= govuk_link_to t('pages.go_to_your_questions'), form_pages_path(current_form.id) %>
+      <%= govuk_link_to t("pages.go_to_your_questions"), form_pages_path(current_form.id) %>
     </p>
   </div>
 </div>
