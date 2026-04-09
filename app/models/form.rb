@@ -229,6 +229,7 @@ private
 
   def task_status_service
     # TODO: refactor this in favour of dependency injection
+    # https://trello.com/c/TVN9BNxQ/3448-refactor-formtaskstatusservice-to-use-dependency-injection
     # it can also lead to use of `allow_any_instance_of` in testing
     @task_status_service ||= TaskStatusService.new(form: self)
   end

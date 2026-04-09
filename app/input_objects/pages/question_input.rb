@@ -1,7 +1,8 @@
 class Pages::QuestionInput < BaseInput
   attr_accessor :question_text, :hint_text, :is_optional, :answer_type, :draft_question, :is_repeatable, :form_id
 
-  # TODO: We could lose these attributes once we have a Check your answers page
+  # TODO: We could lose these attributes once we have a 'Check your question' page
+  # https://trello.com/c/uSkzB4Sl/3-create-check-your-question-page
   attr_accessor :answer_settings, :page_heading, :guidance_markdown
 
   attr_reader :selection_options # only used for displaying error

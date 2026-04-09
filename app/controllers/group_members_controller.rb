@@ -32,7 +32,8 @@ private
   end
 
   def group_member_params
-    ## TODO: We are passing in host here because the admin doesn't know it's own URL to use in emails
+    # TODO: We are passing in host here because the admin doesn't know it's own URL to use in emails
+    # https://trello.com/c/HkT90mFt/3447-configure-rails-apps-to-know-their-own-urls
     params.require(:group_member_input).permit(:member_email_address).merge(role: new_member_role, group: @group, creator: current_user, host: request.host)
   end
 

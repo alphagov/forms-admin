@@ -166,6 +166,7 @@ private
     # We want to delete the secondary skip for the page at the start of the route
     # That association isn't in the database, so we need to dig it out
     # TODO: what if the page owning the routes has more than two routes?
+    # https://trello.com/c/ZPFCV1C7/3462-rewrite-destroysecondaryskipconditions-to-handle-a-routing-page-with-more-than-two-routes
     goto_conditions
       .filter { |condition| condition.check_page_id == condition.routing_page_id }
       .map(&:check_page)
