@@ -9,6 +9,9 @@ inherit_mode:
   merge:
     - Exclude
 
+plugins:
+  - rubocop-erb
+
 # **************************************************************
 # TRY NOT TO ADD OVERRIDES IN THIS FILE
 #
@@ -22,4 +25,3 @@ inherit_mode:
 RSpec/SpecFilePathFormat:
   CustomTransform:
     OmniAuth: omniauth
-

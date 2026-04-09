@@ -106,6 +106,7 @@ group :development, :test do
   gem "i18n-tasks", "~> 1.1.2"
   gem "rails-controller-testing"
   gem "rspec-rails", ">= 3.9.0"
+  gem "rubocop-erb", "~> 0.7.1", require: false
   gem "rubocop-govuk", require: false
 
   # For security auditing gem vulnerabilities. RUN IN CI

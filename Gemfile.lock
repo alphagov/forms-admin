@@ -257,6 +257,14 @@ GEM
     hashdiff (1.2.1)
     hashie (5.1.0)
       logger
+    herb (0.9.5-aarch64-linux-gnu)
+    herb (0.9.5-aarch64-linux-musl)
+    herb (0.9.5-arm-linux-gnu)
+    herb (0.9.5-arm-linux-musl)
+    herb (0.9.5-arm64-darwin)
+    herb (0.9.5-x86_64-darwin)
+    herb (0.9.5-x86_64-linux-gnu)
+    herb (0.9.5-x86_64-linux-musl)
     highline (3.1.2)
       reline
     html-attributes-utils (1.0.2)
@@ -686,6 +694,10 @@ GEM
     rubocop-capybara (2.22.1)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
+    rubocop-erb (0.7.1)
+      herb (~> 0.7)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     rubocop-govuk (5.2.0)
       rubocop (= 1.82.1)
       rubocop-ast (= 1.49.0)
@@ -847,6 +859,7 @@ DEPENDENCIES
   rails-controller-testing
   reverse_markdown
   rspec-rails (>= 3.9.0)
+  rubocop-erb (~> 0.7.1)
   rubocop-govuk
   selenium-webdriver
   sentry-rails (~> 6)
@@ -940,6 +953,14 @@ CHECKSUMS
   govuk_notify_rails (3.0.0) sha256=e0e1b8b0a7c47f90963034f290fb2982652aa8051a733c25c178680d44f2d7aa
   hashdiff (1.2.1) sha256=9c079dbc513dfc8833ab59c0c2d8f230fa28499cc5efb4b8dd276cf931457cd1
   hashie (5.1.0) sha256=c266471896f323c446ea8207f8ffac985d2718df0a0ba98651a3057096ca3870
+  herb (0.9.5-aarch64-linux-gnu) sha256=3338dcec96e0fae1a384d4e01a64d8c1dddb91ca27b9e61b399d1fe77f654477
+  herb (0.9.5-aarch64-linux-musl) sha256=d444759e9217a40474876989c30ca49a8745653ec3f98a5db14f3bf79558801f
+  herb (0.9.5-arm-linux-gnu) sha256=c118cd3a485945081a4d837dc3e772211ddb358abf4b8559889f5084af64b95f
+  herb (0.9.5-arm-linux-musl) sha256=3e2047c738d61e9f60fef08df62ad6cca43149749b6e775b0e04fb16620635b3
+  herb (0.9.5-arm64-darwin) sha256=342c2065e6bf27b0fc3cd9d52906cf773caa9962642f57dbd2146abf43ce0295
+  herb (0.9.5-x86_64-darwin) sha256=d5771b2b0d4737db82d9f700f59de42623b56c22c20b080658b8ce20c9896a2d
+  herb (0.9.5-x86_64-linux-gnu) sha256=5acd1a63bf456f27d66b5833649e493ab0f1527fb8ae44325cf76639d7b592db
+  herb (0.9.5-x86_64-linux-musl) sha256=799e53792abfd89cdcdd018d661066a28506de25d0de9f05353a65a77af9dc2a
   highline (3.1.2) sha256=67cbd34d19f6ef11a7ee1d82ffab5d36dfd5b3be861f450fc1716c7125f4bb4a
   html-attributes-utils (1.0.2) sha256=594e0b37b3dd4e554abe893bee9719896f876675fd08fe534fc2e6e1b4e2538c
   i18n (1.14.8) sha256=285778639134865c5e0f6269e0b818256017e8cde89993fdfcbfb64d088824a5
@@ -1093,6 +1114,7 @@ CHECKSUMS
   rubocop (1.82.1) sha256=09f1a6a654a960eda767aebea33e47603080f8e9c9a3f019bf9b94c9cab5e273
   rubocop-ast (1.49.0) sha256=49c3676d3123a0923d333e20c6c2dbaaae2d2287b475273fddee0c61da9f71fd
   rubocop-capybara (2.22.1) sha256=ced88caef23efea53f46e098ff352f8fc1068c649606ca75cb74650970f51c0c
+  rubocop-erb (0.7.1) sha256=17d376b5b9ebb08b75f6bce6bcdc61603b506ef4523473483885d2be88e9099d
   rubocop-govuk (5.2.0) sha256=4742097ecdbd529f27ab137dbc787361ada525f85c50c9f063b7834a41b5bf8a
   rubocop-rails (2.34.3) sha256=10d37989024865ecda8199f311f3faca990143fbac967de943f88aca11eb9ad2
   rubocop-rake (0.7.1) sha256=3797f2b6810c3e9df7376c26d5f44f3475eda59eb1adc38e6f62ecf027cbae4d
