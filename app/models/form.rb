@@ -14,6 +14,7 @@ class Form < ApplicationRecord
   has_one :live_welsh_form_document, -> { where tag: "live", language: :cy }, class_name: "FormDocument"
   has_one :archived_form_document, -> { where tag: "archived", language: :en }, class_name: "FormDocument"
   has_one :archived_welsh_form_document, -> { where tag: "archived", language: :cy }, class_name: "FormDocument"
+  has_one :draft_welsh_form_document, -> { where tag: "draft", language: :cy }, class_name: "FormDocument"
   has_one :draft_form_document, -> { where tag: "draft", language: :en }, class_name: "FormDocument"
   has_many :conditions, through: :pages, source: :routing_conditions
 
