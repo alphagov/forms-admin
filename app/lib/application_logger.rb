@@ -32,7 +32,11 @@ private
     msg = yield if block_given?
 
     begin
-      message_to_hash(msg).merge(attribs || {}).merge(CurrentLoggingAttributes.attributes).compact
+      message_to_hash(msg)
+        .merge(attribs || {})
+        .merge(CurrentLoggingAttributes.attributes)
+        .merge(CurrentTaskLoggingAttributes.attributes)
+        .compact
     rescue NameError
       # if logs aren't attached to a request, CurrentLoggingAttributes will be uninitialized
       message_to_hash(msg).merge(attribs || {})
