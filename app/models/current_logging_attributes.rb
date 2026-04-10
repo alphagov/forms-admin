@@ -15,5 +15,6 @@ class CurrentLoggingAttributes < ActiveSupport::CurrentAttributes
             :answer_type,
             :auth0_session_id,
             :validation_errors,
-            :params
+            :params,
+            :task_name
 end
