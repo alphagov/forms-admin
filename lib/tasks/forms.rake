@@ -215,6 +215,17 @@ namespace :forms do
 
     Rails.logger.info "convert_declaration_text_to_markdown: finished"
   end
+
+  desc "List all forms that are not in a group"
+  task list_forms_without_group: :environment do
+    forms = Form.where.missing(:group_form)
+
+    Rails.logger.info "Found #{forms.count} forms without a group"
+    forms.find_each do |form|
+      creator = User.find(form.creator_id) if form.creator_id.present?
+      Rails.logger.info "Form #{form.id} (\"#{form.name}\") created by #{creator&.name || 'No creator'} with organisation #{creator&.organisation&.name || 'N/A'}"
+    end
+  end
 end
 
 def move_forms(form_ids, group_id)
