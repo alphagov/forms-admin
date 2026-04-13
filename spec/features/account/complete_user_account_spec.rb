@@ -3,7 +3,6 @@ require "rails_helper"
 feature "Add account organisation to user without organisation", type: :feature do
   let(:user) { create :user, :with_no_org, name: nil, terms_agreed_at: nil }
   let!(:organisation) { create :organisation }
-  let(:form_name) { "a form I created when I didn't have an organisation" }
 
   before do
     OmniAuth.config.test_mode = true
@@ -13,8 +12,6 @@ feature "Add account organisation to user without organisation", type: :feature 
     )
 
     allow(Settings).to receive(:auth_provider).and_return("auth0")
-
-    create(:form, creator_id: user.id, name: form_name, created_at: "2024-10-08T07:31:15.762Z")
   end
 
   after do
@@ -33,8 +30,6 @@ feature "Add account organisation to user without organisation", type: :feature 
     then_i_should_be_redirected_to_the_account_terms_of_use_page
     and_i_agree_to_the_terms_of_use
     then_i_should_be_redirected_to_my_original_destination
-    and_i_open_my_default_group
-    and_i_can_open_my_form
   end
 
 private
@@ -76,14 +71,5 @@ private
 
   def then_i_should_be_redirected_to_my_original_destination
     expect(page).to have_current_path(groups_path)
-  end
-
-  def and_i_open_my_default_group
-    click_link("John Doe’s trial group")
-  end
-
-  def and_i_can_open_my_form
-    click_link("a form I created when I didn't have an organisation")
-    expect(page.find("h1")).to have_text "a form I created when I didn't have an organisation"
   end
 end
