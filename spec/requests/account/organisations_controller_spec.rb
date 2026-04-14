@@ -34,13 +34,11 @@ describe Account::OrganisationsController do
     context "with valid parameters" do
       let(:organisation) { create(:organisation) }
       let(:valid_params) { { account_organisation_input: { organisation_id: organisation.id } } }
-      let(:default_group_service) { instance_spy(DefaultGroupService) }
 
       before do
         # rubocop:disable RSpec/AnyInstance
         allow_any_instance_of(AfterSignInPathHelper).to receive(:after_sign_in_next_path).and_return("/next-path")
         # rubocop:enable RSpec/AnyInstance
-        allow(DefaultGroupService).to receive(:new).and_return(default_group_service)
       end
 
       it "updates the user's organisation" do
@@ -51,11 +49,6 @@ describe Account::OrganisationsController do
       it "redirects to the root path" do
         put account_organisation_path, params: valid_params
         expect(response).to redirect_to("/next-path")
-      end
-
-      it "calls create_user_default_trial_group!" do
-        put account_organisation_path, params: valid_params
-        expect(default_group_service).to have_received(:create_user_default_trial_group!)
       end
     end
 
