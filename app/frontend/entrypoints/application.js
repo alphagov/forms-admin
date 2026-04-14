@@ -7,7 +7,8 @@ import {
   installAnalyticsScript,
   sendPageViewEvent,
   attachExternalLinkTracker,
-  attachQuestionXsRoutesTracker
+  attachQuestionXsRoutesTracker,
+  attachOptionalLinkTracker
 } from '../javascript/google-tag'
 import { saveConsentStatus } from '../javascript/utils/cookie-consent'
 import ajaxMarkdownPreview from '../javascript/ajax-markdown-preview'
@@ -50,6 +51,7 @@ if (document.body.dataset.googleAnalyticsEnabled === 'true') {
   sendPageViewEvent()
   attachExternalLinkTracker()
   attachQuestionXsRoutesTracker()
+  attachOptionalLinkTracker()
 }
 
 initAll()
