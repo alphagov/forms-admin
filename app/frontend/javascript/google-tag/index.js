@@ -68,6 +68,27 @@ export function attachExternalLinkTracker () {
   })
 }
 
+export function attachOptionalLinkTracker () {
+  const linksToTrack = document.querySelectorAll('a[data-track-link]')
+  linksToTrack.forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      const target = event.target
+      const external = target.getAttribute('href').startsWith('http')
+      window.dataLayer.push({
+        event: 'event_data',
+        event_data: {
+          event_name: 'navigation',
+          external,
+          method: 'primary click',
+          text: target.textContent,
+          type: 'generic link',
+          url: target.href
+        }
+      })
+    })
+  })
+}
+
 export function attachQuestionXsRoutesTracker () {
   const showRoutesPathRegex = /^\/forms\/\d+\/pages\/\d+\/routes$/
   const path = window.location.pathname
