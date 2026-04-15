@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Forms::CopyController, :feature_org_admin_alerts_enabled, type: :request do
+RSpec.describe Forms::CopyController, type: :request do
   let(:id) { form.id }
   let(:form) { create(:form) }
 

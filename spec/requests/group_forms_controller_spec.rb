@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/groups/:group_id/forms", :feature_org_admin_alerts_enabled, type: :request do
+RSpec.describe "/groups/:group_id/forms", type: :request do
   let(:group) { create :group, organisation:, status: :active }
   let(:organisation) { test_org }
   let(:nonexistent_group) { "foobar" }
