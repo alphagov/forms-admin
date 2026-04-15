@@ -6,15 +6,12 @@ class OrgAdminAlertsService
   end
 
   def form_made_live
-    return unless feature_enabled?
-
     @org_admins.each do |org_admin_user|
       form_made_live_email(to_email: org_admin_user.email).deliver_now
     end
   end
 
   def new_draft_form_created
-    return unless feature_enabled?
     return unless @form.group.active?
 
     @org_admins.each do |org_admin_user|
@@ -23,8 +20,6 @@ class OrgAdminAlertsService
   end
 
   def draft_of_existing_form_created
-    return unless feature_enabled?
-
     @org_admins.each do |org_admin_user|
       draft_of_existing_form_created_email(to_email: org_admin_user.email).deliver_now
     end
@@ -78,9 +73,5 @@ private
 
   def copied_from_form
     Form.find_by(id: @form.copied_from_id)
-  end
-
-  def feature_enabled?
-    FeatureService.enabled?(:org_admin_alerts_enabled)
   end
 end
