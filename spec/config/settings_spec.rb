@@ -22,7 +22,7 @@ describe "Settings" do
   describe ".features" do
     features = settings[:features]
 
-    include_examples expected_value_test, :weekly_submission_emails_enabled, features, false
+    include_examples expected_value_test, :exit_pages, features, { "enabled_by_group" => true }
   end
 
   describe "forms_api" do

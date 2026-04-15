@@ -37,93 +37,53 @@ RSpec.describe Forms::BatchSubmissionsController, type: :request do
   end
 
   describe "#create" do
-    let(:batch_frequencies) { %w[daily] }
     let(:params) { { forms_batch_submissions_input: { batch_frequencies: } } }
+    let(:batch_frequencies) { %w[daily weekly] }
 
-    context "when the weekly submission batch feature is disabled", feature_weekly_submission_emails_enabled: false do
-      context "when the daily batch checkbox is checked" do
-        it "updates the form send_daily_submission_batch flag to true" do
-          expect {
-            post(batch_submissions_create_path(form_id: form.id), params:)
-          }.to change { form.reload.send_daily_submission_batch }.to(true)
-        end
+    before do
+      post(batch_submissions_create_path(form_id: form.id), params:)
+    end
 
-        it "redirects to the form overview page" do
-          post(batch_submissions_create_path(form_id: form.id), params:)
-          expect(response).to redirect_to(form_path(form.id))
-        end
+    it "updates the form" do
+      expect(form.reload.send_daily_submission_batch).to be true
+      expect(form.reload.send_weekly_submission_batch).to be true
+    end
 
-        it "displays a success flash message" do
-          post(batch_submissions_create_path(form_id: form.id), params:)
-          expect(flash[:success]).to eq(I18n.t("banner.success.form.daily_submission_batch_enabled"))
-        end
-      end
+    it "redirects to the form overview page" do
+      expect(response).to redirect_to(form_path(form.id))
+    end
 
-      context "when the daily batch checkbox is not checked" do
-        let(:send_daily_submission_batch) { true }
-        let(:batch_frequencies) { [] }
+    context "when only the daily batch checkbox is checked" do
+      let(:batch_frequencies) { %w[daily] }
 
-        it "updates the form send_daily_submission_batch flag to false" do
-          expect {
-            post(batch_submissions_create_path(form_id: form.id), params:)
-          }.to change { form.reload.send_daily_submission_batch }.to(false)
-        end
-
-        it "displays a success flash message" do
-          post(batch_submissions_create_path(form_id: form.id), params:)
-          expect(flash[:success]).to eq(I18n.t("banner.success.form.daily_submission_batch_disabled"))
-        end
+      it "displays a success flash message indicating that daily batch emails are enabled" do
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.daily_enabled"))
       end
     end
 
-    context "when the weekly submission batch feature is enabled", :feature_weekly_submission_emails_enabled do
+    context "when only the weekly batch checkbox is checked" do
+      let(:batch_frequencies) { %w[weekly] }
+
+      it "displays a success flash message indicating that weekly batch emails are enabled" do
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.weekly_enabled"))
+      end
+    end
+
+    context "when both the daily and weekly batch checkboxes are checked" do
       let(:batch_frequencies) { %w[daily weekly] }
 
-      before do
-        post(batch_submissions_create_path(form_id: form.id), params:)
+      it "displays a success flash message indicating that daily and weekly batch emails are enabled" do
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.daily_and_weekly_enabled"))
       end
+    end
 
-      it "updates the form" do
-        expect(form.reload.send_daily_submission_batch).to be true
-        expect(form.reload.send_weekly_submission_batch).to be true
-      end
+    context "when daily and weekly batch checkboxes are unchecked" do
+      let(:send_daily_submission_batch) { true }
+      let(:send_weekly_submission_batch) { true }
+      let(:batch_frequencies) { [] }
 
-      it "redirects to the form overview page" do
-        expect(response).to redirect_to(form_path(form.id))
-      end
-
-      context "when only the daily batch checkbox is checked" do
-        let(:batch_frequencies) { %w[daily] }
-
-        it "displays a success flash message indicating that daily batch emails are enabled" do
-          expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.daily_enabled"))
-        end
-      end
-
-      context "when only the weekly batch checkbox is checked" do
-        let(:batch_frequencies) { %w[weekly] }
-
-        it "displays a success flash message indicating that weekly batch emails are enabled" do
-          expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.weekly_enabled"))
-        end
-      end
-
-      context "when both the daily and weekly batch checkboxes are checked" do
-        let(:batch_frequencies) { %w[daily weekly] }
-
-        it "displays a success flash message indicating that daily and weekly batch emails are enabled" do
-          expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.daily_and_weekly_enabled"))
-        end
-      end
-
-      context "when daily and weekly batch checkboxes are unchecked" do
-        let(:send_daily_submission_batch) { true }
-        let(:send_weekly_submission_batch) { true }
-        let(:batch_frequencies) { [] }
-
-        it "displays a success flash message indicating that batch emails are disabled" do
-          expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.disabled"))
-        end
+      it "displays a success flash message indicating that batch emails are disabled" do
+        expect(flash[:success]).to eq(I18n.t("banner.success.form.batch_submissions.disabled"))
       end
     end
 

@@ -114,11 +114,8 @@ private
   end
 
   def batch_submissions_task
-    task_name = if FeatureService.enabled?(:weekly_submission_emails_enabled)
-                  I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.batch_submissions")
-                else
-                  I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch")
-                end
+    task_name = I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.optional_subsection.batch_submissions")
+
     {
       task_name:,
       path: batch_submissions_path(@form.id),
