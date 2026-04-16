@@ -190,63 +190,41 @@ describe "forms/_made_live_form.html.erb" do
     end
   end
 
-  context "when the weekly submissions feature is disabled", feature_weekly_submission_emails_enabled: false do
-    context "when send_daily_submission_batch is true" do
-      let(:send_daily_submission_batch) { true }
+  it "has a section for daily and weekly CSVs" do
+    expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.title"))
+  end
 
-      it "tells the user they getting a daily CSV" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.enabled"))
-      end
-    end
+  context "when only daily batches are enabled" do
+    let(:send_daily_submission_batch) { true }
 
-    context "when send_daily_submission_batch is false" do
-      let(:send_daily_submission_batch) { false }
-
-      it "tells the user they have not opted to get a daily CSV" do
-        expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.title"))
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.daily_csv.disabled"))
-      end
+    it "tells the user they getting a daily CSV" do
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.daily_enabled"))
     end
   end
 
-  context "when the weekly submissions feature is enabled", :feature_weekly_submission_emails_enabled do
-    it "has a section for daily and weekly CSVs" do
-      expect(rendered).to have_css("h4", text: I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.title"))
+  context "when only weekly batches are enabled" do
+    let(:send_weekly_submission_batch) { true }
+
+    it "tells the user they getting a weekly CSV" do
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.weekly_enabled"))
     end
+  end
 
-    context "when only daily batches are enabled" do
-      let(:send_daily_submission_batch) { true }
+  context "when both daily and weekly batches are enabled" do
+    let(:send_daily_submission_batch) { true }
+    let(:send_weekly_submission_batch) { true }
 
-      it "tells the user they getting a daily CSV" do
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.daily_enabled"))
-      end
+    it "tells the user they getting a daily and weekly CSV" do
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.daily_and_weekly_enabled"))
     end
+  end
 
-    context "when only weekly batches are enabled" do
-      let(:send_weekly_submission_batch) { true }
+  context "when neither daily or weekly batches are enabled" do
+    let(:send_daily_submission_batch) { false }
+    let(:send_weekly_submission_batch) { false }
 
-      it "tells the user they getting a weekly CSV" do
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.weekly_enabled"))
-      end
-    end
-
-    context "when both daily and weekly batches are enabled" do
-      let(:send_daily_submission_batch) { true }
-      let(:send_weekly_submission_batch) { true }
-
-      it "tells the user they getting a daily and weekly CSV" do
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.daily_and_weekly_enabled"))
-      end
-    end
-
-    context "when neither daily or weekly batches are enabled" do
-      let(:send_daily_submission_batch) { false }
-      let(:send_weekly_submission_batch) { false }
-
-      it "tells the user they have not opted to get a daily or weekly CSV" do
-        expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.disabled"))
-      end
+    it "tells the user they have not opted to get a daily or weekly CSV" do
+      expect(rendered).to include(I18n.t("forms.made_live_form.how_you_get_completed_forms.batch_submissions.disabled"))
     end
   end
 

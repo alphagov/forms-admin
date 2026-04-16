@@ -24,8 +24,7 @@ locals {
     { name = "SETTINGS__ACT_AS_USER_ENABLED", value = "true" },
     { name = "SETTINGS__AUTH_PROVIDER", value = "developer" },
     { name = "SETTINGS__FORMS_ENV", value = "review" },
-    { name = "SETTINGS__FORMS_RUNNER__URL", value = "https://forms.service.gov.uk" },
-    { name = "SETTINGS__FEATURES__WEEKLY_SUBMISSION_EMAILS_ENABLED", value = "true" }
+    { name = "SETTINGS__FORMS_RUNNER__URL", value = "https://forms.service.gov.uk" }
   ]
 }
 

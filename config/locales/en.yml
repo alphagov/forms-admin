@@ -235,8 +235,6 @@ en:
           weekly_enabled: You’ll get a weekly batch of form submissions
         change_name: Your form name has been saved
         copied: Your form has been copied
-        daily_submission_batch_disabled: You will not get a daily CSV of the previous day’s completed forms
-        daily_submission_batch_enabled: You’ll get a daily CSV of the previous day’s completed forms
         declaration_saved: Your declaration has been saved
         declaration_saved_and_completed: Your declaration has been saved and marked as complete
         page_moved: "‘%{question_text}’ has moved %{direction} to number %{question_number}"
@@ -398,14 +396,6 @@ en:
           <p>The CSVs will include each submission’s answers in plain text separated by commas - plus the date and time of submission.</p>
           <p>If you make changes to the form such as adding, moving or deleting a question, the structure of the CSV will change. Forms completed before and after the change will be split into separate CSV files.</p>
           <p>You’ll continue to receive individual completed form submissions in the usual way. If your form has any file upload questions, the uploaded files will only be attached to the individual submissions.</p>
-        weekly_disabled_body_html: |
-          <p>You can get a daily email with all the answers from the previous day’s completed forms collected into a CSV file.</p>
-          <p>The CSV will list all the answers in plain text, separated by commas, with a row for each completed form.</p>
-          <p>We’ll send the email shortly after 2am with the completed forms from the previous day. It’ll be sent to the same email address you set for completed forms.</p>
-          <p>If you make changes to the form such as adding, moving or deleting a question, the structure of the CSV will change. Forms completed before and after the change will be split into separate CSV files.</p>
-          <p>You’ll continue to receive individual completed form emails. If your form has any file upload questions, the uploaded files will only be attached to the individual completed form emails.</p>
-        weekly_disabled_checkbox_label: Get a daily CSV of completed forms
-        weekly_disabled_fieldset_legend: Do you want to get a daily CSV of the previous day’s completed forms?
     delete_confirmation:
       delete:
         hint_for_archived_draft: Deleting this draft will not remove the archived form.
@@ -443,10 +433,6 @@ en:
           title: Daily and weekly CSVs
           weekly_enabled: You are getting a weekly batch of completed forms.
         csv_and_json: CSV and JSON
-        daily_csv:
-          disabled: You have not opted to get a daily CSV of the previous day’s completed forms.
-          enabled: You are getting a daily CSV of the previous day’s completed forms.
-          title: Daily CSV
         submission_email: Email
         submission_format:
           email:
@@ -515,7 +501,6 @@ en:
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
         optional_subsection:
           batch_submissions: Get a daily or weekly batch of completed forms
-          daily_submission_batch: Get a daily CSV of the previous day’s completed forms
           submission_attachments: Get a CSV or JSON file of each completed form
         title: Set up how you get completed forms
       make_form_live_section:
@@ -561,7 +546,6 @@ en:
         hint_text_html: Completed forms will be sent to:<br> <span class="govuk-!-text-break-word">%{submission_email}</span>
         optional_subsection:
           batch_submissions: Get a daily or weekly batch of completed forms
-          daily_submission_batch: Get a daily CSV of the previous day’s completed forms
           submission_attachments: Get a CSV or JSON file of each completed form
         title: Change how you get completed forms
       make_form_live_section:
@@ -1462,7 +1446,6 @@ en:
     confirm_email_success: Email address confirmed
     contact_details: Provide contact details for support
     copy: What is the name of your form?
-    daily_submission_batch: Get a daily CSV of the previous day’s completed forms
     date_settings: Are you asking for someone’s date of birth?
     declaration: Add a declaration for people to agree to
     delete_secondary_skip: Are you sure you want to delete the route for any other answer?

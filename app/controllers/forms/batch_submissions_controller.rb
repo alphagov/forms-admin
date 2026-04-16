@@ -25,10 +25,6 @@ module Forms
     def success_message(form)
       return nil unless form.send_daily_submission_batch_previously_changed? || form.send_weekly_submission_batch_previously_changed?
 
-      unless FeatureService.enabled?(:weekly_submission_emails_enabled)
-        return form.send_daily_submission_batch ? t("banner.success.form.daily_submission_batch_enabled") : t("banner.success.form.daily_submission_batch_disabled")
-      end
-
       if form.send_daily_submission_batch && form.send_weekly_submission_batch
         t("banner.success.form.batch_submissions.daily_and_weekly_enabled")
       elsif form.send_daily_submission_batch
