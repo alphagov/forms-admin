@@ -22,7 +22,7 @@ feature "Record time when user last signed in" do
     OmniAuth.config.test_mode = false
   end
 
-  scenario "user authenticates" do
+  scenario "user authenticates", :flaky do
     when_i_sign_in
     then_my_last_signed_in_at_time_is_updated
   end

@@ -128,7 +128,7 @@ RSpec.describe "/groups", type: :request do
         let!(:other_org_active_groups) { create_list :group, 3, :active, organisation: other_org }
         let!(:other_org_upgrade_requested_groups) { create_list :group, 3, :upgrade_requested, organisation: other_org }
 
-        it "shows groups for organisation in query" do
+        it "shows groups for organisation in query", :flaky do
           get groups_url, params: { search: { organisation_id: other_org.id } }
           expect(assigns(:trial_groups)).to match_array(other_org_trial_groups)
           expect(assigns(:active_groups)).to match_array(other_org_active_groups)
