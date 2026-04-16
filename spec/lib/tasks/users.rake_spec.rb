@@ -107,7 +107,7 @@ RSpec.describe "users.rake" do
       expect(Rails.logger).to have_received(:info).with(/delete_users_with_no_name_or_org: Deleted user \d+ \(.+@.+\)/).exactly(9)
     end
 
-    it "logs the number of users deleted", :flaky do
+    it "logs the number of users deleted" do
       task.invoke
 
       expect(Rails.logger).to have_received(:info).with(/delete_users_with_no_name_or_org: Deleted 9 users/)
@@ -119,7 +119,7 @@ RSpec.describe "users.rake" do
         users[8]
       end
 
-      it "does not delete that user", :flaky do
+      it "does not delete that user" do
         task.invoke
 
         expect(User.exists?(new_user.id)).to be true
@@ -168,7 +168,7 @@ RSpec.describe "users.rake" do
         }.to change(User, :count).to(4)
       end
 
-      it "logs that the user is being skipped", :flaky do
+      it "logs that the user is being skipped" do
         task.invoke
 
         expect(Rails.logger).to have_received(:info).with(
@@ -198,7 +198,7 @@ RSpec.describe "users.rake" do
         create :membership, group: group_with_user, user: user_in_group, added_by: users.first
       end
 
-      it "logs the changes that would be made", :flaky do
+      it "logs the changes that would be made" do
         dry_run_task.invoke
 
         [

@@ -57,7 +57,7 @@ FactoryBot.define do
     end
 
     trait :with_unique_email do
-      email { Faker::Internet.email(domain: "example.gov.uk") }
+      email { Faker::Internet.unique.email(domain: "example.gov.uk") }
     end
 
     trait :old do
