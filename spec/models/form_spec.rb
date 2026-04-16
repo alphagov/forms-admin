@@ -444,6 +444,36 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "draft_welsh_form_document" do
+    context "when there is no draft Welsh form document" do
+      subject(:form) { create :form }
+
+      it "returns nil" do
+        expect(form.draft_welsh_form_document).to be_nil
+      end
+    end
+
+    context "when there is a draft Welsh form document" do
+      subject(:form) { create :form, :draft, :with_welsh_translation }
+
+      it "returns nil" do
+        expect(form.draft_welsh_form_document).to be_a(FormDocument)
+      end
+    end
+
+    context "when there is only a live Welsh form document" do
+      subject(:form) { create :form, :live, :with_welsh_translation }
+
+      before do
+        FormDocument.find_by(form:, tag: "draft").destroy
+      end
+
+      it "returns nil" do
+        expect(form.draft_welsh_form_document).to be_nil
+      end
+    end
+  end
+
   describe "draft_form_document" do
     context "when there is no archived form document" do
       it "returns nil" do

@@ -114,6 +114,32 @@ describe FormListPresenter do
           expect(rows[3][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/2\">b</a>")
         end
       end
+
+      context "when a welsh version of the form exists" do
+        let(:forms) do
+          [
+            create(:form, :live, :with_welsh_translation, id: 1, name: "form with a live Welsh Version"),
+            create(:form, :archived, :with_welsh_translation, id: 2, name: "form with an archived and a draft Welsh version"),
+            create(:form, :draft, :with_welsh_translation, id: 3, name: "form with Welsh draft"),
+            create(:form, id: 4, name: "form with no Welsh version"),
+            create(:form, :archived, :with_welsh_translation, id: 5, name: "form with only an archived Welsh version"),
+          ]
+        end
+
+        before do
+          # remove the draft version of the welsh translation for the form with only archived version.
+          FormDocument.find_by(form: forms[4], tag: "draft", language: "cy").destroy!
+        end
+
+        it "appends the correct text" do
+          rows = presenter.data[:rows]
+          expect(rows[0][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/1/live\">form with a live Welsh Version</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh Version</p>")
+          expect(rows[1][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/2/archived\">form with an archived and a draft Welsh version</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh draft</p>")
+          expect(rows[2][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/4\">form with no Welsh version</a>")
+          expect(rows[3][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/5/archived\">form with only an archived Welsh version</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With archived Welsh version</p>")
+          expect(rows[4][0][:text]).to eq("<a class=\"govuk-link\" href=\"/forms/3\">form with Welsh draft</a><p class=\"govuk-!-margin-bottom-1 govuk-!-margin-top-2 govuk-hint\">With Welsh draft</p>")
+        end
+      end
     end
   end
 end
