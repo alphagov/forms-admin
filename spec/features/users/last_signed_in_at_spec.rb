@@ -38,6 +38,7 @@ private
 
   def when_i_sign_in
     visit root_path
+    expect(page).to have_current_path(root_path) # make sure we wait until the sign in journey has completed
   end
 
   def then_my_last_signed_in_at_time_is_updated
@@ -51,7 +52,7 @@ private
 
   def when_i_sign_in_as_a_super_admin
     login_as_super_admin_user
-    visit root_path
+    when_i_sign_in
   end
 
   def and_i_edit_that_user

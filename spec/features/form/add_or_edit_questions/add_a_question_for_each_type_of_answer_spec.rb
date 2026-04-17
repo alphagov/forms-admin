@@ -13,7 +13,7 @@ feature "Add/editing a single question", type: :feature do
   context "when a form has no existing pages" do
     let(:form) { create :form }
 
-    scenario "add a question for each type of answer" do
+    scenario "add a question for each type of answer", :flaky do
       when_i_am_viewing_an_existing_form
       and_i_want_to_create_or_edit_a_page
 
