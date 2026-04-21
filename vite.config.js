@@ -7,7 +7,10 @@ import { NodePackageImporter } from 'sass'
 
 export default defineConfig({
   plugins: [RubyPlugin()],
-  build: { emptyOutDir: true },
+  build: {
+    emptyOutDir: true,
+    cssMinify: 'esbuild'
+  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -16,7 +19,8 @@ export default defineConfig({
         quietDeps: true
       },
       devSourcemaps: true
-    }
+    },
+    transformer: 'postcss'
   },
   resolve: {
     alias: {
