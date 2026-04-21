@@ -135,7 +135,7 @@ RSpec.describe "/groups/:group_id/forms", type: :request do
         post group_forms_url(group), params: { forms_name_input: valid_attributes }
         expect(ActionMailer::Base.deliveries.count).to eq(1)
 
-        template_id = Settings.govuk_notify.org_admin_alerts.new_draft_form_created_template_id
+        template_id = Settings.govuk_notify.admin_alerts.new_draft_form_created_template_id
         expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
     end

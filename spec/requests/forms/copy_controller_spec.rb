@@ -70,7 +70,7 @@ RSpec.describe Forms::CopyController, type: :request do
         post create_copy_form_path(id), params: { forms_copy_input: { name: "Copied Form", tag: "draft" } }
         expect(ActionMailer::Base.deliveries.count).to eq(1)
 
-        template_id = Settings.govuk_notify.org_admin_alerts.copied_draft_form_created_template_id
+        template_id = Settings.govuk_notify.admin_alerts.copied_draft_form_created_template_id
         expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
     end

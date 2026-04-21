@@ -32,7 +32,7 @@ govuk_notify:
   group_upgrade_rejected_template_id: f494999a-1a38-4b01-a3c8-dbb2d60e6e5f
   group_deleted_group_admin_editor_template_id: b987d794-9214-40f5-8014-65d5b9c058d8
   group_deleted_org_admin_template_id: 4c6d6c67-e9f1-4012-adc2-05f23dc69638
-  org_admin_alerts:
+  admin_alerts:
     new_draft_form_made_live_template_id: 95065d23-e7ad-4af7-9a2f-7209276d74d0
     live_form_changes_made_live_template_id: 02c38f9b-197e-480d-8031-bba9498d5907
     archived_form_changes_made_live_template_id: 9db2d85b-9db4-48c3-bbc6-31aa0c742384

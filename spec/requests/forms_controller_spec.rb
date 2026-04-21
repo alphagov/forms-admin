@@ -37,7 +37,7 @@ RSpec.describe FormsController, type: :request do
         expect(form.reload).to be_live_with_draft
         expect(ActionMailer::Base.deliveries.count).to eq(1)
 
-        template_id = Settings.govuk_notify.org_admin_alerts.new_live_form_draft_created_template_id
+        template_id = Settings.govuk_notify.admin_alerts.new_live_form_draft_created_template_id
         expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
     end

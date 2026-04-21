@@ -1,7 +1,7 @@
-class OrgAdminAlerts::MadeLiveMailer < GovukNotifyRails::Mailer
+class AdminAlerts::MadeLiveMailer < GovukNotifyRails::Mailer
   include Rails.application.routes.url_helpers
   def new_draft_form_made_live(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.new_draft_form_made_live_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.new_draft_form_made_live_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: live_form_url(form),
@@ -11,7 +11,7 @@ class OrgAdminAlerts::MadeLiveMailer < GovukNotifyRails::Mailer
   end
 
   def live_form_changes_made_live(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.live_form_changes_made_live_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.live_form_changes_made_live_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: live_form_url(form),
@@ -21,7 +21,7 @@ class OrgAdminAlerts::MadeLiveMailer < GovukNotifyRails::Mailer
   end
 
   def archived_form_changes_made_live(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.archived_form_changes_made_live_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.archived_form_changes_made_live_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: live_form_url(form),
@@ -31,7 +31,7 @@ class OrgAdminAlerts::MadeLiveMailer < GovukNotifyRails::Mailer
   end
 
   def copied_form_made_live(form:, copied_from_form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.copied_form_made_live_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.copied_form_made_live_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: live_form_url(form),
@@ -43,7 +43,7 @@ class OrgAdminAlerts::MadeLiveMailer < GovukNotifyRails::Mailer
   end
 
   def archived_form_made_live(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.archived_form_made_live_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.archived_form_made_live_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: live_form_url(form),

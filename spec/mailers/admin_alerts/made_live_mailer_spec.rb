@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe OrgAdminAlerts::MadeLiveMailer, type: :mailer do
+describe AdminAlerts::MadeLiveMailer, type: :mailer do
   let(:form) { create :form, :live }
   let(:user) { create :user }
   let(:to_email) { "admin@example.gov.uk" }
@@ -15,7 +15,7 @@ describe OrgAdminAlerts::MadeLiveMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.new_draft_form_made_live_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.new_draft_form_made_live_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -40,7 +40,7 @@ describe OrgAdminAlerts::MadeLiveMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.live_form_changes_made_live_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.live_form_changes_made_live_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -65,7 +65,7 @@ describe OrgAdminAlerts::MadeLiveMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.archived_form_changes_made_live_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.archived_form_changes_made_live_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -93,7 +93,7 @@ describe OrgAdminAlerts::MadeLiveMailer, type: :mailer do
     let(:copied_from_form) { create :form }
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.copied_form_made_live_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.copied_form_made_live_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -120,7 +120,7 @@ describe OrgAdminAlerts::MadeLiveMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.archived_form_made_live_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.archived_form_made_live_template_id)
     end
 
     it "sends an email to the correct email address" do

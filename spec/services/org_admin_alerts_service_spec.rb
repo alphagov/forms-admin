@@ -24,13 +24,13 @@ RSpec.describe OrgAdminAlertsService do
 
       context "when form was not copied from another form" do
         it "sends the new draft form made live email to the organisation admins" do
-          expect(OrgAdminAlerts::MadeLiveMailer).to receive(:new_draft_form_made_live).with(
+          expect(AdminAlerts::MadeLiveMailer).to receive(:new_draft_form_made_live).with(
             form: form,
             user: current_user,
             to_email: organisation_admins.first.email,
           ).and_call_original
 
-          expect(OrgAdminAlerts::MadeLiveMailer).to receive(:new_draft_form_made_live).with(
+          expect(AdminAlerts::MadeLiveMailer).to receive(:new_draft_form_made_live).with(
             form: form,
             user: current_user,
             to_email: organisation_admins.second.email,
@@ -42,10 +42,10 @@ RSpec.describe OrgAdminAlertsService do
         end
 
         it "does not send an email to the current user" do
-          allow(OrgAdminAlerts::MadeLiveMailer).to receive(:new_draft_form_made_live).and_call_original
+          allow(AdminAlerts::MadeLiveMailer).to receive(:new_draft_form_made_live).and_call_original
           service.form_made_live
 
-          expect(OrgAdminAlerts::MadeLiveMailer).not_to have_received(:new_draft_form_made_live).with(
+          expect(AdminAlerts::MadeLiveMailer).not_to have_received(:new_draft_form_made_live).with(
             form: form,
             user: current_user,
             to_email: current_user.email,
@@ -58,14 +58,14 @@ RSpec.describe OrgAdminAlertsService do
         let(:form) { create(:form, :ready_for_live, state: previous_state, copied_from_id: copied_from_form.id) }
 
         it "sends the copied form made live email to the organisation admins" do
-          expect(OrgAdminAlerts::MadeLiveMailer).to receive(:copied_form_made_live).with(
+          expect(AdminAlerts::MadeLiveMailer).to receive(:copied_form_made_live).with(
             form: form,
             copied_from_form: copied_from_form,
             user: current_user,
             to_email: organisation_admins.first.email,
           ).and_call_original
 
-          expect(OrgAdminAlerts::MadeLiveMailer).to receive(:copied_form_made_live).with(
+          expect(AdminAlerts::MadeLiveMailer).to receive(:copied_form_made_live).with(
             form: form,
             copied_from_form: copied_from_form,
             user: current_user,
@@ -83,13 +83,13 @@ RSpec.describe OrgAdminAlertsService do
       let(:previous_state) { :live_with_draft }
 
       it "sends the live form changes made live email to the organisation admins" do
-        expect(OrgAdminAlerts::MadeLiveMailer).to receive(:live_form_changes_made_live).with(
+        expect(AdminAlerts::MadeLiveMailer).to receive(:live_form_changes_made_live).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::MadeLiveMailer).to receive(:live_form_changes_made_live).with(
+        expect(AdminAlerts::MadeLiveMailer).to receive(:live_form_changes_made_live).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.second.email,
@@ -105,13 +105,13 @@ RSpec.describe OrgAdminAlertsService do
       let(:previous_state) { :archived }
 
       it "sends the archived form made live email to the organisation admins" do
-        expect(OrgAdminAlerts::MadeLiveMailer).to receive(:archived_form_made_live).with(
+        expect(AdminAlerts::MadeLiveMailer).to receive(:archived_form_made_live).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::MadeLiveMailer).to receive(:archived_form_made_live).with(
+        expect(AdminAlerts::MadeLiveMailer).to receive(:archived_form_made_live).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.second.email,
@@ -127,13 +127,13 @@ RSpec.describe OrgAdminAlertsService do
       let(:previous_state) { :archived_with_draft }
 
       it "sends the archived form changes made live email to the organisation admins" do
-        expect(OrgAdminAlerts::MadeLiveMailer).to receive(:archived_form_changes_made_live).with(
+        expect(AdminAlerts::MadeLiveMailer).to receive(:archived_form_changes_made_live).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::MadeLiveMailer).to receive(:archived_form_changes_made_live).with(
+        expect(AdminAlerts::MadeLiveMailer).to receive(:archived_form_changes_made_live).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.second.email,
@@ -163,13 +163,13 @@ RSpec.describe OrgAdminAlertsService do
 
     context "when form was not copied from another form" do
       it "sends the new draft form created email to the organisation admins" do
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_draft_form_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:new_draft_form_created).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_draft_form_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:new_draft_form_created).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.second.email,
@@ -181,10 +181,10 @@ RSpec.describe OrgAdminAlertsService do
       end
 
       it "does not send an email to the current user" do
-        allow(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_draft_form_created).and_call_original
+        allow(AdminAlerts::DraftCreatedMailer).to receive(:new_draft_form_created).and_call_original
         service.new_draft_form_created
 
-        expect(OrgAdminAlerts::DraftCreatedMailer).not_to have_received(:new_draft_form_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).not_to have_received(:new_draft_form_created).with(
           form: form,
           user: current_user,
           to_email: current_user.email,
@@ -197,14 +197,14 @@ RSpec.describe OrgAdminAlertsService do
       let(:form) { create(:form, :ready_for_live, copied_from_id: copied_from_form.id) }
 
       it "sends the copied draft form created email to the organisation admins" do
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:copied_draft_form_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:copied_draft_form_created).with(
           form: form,
           copied_from_form: copied_from_form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:copied_draft_form_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:copied_draft_form_created).with(
           form: form,
           copied_from_form: copied_from_form,
           user: current_user,
@@ -235,13 +235,13 @@ RSpec.describe OrgAdminAlertsService do
       let(:form) { create(:form, :live_with_draft) }
 
       it "sends the live form changes made live email to the organisation admins" do
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.second.email,
@@ -253,10 +253,10 @@ RSpec.describe OrgAdminAlertsService do
       end
 
       it "does not send an email to the current user" do
-        allow(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).and_call_original
+        allow(AdminAlerts::DraftCreatedMailer).to receive(:new_live_form_draft_created).and_call_original
         service.draft_of_existing_form_created
 
-        expect(OrgAdminAlerts::DraftCreatedMailer).not_to have_received(:new_live_form_draft_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).not_to have_received(:new_live_form_draft_created).with(
           form: form,
           user: current_user,
           to_email: current_user.email,
@@ -268,13 +268,13 @@ RSpec.describe OrgAdminAlertsService do
       let(:form) { create(:form, :archived_with_draft) }
 
       it "sends the archived form changes made live email to the organisation admins" do
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_archived_form_draft_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:new_archived_form_draft_created).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.first.email,
         ).and_call_original
 
-        expect(OrgAdminAlerts::DraftCreatedMailer).to receive(:new_archived_form_draft_created).with(
+        expect(AdminAlerts::DraftCreatedMailer).to receive(:new_archived_form_draft_created).with(
           form: form,
           user: current_user,
           to_email: organisation_admins.second.email,
