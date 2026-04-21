@@ -1,12 +1,12 @@
-class GroupFormsMoveMailer < GovukNotifyRails::Mailer
+class AdminAlerts::GroupFormsMoveMailer < GovukNotifyRails::Mailer
   def form_moved_email_org_admin(...)
-    set_template(Settings.govuk_notify.group_form_moved_org_admin_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.group_form_moved_org_admin_template_id)
 
     form_moved_email(...)
   end
 
   def form_moved_email_group_admin(...)
-    set_template(Settings.govuk_notify.group_form_moved_group_admin_editor_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.group_form_moved_group_admin_editor_template_id)
 
     form_moved_email(...)
   end

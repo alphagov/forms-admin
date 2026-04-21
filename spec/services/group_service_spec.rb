@@ -188,7 +188,7 @@ RSpec.describe GroupService do
     let(:delivery) { double }
 
     before do
-      allow(GroupDeleteMailer).to receive_messages(group_deleted_email_org_admin: delivery, group_deleted_email_group_admins_and_editors: delivery)
+      allow(AdminAlerts::GroupDeleteMailer).to receive_messages(group_deleted_email_org_admin: delivery, group_deleted_email_group_admins_and_editors: delivery)
       allow(delivery).to receive(:deliver_now).with(any_args)
     end
 
@@ -207,7 +207,7 @@ RSpec.describe GroupService do
         expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
 
         org_admins.each do |org_admin|
-          expect(GroupDeleteMailer).to have_received(:group_deleted_email_org_admin).with(
+          expect(AdminAlerts::GroupDeleteMailer).to have_received(:group_deleted_email_org_admin).with(
             to_email: org_admin.email,
             org_admin_name: current_user.name,
             org_admin_email_address: current_user.email,
@@ -232,7 +232,7 @@ RSpec.describe GroupService do
         expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
 
         group_admins.each do |user|
-          expect(GroupDeleteMailer).to have_received(:group_deleted_email_group_admins_and_editors).with(
+          expect(AdminAlerts::GroupDeleteMailer).to have_received(:group_deleted_email_group_admins_and_editors).with(
             to_email: user.email,
             org_admin_name: current_user.name,
             org_admin_email_address: current_user.email,
@@ -257,7 +257,7 @@ RSpec.describe GroupService do
         expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
 
         group_editors.each do |user|
-          expect(GroupDeleteMailer).to have_received(:group_deleted_email_group_admins_and_editors).with(
+          expect(AdminAlerts::GroupDeleteMailer).to have_received(:group_deleted_email_group_admins_and_editors).with(
             to_email: user.email,
             org_admin_name: current_user.name,
             org_admin_email_address: current_user.email,
