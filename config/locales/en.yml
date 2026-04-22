@@ -1358,7 +1358,6 @@ en:
       If you pasted the web address, check you copied the entire address.
     title: Page not found
   page_conditions:
-    check_your_answers: End of form
     condition_answer_value_text: "“%{answer_value}”"
     condition_answer_value_text_with_errors: "[Answer not selected]"
     condition_check_page_text: "“%{check_page_question_text}”"
@@ -1374,6 +1373,7 @@ en:
     condition_goto_page_text_with_errors: "[Question not selected]"
     condition_name: Question %{question_number}’s routes
     edit_exit_page: Edit “%{exit_page_heading}”
+    end_of_form: End of form
     exit_page: Add an exit page
     exit_page_label: An ‘exit page’ to leave the form
     none_of_the_above: None of the above

@@ -48,7 +48,7 @@ class Pages::ConditionsInput < BaseInput
 
   def goto_page_options
     page_options = pages_after_position(page.position + 1).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) }
-    page_options << OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers"))
+    page_options << OpenStruct.new(id: "end_of_form", question_text: I18n.t("page_conditions.end_of_form"))
 
     page_options
   end
@@ -61,7 +61,7 @@ class Pages::ConditionsInput < BaseInput
 
   def assign_condition_values
     if goto_page_id.nil? && skip_to_end
-      self.goto_page_id = "check_your_answers"
+      self.goto_page_id = "end_of_form"
     end
     if record.exit_page?
       self.goto_page_id = "exit_page"
@@ -70,7 +70,7 @@ class Pages::ConditionsInput < BaseInput
   end
 
   def assign_skip_to_end
-    if goto_page_id == "check_your_answers"
+    if goto_page_id == "end_of_form"
       self.goto_page_id = nil
       self.skip_to_end = true
     else
@@ -97,7 +97,7 @@ private
 
   def goto_page_id_valid
     return if goto_page_id.nil?
-    return if %w[check_your_answers create_exit_page exit_page].include? goto_page_id
+    return if %w[end_of_form create_exit_page exit_page].include? goto_page_id
     return if form.pages.find { |page| page.id.to_s == goto_page_id.to_s }
 
     errors.add(:goto_page_id, :invalid, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.invalid"))

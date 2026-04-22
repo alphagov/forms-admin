@@ -24,7 +24,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       expect(conditions_input).to be_valid
     end
 
-    %w[check_your_answers create_exit_page exit_page].each do |goto_page_id|
+    %w[end_of_form create_exit_page exit_page].each do |goto_page_id|
       it "is valid when the goto_page_id is #{goto_page_id}" do
         conditions_input.goto_page_id = goto_page_id
         conditions_input.answer_value = "Rabbit"
@@ -143,7 +143,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
           OpenStruct.new(value: "Option 1", label: "Option 1"),
           OpenStruct.new(value: "Option 2", label: "Option 2"),
           OpenStruct.new(value: :none_of_the_above.to_s,
-            label: I18n.t("page_conditions.none_of_the_above")),
+                         label: I18n.t("page_conditions.none_of_the_above")),
         ])
       end
     end
@@ -171,7 +171,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
       it "includes 'Check your answers before submitting'" do
         expect(goto_page_options).to include(
-          OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
+          OpenStruct.new(id: "end_of_form", question_text: I18n.t("page_conditions.end_of_form")),
         )
       end
     end
@@ -199,7 +199,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
 
       it "includes 'Check your answers before submitting'" do
         expect(goto_page_options).to include(
-          OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
+          OpenStruct.new(id: "end_of_form", question_text: I18n.t("page_conditions.end_of_form")),
         )
       end
     end
@@ -224,14 +224,14 @@ RSpec.describe Pages::ConditionsInput, type: :model do
     context "when goto_page is nil and skip_to_end is set to true" do
       let(:skip_to_end) { true }
 
-      it "sets goto_page_id to 'check_your_answers'" do
+      it "sets goto_page_id to 'end_of_form'" do
         conditions_input.assign_condition_values
-        expect(conditions_input.goto_page_id).to eq "check_your_answers"
+        expect(conditions_input.goto_page_id).to eq "end_of_form"
       end
     end
 
     context "when goto_page is nil and skip_to_end is set to false" do
-      it "sets goto_page_id to 'check_your_answers'" do
+      it "sets goto_page_id to 'end_of_form'" do
         conditions_input.assign_condition_values
         expect(conditions_input.goto_page_id).to be_nil
       end
@@ -241,7 +241,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       let(:goto_page_id) { 3 }
       let(:skip_to_end) { true }
 
-      it "sets goto_page_id to 'check_your_answers'" do
+      it "sets goto_page_id to 'end_of_form'" do
         conditions_input.assign_condition_values
         expect(conditions_input.goto_page_id).to eq 3
       end
@@ -262,8 +262,8 @@ RSpec.describe Pages::ConditionsInput, type: :model do
     let(:goto_page_id) { 3 }
     let(:skip_to_end) { false }
 
-    context "when goto_page is 'check_your_answers" do
-      let(:goto_page_id) { "check_your_answers" }
+    context "when goto_page is 'end_of_form" do
+      let(:goto_page_id) { "end_of_form" }
 
       it "sets goto_page_id to nil and skip_to_end to true" do
         conditions_input.assign_skip_to_end
@@ -272,7 +272,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       end
     end
 
-    context "when goto_page is not 'check_your_answers" do
+    context "when goto_page is not 'end_of_form" do
       let(:goto_page_id) { 3 }
       let(:skip_to_end) { true }
 

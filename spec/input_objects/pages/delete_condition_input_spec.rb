@@ -70,7 +70,7 @@ RSpec.describe Pages::DeleteConditionInput, type: :model do
       let(:skip_to_end) { true }
 
       it "returns the check your answers translation" do
-        expect(delete_condition_input.goto_page_question_text).to eq I18n.t("page_conditions.check_your_answers")
+        expect(delete_condition_input.goto_page_question_text).to eq I18n.t("page_conditions.end_of_form")
       end
     end
   end

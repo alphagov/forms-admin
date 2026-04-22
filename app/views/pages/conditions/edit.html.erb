@@ -28,7 +28,7 @@
 
       <%= f.govuk_select(:goto_page_id, label: { class: "govuk-!-font-weight-bold" }, options: { include_blank: t("helpers.label.pages_conditions_input.default_goto_page_id") }) do %>
         <% condition_input.goto_page_options.each do |option| %>
-          <option value=<%= option.id %> <% if condition_input.record.goto_page_id == option.id || (condition_input.record.skip_to_end? && option.id == "check_your_answers") %>selected<% end %>>
+          <option value=<%= option.id %> <% if condition_input.record.goto_page_id == option.id || (condition_input.record.skip_to_end? && option.id == "end_of_form") %>selected<% end %>>
           <%= option.question_text %>
           </option>
         <% end %>
