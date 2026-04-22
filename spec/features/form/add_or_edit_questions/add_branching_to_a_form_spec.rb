@@ -86,7 +86,7 @@ private
 
   def and_i_select_a_skip_page_and_goto_page
     select form.pages[3].question_text, from: "pages_secondary_skip_input[routing_page_id]"
-    select "Check your answers before submitting", from: "pages_secondary_skip_input[goto_page_id]"
+    select "End of form", from: "pages_secondary_skip_input[goto_page_id]"
 
     create(:condition, id: 2, check_page_id: form.pages.first.id, routing_page_id: form.pages[3].id, goto_page_id: nil, skip_to_end: true)
     form.pages.each(&:reload)
@@ -98,7 +98,7 @@ private
     expect(page).to have_text "Route for any other answer"
     expect(page).to have_text "Continue to"
     expect(page).to have_text form.pages[3].question_text
-    expect(page).to have_text "Check your answers before submitting"
+    expect(page).to have_text "End of form"
     expect_page_to_have_no_axe_errors(page)
   end
 end

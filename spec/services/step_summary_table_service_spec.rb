@@ -738,7 +738,7 @@ describe StepSummaryTableService do
       context "when a page has a route which skips to the end of the form" do
         let(:page) { page_with_skip_to_end }
 
-        it "returns an array containing condition data including text about the 'Check your answers' page" do
+        it "returns an array containing condition data including text about skipping to the end of the form" do
           expect(step_summary_table_service.route_content).to eq [{ answer_value: "Skip to end",
                                                                     answer_value_cy: "Skip to end (Welsh)",
                                                                     check_page: "11. Question to be skipped",
@@ -748,8 +748,8 @@ describe StepSummaryTableService do
                                                                     exit_page_heading_cy: nil,
                                                                     exit_page_markdown: nil,
                                                                     exit_page_markdown_cy: nil,
-                                                                    goto_page: "Check your answers before submitting",
-                                                                    goto_page_cy: "Check your answers before submitting",
+                                                                    goto_page: "End of form",
+                                                                    goto_page_cy: "End of form",
                                                                     routing_page: "11. Question to be skipped",
                                                                     routing_page_cy: "11. Question to be skipped (Welsh)",
                                                                     secondary_skip: false }]
