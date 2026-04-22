@@ -546,7 +546,7 @@ RSpec.describe Condition, type: :model do
     end
   end
 
-  describe "#is_check_your_answers?" do
+  describe "#is_end_of_form?" do
     let(:form) { create :form }
     let(:check_page) { create :page, :with_selection_settings, form: }
     let(:goto_page) { create :page, form: }
@@ -555,7 +555,7 @@ RSpec.describe Condition, type: :model do
       let(:condition) { create :condition, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: nil, skip_to_end: false }
 
       it "returns nil" do
-        expect(condition.is_check_your_answers?).to be false
+        expect(condition.is_end_of_form?).to be false
       end
     end
 
@@ -563,7 +563,7 @@ RSpec.describe Condition, type: :model do
       let(:condition) { create :condition, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: nil, skip_to_end: true }
 
       it "returns nil" do
-        expect(condition.is_check_your_answers?).to be true
+        expect(condition.is_end_of_form?).to be true
       end
     end
 
@@ -571,7 +571,7 @@ RSpec.describe Condition, type: :model do
       let(:condition) { create :condition, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: goto_page.id, skip_to_end: false }
 
       it "returns nil" do
-        expect(condition.is_check_your_answers?).to be false
+        expect(condition.is_end_of_form?).to be false
       end
     end
 
@@ -579,7 +579,7 @@ RSpec.describe Condition, type: :model do
       let(:condition) { create :condition, routing_page_id: check_page.id, check_page_id: check_page.id, goto_page_id: goto_page.id, skip_to_end: true }
 
       it "returns nil" do
-        expect(condition.is_check_your_answers?).to be false
+        expect(condition.is_end_of_form?).to be false
       end
     end
   end

@@ -40,7 +40,7 @@ class Condition < ApplicationRecord
   def warning_goto_page_doesnt_exist
     return nil if is_exit_page?
     # goto_page_id isn't needed if the route is skipping to the end of the form
-    return nil if is_check_your_answers?
+    return nil if is_end_of_form?
 
     page = form.pages.find_by(id: goto_page_id)
     return nil if page.present?
@@ -58,10 +58,10 @@ class Condition < ApplicationRecord
   end
 
   def warning_routing_to_next_page
-    return nil if check_page.nil? || goto_page.nil? && !is_check_your_answers?
+    return nil if check_page.nil? || goto_page.nil? && !is_end_of_form?
 
     routing_page_position = routing_page.position
-    goto_page_position = is_check_your_answers? ? form.pages.last.position + 1 : goto_page.position
+    goto_page_position = is_end_of_form? ? form.pages.last.position + 1 : goto_page.position
 
     return DataStruct.new(name: "cannot_route_to_next_page") if goto_page_position == (routing_page_position + 1)
 
@@ -74,7 +74,7 @@ class Condition < ApplicationRecord
     end
   end
 
-  def is_check_your_answers?
+  def is_end_of_form?
     goto_page.nil? && skip_to_end
   end
 
