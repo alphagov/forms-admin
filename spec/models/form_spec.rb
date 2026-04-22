@@ -465,7 +465,7 @@ RSpec.describe Form, type: :model do
       subject(:form) { create :form, :live, :with_welsh_translation }
 
       before do
-        FormDocument.find_by(form:, tag: "draft").destroy
+        FormDocument.find_by(form:, tag: "draft", language: "cy").destroy
       end
 
       it "returns nil" do

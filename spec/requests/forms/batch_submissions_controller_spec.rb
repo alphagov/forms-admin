@@ -92,7 +92,6 @@ RSpec.describe Forms::BatchSubmissionsController, type: :request do
       let(:batch_frequencies) { %w[daily] }
 
       it "does not display a flash message" do
-        post(batch_submissions_create_path(form_id: form.id), params:)
         expect(flash[:success]).to be_nil
       end
     end
@@ -101,7 +100,6 @@ RSpec.describe Forms::BatchSubmissionsController, type: :request do
       let(:current_user) { build :user }
 
       it "returns 403" do
-        post(batch_submissions_create_path(form_id: form.id), params:)
         expect(response).to have_http_status(:forbidden)
       end
     end
