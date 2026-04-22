@@ -276,7 +276,7 @@ private
   end
 
   def print_goto_page(condition, steps, locale: "en")
-    return I18n.t("step_summary_card.check_your_answers.#{locale}") if condition.skip_to_end
+    return I18n.t("step_summary_card.end_of_form.#{locale}") if condition.skip_to_end
     return condition.exit_page_heading if condition.exit_page?
 
     build_title(steps.find { |step| step.id == condition.goto_page_id })

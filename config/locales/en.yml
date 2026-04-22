@@ -1368,7 +1368,7 @@ en:
     condition_compact_html_secondary_skip_to_end_of_form: Go to end of form
     condition_description: If %{check_page_question_text} is answered as %{answer_value} go to %{goto_page_question_text}
     condition_goto_exit_page: exit page, “%{exit_page_heading}”
-    condition_goto_page_check_your_answers: end of form.
+    condition_goto_page_end_of_form: end of form.
     condition_goto_page_text: "%{goto_page_question_number}, “%{goto_page_question_text}”"
     condition_goto_page_text_with_errors: "[Question not selected]"
     condition_name: Question %{question_number}’s routes
@@ -1382,12 +1382,12 @@ en:
     skip_condition_route_page_text: "%{route_page_question_number}, “%{route_page_question_text}”"
   page_route_card:
     any_other_answer: Route for any other answer
-    check_your_answers: End of form
     conditional_answer_value: "%{answer_value}"
     continue_to: Continue to
     delete: Delete
     delete_route: Delete all routes
     edit: Edit
+    end_of_form: End of form
     errors:
       answer_value_doesnt_exist: The answer that route 1 is based on no longer exists - edit or delete this route
       cannot_have_goto_page_before_routing_page: The question route 1 skips to cannot be before question %{question_number} - edit or delete this route
@@ -1594,7 +1594,7 @@ en:
           set_questions_to_skip: Set questions to skip
           skip_later: If you need to, you can make them skip one or more questions that only people on route 1 need to answer.
           will_continue_to: People who select any other answer will continue to question %{next_question_number} and through the rest of the form.
-          will_continue_to_check_your_answers: People who select any other answer will continue to the end of the form.
+          will_continue_to_end_of_form: People who select any other answer will continue to the end of the form.
     submit_save: Save question
   payment_link_input:
     body_html: |
@@ -1986,12 +1986,12 @@ en:
     status: Status
   step_summary_card:
     answer_type: Answer type
-    check_your_answers:
-      cy: End of form
-      en: End of form
     date_type:
       date_of_birth: Date of birth
       other_date: Date
+    end_of_form:
+      cy: End of form
+      en: End of form
     guidance_markdown: Guidance
     hint_text: Hint text
     name_type:

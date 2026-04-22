@@ -182,7 +182,7 @@ private
   end
 
   def end_page_name
-    I18n.t("page_route_card.check_your_answers")
+    I18n.t("page_route_card.end_of_form")
   end
 
   def question_number(page_id)
