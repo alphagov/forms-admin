@@ -517,7 +517,7 @@ describe FormTaskListService do
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.email"),
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.confirm_email"),
           I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.optional_subsection.submission_attachments"),
-          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.optional_subsection.daily_submission_batch"),
+          I18n.t("forms.task_list_edit.how_you_get_completed_forms_section.optional_subsection.batch_submissions"),
           I18n.t("forms.task_list_edit.privacy_and_contact_details_section.privacy_policy"),
           I18n.t("forms.task_list_edit.privacy_and_contact_details_section.contact_details"),
           I18n.t("forms.task_list_edit.translations_section.add_welsh"),
