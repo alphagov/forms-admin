@@ -2,7 +2,7 @@ class Pages::SecondarySkipInput < BaseInput
   attr_accessor :form, :page, :routing_page_id, :goto_page_id, :record
 
   validates :routing_page_id, :goto_page_id, presence: true
-  validate :pages_in_valid_order
+  validate :goto_page_id_valid, :pages_in_valid_order
 
   def submit
     return false if invalid?
@@ -35,7 +35,7 @@ class Pages::SecondarySkipInput < BaseInput
   def goto_page_options
     [
       *pages_after_current_page(form.pages, page).map { |p| OpenStruct.new(id: p.id, question_text: p.question_with_number) },
-      OpenStruct.new(id: "check_your_answers", question_text: I18n.t("page_conditions.check_your_answers")),
+      OpenStruct.new(id: "end_of_form", question_text: I18n.t("page_conditions.end_of_form")),
     ]
   end
 
@@ -44,7 +44,7 @@ class Pages::SecondarySkipInput < BaseInput
   end
 
   def end_page_name
-    I18n.t("page_route_card.check_your_answers")
+    I18n.t("page_route_card.end_of_form")
   end
 
   def answer_value
@@ -55,7 +55,7 @@ class Pages::SecondarySkipInput < BaseInput
     primary_route = page.routing_conditions.find { |rc| rc.answer_value.present? }
 
     if primary_route.skip_to_end?
-      return I18n.t("page_route_card.check_your_answers")
+      return I18n.t("page_route_card.end_of_form")
     end
 
     question_name(primary_route.goto_page_id) || I18n.t("page_route_card.goto_page_invalid")
@@ -84,7 +84,7 @@ class Pages::SecondarySkipInput < BaseInput
 
   def assign_values
     self.routing_page_id = record.routing_page_id
-    self.goto_page_id = record.goto_page_id.nil? ? "check_your_answers" : record.goto_page_id
+    self.goto_page_id = record.goto_page_id.nil? ? "end_of_form" : record.goto_page_id
     self
   end
 
@@ -95,11 +95,19 @@ private
   end
 
   def skip_to_end?
-    goto_page_id == "check_your_answers"
+    goto_page_id == "end_of_form"
   end
 
   def goto_question_page?
     !skip_to_end?
+  end
+
+  def goto_page_id_valid
+    return if goto_page_id.nil?
+    return if goto_page_id == "end_of_form"
+    return if form.pages.find { |page| page.id.to_s == goto_page_id.to_s }
+
+    errors.add(:goto_page_id, :invalid, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.invalid"))
   end
 
   def pages_in_valid_order
@@ -112,7 +120,7 @@ private
         errors.add(:goto_page_id, :equal, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.equal"))
       end
 
-      if goto_question_page?
+      if goto_page && goto_question_page?
         if routing_page.position > goto_page.position
           errors.add(:goto_page_id, :routing_page_after, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.routing_page_after"))
         end

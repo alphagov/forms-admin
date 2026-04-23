@@ -16,6 +16,12 @@ RSpec.describe Pages::SecondarySkipInput, type: :model do
       expect(secondary_skip_input).to be_valid
     end
 
+    it "is valid when the goto_page_id is end_of_form" do
+      secondary_skip_input.routing_page_id = form.pages.first.id.to_s
+      secondary_skip_input.goto_page_id = "end_of_form"
+      expect(secondary_skip_input).to be_valid
+    end
+
     it "is invalid if goto_page_id is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.blank")
       secondary_skip_input.goto_page_id = nil
@@ -50,6 +56,14 @@ RSpec.describe Pages::SecondarySkipInput, type: :model do
       error_message = I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.equal")
       secondary_skip_input.routing_page_id = form.pages.first.id.to_s
       secondary_skip_input.goto_page_id = form.pages.first.id.to_s
+      expect(secondary_skip_input).to be_invalid
+      expect(secondary_skip_input.errors.full_messages_for(:goto_page_id)).to include("Goto page #{error_message}")
+    end
+
+    it "is invalid when the goto_page_id is not a page ID or end_of_form" do
+      error_message = I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.invalid")
+      secondary_skip_input.routing_page_id = form.pages.first.id.to_s
+      secondary_skip_input.goto_page_id = "invalid_page_id"
       expect(secondary_skip_input).to be_invalid
       expect(secondary_skip_input.errors.full_messages_for(:goto_page_id)).to include("Goto page #{error_message}")
     end

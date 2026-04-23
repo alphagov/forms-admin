@@ -11,7 +11,7 @@ class Pages::DeleteConditionInput < ConfirmActionInput
   end
 
   def goto_page_question_text
-    return I18n.t("page_conditions.check_your_answers") if goto_page_id.nil? && record.skip_to_end
+    return I18n.t("page_conditions.end_of_form") if goto_page_id.nil? && record.skip_to_end
 
     pages.filter { |p| p.id == goto_page_id }.first&.question_text
   end

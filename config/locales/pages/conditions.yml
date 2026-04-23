@@ -13,6 +13,7 @@ en:
               cannot_have_goto_page_before_routing_page: Select the question or page to skip to, or delete this route
               cannot_route_to_next_page: Select the question or page to skip to, or delete this route
               goto_page_doesnt_exist: Select the question or page you want to take the person to, or delete this route
+              invalid: Select the question or page to skip to
         pages/delete_condition_input:
           attributes:
             confirm:

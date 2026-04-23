@@ -47,7 +47,7 @@ module PageListComponent
         goto_page = @pages.find { |page| page.id == condition.goto_page_id }
         I18n.t("page_conditions.condition_goto_page_text", goto_page_question_number: goto_page.position, goto_page_question_text: goto_page.question_text)
       elsif condition.skip_to_end
-        I18n.t("page_conditions.condition_goto_page_check_your_answers")
+        I18n.t("page_conditions.condition_goto_page_end_of_form")
       elsif condition.exit_page?
         I18n.t("page_conditions.condition_goto_exit_page", exit_page_heading: condition.exit_page_heading)
       else

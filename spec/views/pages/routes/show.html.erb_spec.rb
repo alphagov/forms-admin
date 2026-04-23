@@ -101,7 +101,7 @@ describe "pages/routes/show.html.erb" do
         end
 
         it "shows the check your answers page as the next question in the form" do
-          expect(rendered).to have_text "People who select any other answer will continue to “Check your answers before submitting”."
+          expect(rendered).to have_text "People who select any other answer will continue to the end of the form."
         end
 
         it "does not have a link to set questions to skip" do
