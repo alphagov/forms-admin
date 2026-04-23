@@ -18,6 +18,20 @@ RSpec.describe Pages::ConditionsInput, type: :model do
   let(:condition) { nil }
 
   describe "validations" do
+    it "is valid given valid params" do
+      conditions_input.goto_page_id = page.id
+      conditions_input.answer_value = "Rabbit"
+      expect(conditions_input).to be_valid
+    end
+
+    %w[check_your_answers create_exit_page exit_page].each do |goto_page_id|
+      it "is valid when the goto_page_id is #{goto_page_id}" do
+        conditions_input.goto_page_id = goto_page_id
+        conditions_input.answer_value = "Rabbit"
+        expect(conditions_input).to be_valid
+      end
+    end
+
     it "is invalid if answer_value is nil" do
       error_message = I18n.t("activemodel.errors.models.pages/conditions_input.attributes.answer_value.blank")
       conditions_input.answer_value = nil
@@ -31,13 +45,20 @@ RSpec.describe Pages::ConditionsInput, type: :model do
       expect(conditions_input).to be_invalid
       expect(conditions_input.errors.full_messages_for(:goto_page_id)).to include("Goto page #{error_message}")
     end
+
+    it "is invalid when the goto_page_id is not a page ID or end_of_form" do
+      error_message = I18n.t("activemodel.errors.models.pages/conditions_input.attributes.goto_page_id.invalid")
+      conditions_input.goto_page_id = "invalid_page_id"
+      expect(conditions_input).to be_invalid
+      expect(conditions_input.errors.full_messages_for(:goto_page_id)).to include("Goto page #{error_message}")
+    end
   end
 
   describe "#submit" do
     context "when validation pass" do
       before do
         conditions_input.answer_value = "Rabbit"
-        conditions_input.goto_page_id = 4
+        conditions_input.goto_page_id = pages.last.id
       end
 
       it "calls assign_skip_to_end" do
@@ -122,7 +143,7 @@ RSpec.describe Pages::ConditionsInput, type: :model do
           OpenStruct.new(value: "Option 1", label: "Option 1"),
           OpenStruct.new(value: "Option 2", label: "Option 2"),
           OpenStruct.new(value: :none_of_the_above.to_s,
-                         label: I18n.t("page_conditions.none_of_the_above")),
+            label: I18n.t("page_conditions.none_of_the_above")),
         ])
       end
     end

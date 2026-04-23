@@ -136,6 +136,7 @@ en:
               already_consecutive: The question or page to skip to cannot be straight after the question to skip from
               blank: Select the question or page to skip to
               equal: The question to skip to cannot be the same as the question to skip from
+              invalid: Select the question or page to skip to
               routing_page_after: The question to skip to cannot be before the question to skip from
             routing_page_id:
               blank: Select the question to skip from

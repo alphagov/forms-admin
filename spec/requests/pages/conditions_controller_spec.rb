@@ -472,7 +472,7 @@ RSpec.describe Pages::ConditionsController, type: :request do
   describe "#update_change_exit_page" do
     let(:condition) { create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id }
     let(:answer_value) { "Option 1" }
-    let(:goto_page_id) { "2" }
+    let(:goto_page_id) { pages.last.id }
     let(:confirm) { "yes" }
     let(:update_condition_result) { nil }
 

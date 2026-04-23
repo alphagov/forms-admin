@@ -2,6 +2,7 @@ class Pages::ConditionsInput < BaseInput
   attr_accessor :form, :page, :check_page_id, :routing_page_id, :answer_value, :goto_page_id, :record, :skip_to_end
 
   validates :answer_value, :goto_page_id, presence: true
+  validate :goto_page_id_valid
 
   def submit
     return false if invalid?
@@ -93,6 +94,14 @@ class Pages::ConditionsInput < BaseInput
   end
 
 private
+
+  def goto_page_id_valid
+    return if goto_page_id.nil?
+    return if %w[check_your_answers create_exit_page exit_page].include? goto_page_id
+    return if form.pages.find { |page| page.id.to_s == goto_page_id.to_s }
+
+    errors.add(:goto_page_id, :invalid, message: I18n.t("activemodel.errors.models.pages/secondary_skip_input.attributes.goto_page_id.invalid"))
+  end
 
   def pages_after_position(position)
     all_pages = form.pages
