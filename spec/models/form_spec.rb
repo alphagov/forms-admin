@@ -1237,11 +1237,11 @@ RSpec.describe Form, type: :model do
     it "includes steps" do
       expect(form.as_form_document["steps"].count).to eq(form.pages.count)
       expect(form.as_form_document["steps"].first).to match a_hash_including(
-        "type" => "question_page",
+        "type" => "question",
         "next_step_id" => form.pages.second.external_id,
       )
       expect(form.as_form_document["steps"].last).to match a_hash_including(
-        "type" => "question_page",
+        "type" => "question",
         "next_step_id" => nil,
       )
     end

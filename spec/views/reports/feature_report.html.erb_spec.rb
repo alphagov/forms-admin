@@ -200,8 +200,8 @@ describe "reports/feature_report" do
     let(:type) { :questions }
     let(:records) do
       [
-        { "type" => "question_page", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },
-        { "type" => "question_page", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" } },
+        { "type" => "question", "data" => { "question_text" => "Email address" }, "form" => { "form_id" => 1, "tag" => tag, "content" => { "name" => "All question types form" }, "organisation_name" => "Government Digital Service" } },
+        { "type" => "question", "data" => { "question_text" => "What’s your email address?" }, "form" => { "form_id" => 3, "tag" => tag, "content" => { "name" => "Branch route form" }, "organisation_name" => "Government Digital Service" } },
       ]
     end
 

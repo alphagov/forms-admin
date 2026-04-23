@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :form_document_step, class: "FormDocument::Step" do
     id { |n| n }
-    type { "question_page" }
+    type { "question" }
     position { |n| n }
     next_step_id { nil }
     data do
