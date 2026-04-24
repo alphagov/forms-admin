@@ -26,6 +26,25 @@ RSpec.describe ApplicationLogger, :capture_logging do
     end
   end
 
+  context "when CurrentTaskLoggingAttributes has attributes set" do
+    before do
+      CurrentTaskLoggingAttributes.task_name = "task:example"
+      logger.info("A message")
+    end
+
+    it "includes the message as a field" do
+      expect(log_line["message"]).to eq "A message"
+    end
+
+    it "includes attributes with values on the log line" do
+      expect(log_line["task_name"]).to eq "task:example"
+    end
+
+    it "does not include attributes without values on the log line" do
+      expect(log_line.keys).not_to include "user_id"
+    end
+  end
+
   context "when a hash is passed as an argument" do
     before do
       CurrentLoggingAttributes.request_id = "a-request-id"
