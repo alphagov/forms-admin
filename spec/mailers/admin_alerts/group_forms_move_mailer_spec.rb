@@ -17,6 +17,7 @@ describe AdminAlerts::GroupFormsMoveMailer, type: :mailer do
           new_group_name: group.name,
           org_admin_email: current_user.email,
           org_admin_name: current_user.name,
+          group_active: group.active?,
         )
       end
 
@@ -30,6 +31,15 @@ describe AdminAlerts::GroupFormsMoveMailer, type: :mailer do
         expect(mail.govuk_notify_personalisation[:new_group_name]).to eq(group.name)
         expect(mail.govuk_notify_personalisation[:org_admin_email]).to eq(current_user.email)
         expect(mail.govuk_notify_personalisation[:org_admin_name]).to eq(current_user.name)
+        expect(mail.govuk_notify_personalisation[:group_active]).to eq("no")
+      end
+
+      context "when group is active" do
+        let(:group) { create :group, status: :active }
+
+        it "personalisation includes group active as yes" do
+          expect(mail.govuk_notify_personalisation[:group_active]).to eq("yes")
+        end
       end
     end
 
@@ -42,6 +52,7 @@ describe AdminAlerts::GroupFormsMoveMailer, type: :mailer do
           new_group_name: group.name,
           org_admin_email: current_user.email,
           org_admin_name: current_user.name,
+          group_active: group.active?,
         )
       end
 
@@ -55,6 +66,7 @@ describe AdminAlerts::GroupFormsMoveMailer, type: :mailer do
         expect(mail.govuk_notify_personalisation[:new_group_name]).to eq(group.name)
         expect(mail.govuk_notify_personalisation[:org_admin_email]).to eq(current_user.email)
         expect(mail.govuk_notify_personalisation[:org_admin_name]).to eq(current_user.name)
+        expect(mail.govuk_notify_personalisation[:group_active]).to eq("no")
       end
     end
   end

@@ -53,6 +53,7 @@ RSpec.describe GroupFormsService do
               new_group_name: group.name,
               org_admin_email: current_user.email,
               org_admin_name: current_user.name,
+              group_active: group.active?,
             )
           end
         end
@@ -80,6 +81,7 @@ RSpec.describe GroupFormsService do
               new_group_name: group.name,
               org_admin_email: current_user.email,
               org_admin_name: current_user.name,
+              group_active: group.active?,
             )
           end
         end
