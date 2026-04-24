@@ -54,7 +54,7 @@ RSpec.describe "Logging Rake Tasks", rakefile: false, type: :task do
   context "when the task is aborted with SystemExit" do
     let(:my_task) do
       Rake::Task.define_task(my_task: :environment) do
-        raise SystemExit.new(0, "exit")
+        abort "exit" # rubocop:disable Rails/Exit
       end
     end
 
@@ -62,7 +62,9 @@ RSpec.describe "Logging Rake Tasks", rakefile: false, type: :task do
       allow(Rails.logger).to receive(:info).with("Task started", hash_including(:args))
       expect(Rails.logger).to receive(:error).with("Task aborted", { exit_message: "exit" })
 
-      expect { rake["my_task"].invoke }.to output(/exit/).to_stderr
+      expect { rake["my_task"].invoke }
+        .to raise_error(SystemExit)
+        .and output(/exit/).to_stderr
     end
   end
 end
