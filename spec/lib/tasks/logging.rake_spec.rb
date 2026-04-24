@@ -1,13 +1,9 @@
-require "rake"
 require "rails_helper"
 
-RSpec.describe "Logging Rake Tasks" do
-  let(:rake) { Rake::Application.new }
+RSpec.describe "Logging Rake Tasks", rakefile: false, type: :task do
+  let(:rake) { Rake.application }
 
   before do
-    Rake.application = rake
-
-    Rake::Task.define_task(:environment)
     my_task
 
     allow(rake).to receive(:top_level_tasks).and_return(%w[my_task])

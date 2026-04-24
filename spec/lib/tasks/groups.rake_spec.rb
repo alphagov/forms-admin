@@ -1,14 +1,8 @@
-require "rake"
 require "rails_helper"
 
-RSpec.describe "groups.rake" do
-  before do
-    Rake.application.rake_require "tasks/groups"
-    Rake::Task.define_task(:environment)
-  end
-
+RSpec.describe "groups.rake", type: :task do
   describe "groups:remove_group" do
-    subject(:task) { Rake::Task["groups:remove_group"].tap(&:reenable) }
+    subject(:task) { Rake::Task["groups:remove_group"] }
 
     it "with correct arguments removes the group" do
       group = create(:group)
@@ -43,7 +37,7 @@ RSpec.describe "groups.rake" do
   end
 
   describe "groups:remove_group_dry_run" do
-    subject(:task) { Rake::Task["groups:remove_group_dry_run"].tap(&:reenable) }
+    subject(:task) { Rake::Task["groups:remove_group_dry_run"] }
 
     it "with correct arguments does not remove the group" do
       group = create(:group)

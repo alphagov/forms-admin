@@ -1,16 +1,9 @@
-require "rake"
 require "rails_helper"
 
-RSpec.describe "forms.rake" do
-  before do
-    Rake.application.rake_require "tasks/forms"
-    Rake::Task.define_task(:environment)
-  end
-
+RSpec.describe "forms.rake", type: :task do
   describe "forms:move" do
     subject(:task) do
       Rake::Task["forms:move"]
-        .tap(&:reenable)
     end
 
     let(:group) { create :group }
@@ -129,7 +122,6 @@ RSpec.describe "forms.rake" do
   describe "forms:submission_email:update" do
     subject(:task) do
       Rake::Task["forms:submission_email:update"]
-        .tap(&:reenable)
     end
 
     let(:form) do
@@ -231,7 +223,6 @@ RSpec.describe "forms.rake" do
   describe "forms:submission_type:set_to_email" do
     subject(:task) do
       Rake::Task["forms:submission_type:set_to_email"]
-        .tap(&:reenable)
     end
 
     let(:form) { create :form, :live, submission_type: "s3", submission_format: [] }
@@ -361,7 +352,6 @@ RSpec.describe "forms.rake" do
   describe "forms:submission_type:set_to_s3" do
     subject(:task) do
       Rake::Task["forms:submission_type:set_to_s3"]
-        .tap(&:reenable)
     end
 
     let(:form) { create :form, :live }
@@ -545,7 +535,6 @@ RSpec.describe "forms.rake" do
   describe "add_value_to_selection_options" do
     subject(:task) do
       Rake::Task["forms:add_value_to_selection_options"]
-        .tap(&:reenable)
     end
 
     let(:form) { create :form, pages: }
@@ -609,7 +598,6 @@ RSpec.describe "forms.rake" do
   describe "add_send_weekly_submission_batch_to_form_documents" do
     subject(:task) do
       Rake::Task["forms:add_send_weekly_submission_batch_to_form_documents"]
-        .tap(&:reenable)
     end
 
     let!(:form_with_send_weekly_submission_batch) { create :form, send_weekly_submission_batch: true }
@@ -635,7 +623,6 @@ RSpec.describe "forms.rake" do
   describe "convert_declaration_text_to_markdown" do
     subject(:task) do
       Rake::Task["forms:convert_declaration_text_to_markdown"]
-        .tap(&:reenable)
     end
 
     let(:form) { create :form, declaration_text: "<p>This is a declaration</p>" }

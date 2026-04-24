@@ -1,17 +1,9 @@
-require "rake"
-
 require "rails_helper"
 
-RSpec.describe "mailchimp.rake" do
+RSpec.describe "mailchimp.rake", type: :task do
   describe "synchronize_audiences" do
     subject(:task) do
       Rake::Task["mailchimp:synchronize_audiences"]
-        .tap(&:reenable)
-    end
-
-    before do
-      Rake.application.rake_require "tasks/mailchimp"
-      Rake::Task.define_task(:environment)
     end
 
     it "creates a ListSyncService and calls synchronize_lists" do

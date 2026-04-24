@@ -1,17 +1,9 @@
-require "rake"
-
 require "rails_helper"
 
-RSpec.describe "organisations.rake" do
-  before do
-    Rake.application.rake_require "tasks/organisations"
-    Rake::Task.define_task(:environment)
-  end
-
+RSpec.describe "organisations.rake", type: :task do
   describe "organisations:create" do
     subject(:task) do
       Rake::Task["organisations:create"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     it "creates an organisation" do
@@ -54,7 +46,6 @@ RSpec.describe "organisations.rake" do
   describe "organisations:fetch" do
     subject(:task) do
       Rake::Task["organisations:fetch"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     it "fetches organisations" do
@@ -71,7 +62,6 @@ RSpec.describe "organisations.rake" do
   describe "organisations:rename" do
     subject(:task) do
       Rake::Task["organisations:rename"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     it "renames an organisation" do
@@ -103,7 +93,6 @@ RSpec.describe "organisations.rake" do
   describe "organisations:merge" do
     subject(:task) do
       Rake::Task["organisations:merge"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let!(:source_org) { create :organisation, slug: "old-organisation", closed: true }
@@ -196,7 +185,6 @@ RSpec.describe "organisations.rake" do
     describe ":dry_run" do
       subject(:task) do
         Rake::Task["organisations:merge:dry_run"]
-          .tap(&:reenable) # make sure task is invoked every time
       end
 
       let(:invoked_task) do
@@ -210,7 +198,6 @@ RSpec.describe "organisations.rake" do
   describe "organisations:make_internal" do
     subject(:task) do
       Rake::Task["organisations:make_internal"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     it "sets an organisation's internal flag to true" do
@@ -245,7 +232,6 @@ RSpec.describe "organisations.rake" do
   describe "organisations:make_external" do
     subject(:task) do
       Rake::Task["organisations:make_external"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     it "sets an organisation's internal flag to false" do
