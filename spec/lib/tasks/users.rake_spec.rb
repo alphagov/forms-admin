@@ -1,17 +1,9 @@
-require "rake"
-
 require "rails_helper"
 
-RSpec.describe "users.rake" do
-  before do
-    Rake.application.rake_require "tasks/users"
-    Rake::Task.define_task(:environment)
-  end
-
+RSpec.describe "users.rake", type: :task do
   describe "users:delete_user_dry_run" do
     subject(:task) do
       Rake::Task["users:delete_user_dry_run"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let!(:user_to_delete) { create(:user) }
@@ -45,7 +37,6 @@ RSpec.describe "users.rake" do
   describe "users:delete_user" do
     subject(:task) do
       Rake::Task["users:delete_user"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let!(:user_to_delete) { create(:user) }
@@ -78,7 +69,6 @@ RSpec.describe "users.rake" do
   describe "users:delete_users_with_no_name_or_org" do
     subject(:task) do
       Rake::Task["users:delete_users_with_no_name_or_org"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let(:users) do
@@ -188,7 +178,6 @@ RSpec.describe "users.rake" do
     describe ":dry_run" do
       subject(:dry_run_task) do
         Rake::Task["users:delete_users_with_no_name_or_org:dry_run"]
-          .tap(&:reenable) # make sure task is invoked every time
       end
 
       let(:user_in_group) { users.fifth }

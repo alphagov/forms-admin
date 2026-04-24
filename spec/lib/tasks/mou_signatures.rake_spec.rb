@@ -1,17 +1,9 @@
-require "rake"
-
 require "rails_helper"
 
-RSpec.describe "mou_signatures.rake" do
-  before do
-    Rake.application.rake_require "tasks/mou_signatures"
-    Rake::Task.define_task(:environment)
-  end
-
+RSpec.describe "mou_signatures.rake", type: :task do
   describe "mou_signatures:create" do
     subject(:task) do
       Rake::Task["mou_signatures:create"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let(:user) { create :user, name: "A Person" }
@@ -69,7 +61,6 @@ RSpec.describe "mou_signatures.rake" do
   describe "mou_signatures:update_organisation" do
     subject(:task) do
       Rake::Task["mou_signatures:update_organisation"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let(:user) { create :user }
@@ -117,7 +108,6 @@ RSpec.describe "mou_signatures.rake" do
   describe "mou_signatures:revoke_user_signature" do
     subject(:task) do
       Rake::Task["mou_signatures:revoke_user_signature"]
-        .tap(&:reenable) # make sure task is invoked every time
     end
 
     let(:user) { create :user }
