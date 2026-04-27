@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe GroupDeleteMailer, type: :mailer do
+describe AdminAlerts::GroupDeleteMailer, type: :mailer do
   let(:current_user) { create :organisation_admin_user }
   let(:group) { create :group }
   let(:to_email) { "email@example.gov.uk" }
@@ -17,7 +17,7 @@ describe GroupDeleteMailer, type: :mailer do
       end
 
       it "sends an email with the correct template" do
-        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.group_deleted_org_admin_template_id)
+        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.group_deleted_org_admin_template_id)
       end
 
       it "includes the personalisation" do
@@ -38,7 +38,7 @@ describe GroupDeleteMailer, type: :mailer do
       end
 
       it "sends an email with the correct template" do
-        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.group_deleted_group_admin_editor_template_id)
+        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.group_deleted_group_admin_editor_template_id)
       end
 
       it "includes the personalisation" do

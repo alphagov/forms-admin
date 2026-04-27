@@ -32,24 +32,26 @@ private
   end
 
   def send_move_email_to_org_admin_user(to_email)
-    GroupFormsMoveMailer.form_moved_email_org_admin(
+    AdminAlerts::GroupFormsMoveMailer.form_moved_email_org_admin(
       to_email: to_email,
       form_name: @form.name,
       old_group_name: @old_group.name,
       new_group_name: @group.name,
       org_admin_email: @current_user.email,
       org_admin_name: @current_user.name,
+      group_active: @group.active?,
     ).deliver_now
   end
 
   def send_move_email_to_group_admin_user(to_email)
-    GroupFormsMoveMailer.form_moved_email_group_admin(
+    AdminAlerts::GroupFormsMoveMailer.form_moved_email_group_admin(
       to_email: to_email,
       form_name: @form.name,
       old_group_name: @old_group.name,
       new_group_name: @group.name,
       org_admin_email: @current_user.email,
       org_admin_name: @current_user.name,
+      group_active: @group.active?,
     ).deliver_now
   end
 end

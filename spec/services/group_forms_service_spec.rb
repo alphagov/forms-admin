@@ -27,7 +27,7 @@ RSpec.describe GroupFormsService do
 
     describe "sending emails" do
       before do
-        allow(GroupFormsMoveMailer).to receive_messages(form_moved_email_org_admin: delivery, form_moved_email_group_admin: delivery)
+        allow(AdminAlerts::GroupFormsMoveMailer).to receive_messages(form_moved_email_org_admin: delivery, form_moved_email_group_admin: delivery)
         allow(delivery).to receive(:deliver_now).with(any_args)
       end
 
@@ -46,13 +46,14 @@ RSpec.describe GroupFormsService do
           expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
 
           org_admins.each do |org_admin|
-            expect(GroupFormsMoveMailer).to have_received(:form_moved_email_org_admin).with(
+            expect(AdminAlerts::GroupFormsMoveMailer).to have_received(:form_moved_email_org_admin).with(
               to_email: org_admin.email,
               form_name: form.name,
               old_group_name: old_group.name,
               new_group_name: group.name,
               org_admin_email: current_user.email,
               org_admin_name: current_user.name,
+              group_active: group.active?,
             )
           end
         end
@@ -73,13 +74,14 @@ RSpec.describe GroupFormsService do
           expect(delivery).to have_received(:deliver_now).with(any_args).exactly(2).times
 
           group_admins.each do |user|
-            expect(GroupFormsMoveMailer).to have_received(:form_moved_email_group_admin).with(
+            expect(AdminAlerts::GroupFormsMoveMailer).to have_received(:form_moved_email_group_admin).with(
               to_email: user.email,
               form_name: form.name,
               old_group_name: old_group.name,
               new_group_name: group.name,
               org_admin_email: current_user.email,
               org_admin_name: current_user.name,
+              group_active: group.active?,
             )
           end
         end

@@ -1,7 +1,7 @@
-class OrgAdminAlerts::DraftCreatedMailer < GovukNotifyRails::Mailer
+class AdminAlerts::DraftCreatedMailer < GovukNotifyRails::Mailer
   include Rails.application.routes.url_helpers
   def new_draft_form_created(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.new_draft_form_created_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.new_draft_form_created_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: form_url(form),
@@ -12,7 +12,7 @@ class OrgAdminAlerts::DraftCreatedMailer < GovukNotifyRails::Mailer
   end
 
   def copied_draft_form_created(form:, copied_from_form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.copied_draft_form_created_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.copied_draft_form_created_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: form_url(form),
@@ -25,7 +25,7 @@ class OrgAdminAlerts::DraftCreatedMailer < GovukNotifyRails::Mailer
   end
 
   def new_archived_form_draft_created(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.new_archived_form_draft_created_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.new_archived_form_draft_created_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: form_url(form),
@@ -38,7 +38,7 @@ class OrgAdminAlerts::DraftCreatedMailer < GovukNotifyRails::Mailer
   end
 
   def new_live_form_draft_created(form:, user:, to_email:)
-    set_template(Settings.govuk_notify.org_admin_alerts.new_live_form_draft_created_template_id)
+    set_template(Settings.govuk_notify.admin_alerts.new_live_form_draft_created_template_id)
     send_mail(to_email:, personalisation: {
       form_name: form.name,
       form_link: form_url(form),

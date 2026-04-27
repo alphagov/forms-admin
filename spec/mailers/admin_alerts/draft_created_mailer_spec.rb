@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe OrgAdminAlerts::DraftCreatedMailer, type: :mailer do
+describe AdminAlerts::DraftCreatedMailer, type: :mailer do
   let(:form) { create :form, :with_group }
   let(:user) { create :user }
   let(:to_email) { "admin@example.gov.uk" }
@@ -11,7 +11,7 @@ describe OrgAdminAlerts::DraftCreatedMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.new_draft_form_created_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.new_draft_form_created_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -35,7 +35,7 @@ describe OrgAdminAlerts::DraftCreatedMailer, type: :mailer do
     let(:copied_from_form) { create :form }
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.copied_draft_form_created_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.copied_draft_form_created_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -67,7 +67,7 @@ describe OrgAdminAlerts::DraftCreatedMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.new_archived_form_draft_created_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.new_archived_form_draft_created_template_id)
     end
 
     it "sends an email to the correct email address" do
@@ -99,7 +99,7 @@ describe OrgAdminAlerts::DraftCreatedMailer, type: :mailer do
     end
 
     it "sends an email with the correct template" do
-      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.org_admin_alerts.new_live_form_draft_created_template_id)
+      expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.new_live_form_draft_created_template_id)
     end
 
     it "sends an email to the correct email address" do

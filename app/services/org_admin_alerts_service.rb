@@ -34,11 +34,11 @@ private
     when :draft
       new_draft_made_live_email(to_email:)
     when :live_with_draft
-      OrgAdminAlerts::MadeLiveMailer.live_form_changes_made_live(form: @form, user: @current_user, to_email:)
+      AdminAlerts::MadeLiveMailer.live_form_changes_made_live(form: @form, user: @current_user, to_email:)
     when :archived
-      OrgAdminAlerts::MadeLiveMailer.archived_form_made_live(form: @form, user: @current_user, to_email:)
+      AdminAlerts::MadeLiveMailer.archived_form_made_live(form: @form, user: @current_user, to_email:)
     when :archived_with_draft
-      OrgAdminAlerts::MadeLiveMailer.archived_form_changes_made_live(form: @form, user: @current_user, to_email:)
+      AdminAlerts::MadeLiveMailer.archived_form_changes_made_live(form: @form, user: @current_user, to_email:)
     else
       raise StandardError, "Unexpected previous state: #{previous_state}"
     end
@@ -46,26 +46,26 @@ private
 
   def new_draft_made_live_email(to_email:)
     if copied_from_form
-      OrgAdminAlerts::MadeLiveMailer.copied_form_made_live(form: @form, copied_from_form:, user: @current_user, to_email:)
+      AdminAlerts::MadeLiveMailer.copied_form_made_live(form: @form, copied_from_form:, user: @current_user, to_email:)
     else
-      OrgAdminAlerts::MadeLiveMailer.new_draft_form_made_live(form: @form, user: @current_user, to_email:)
+      AdminAlerts::MadeLiveMailer.new_draft_form_made_live(form: @form, user: @current_user, to_email:)
     end
   end
 
   def new_draft_form_created_email(to_email:)
     if copied_from_form
-      OrgAdminAlerts::DraftCreatedMailer.copied_draft_form_created(form: @form, copied_from_form:, user: @current_user, to_email:)
+      AdminAlerts::DraftCreatedMailer.copied_draft_form_created(form: @form, copied_from_form:, user: @current_user, to_email:)
     else
-      OrgAdminAlerts::DraftCreatedMailer.new_draft_form_created(form: @form, user: @current_user, to_email:)
+      AdminAlerts::DraftCreatedMailer.new_draft_form_created(form: @form, user: @current_user, to_email:)
     end
   end
 
   def draft_of_existing_form_created_email(to_email:)
     case @form.state.to_sym
     when :live_with_draft
-      OrgAdminAlerts::DraftCreatedMailer.new_live_form_draft_created(form: @form, user: @current_user, to_email:)
+      AdminAlerts::DraftCreatedMailer.new_live_form_draft_created(form: @form, user: @current_user, to_email:)
     when :archived_with_draft
-      OrgAdminAlerts::DraftCreatedMailer.new_archived_form_draft_created(form: @form, user: @current_user, to_email:)
+      AdminAlerts::DraftCreatedMailer.new_archived_form_draft_created(form: @form, user: @current_user, to_email:)
     else
       raise StandardError, "Unexpected form state: #{@form.state}"
     end

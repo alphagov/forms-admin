@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe GroupFormsMoveMailer, type: :mailer do
+describe AdminAlerts::GroupFormsMoveMailer, type: :mailer do
   let(:current_user) { create :organisation_admin_user }
   let(:group) { create :group }
   let(:old_group) { create :group }
@@ -17,11 +17,12 @@ describe GroupFormsMoveMailer, type: :mailer do
           new_group_name: group.name,
           org_admin_email: current_user.email,
           org_admin_name: current_user.name,
+          group_active: group.active?,
         )
       end
 
       it "sends an email with the correct template" do
-        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.group_form_moved_org_admin_template_id)
+        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.group_form_moved_org_admin_template_id)
       end
 
       it "includes the personalisation" do
@@ -30,6 +31,15 @@ describe GroupFormsMoveMailer, type: :mailer do
         expect(mail.govuk_notify_personalisation[:new_group_name]).to eq(group.name)
         expect(mail.govuk_notify_personalisation[:org_admin_email]).to eq(current_user.email)
         expect(mail.govuk_notify_personalisation[:org_admin_name]).to eq(current_user.name)
+        expect(mail.govuk_notify_personalisation[:group_active]).to eq("no")
+      end
+
+      context "when group is active" do
+        let(:group) { create :group, status: :active }
+
+        it "personalisation includes group active as yes" do
+          expect(mail.govuk_notify_personalisation[:group_active]).to eq("yes")
+        end
       end
     end
 
@@ -42,11 +52,12 @@ describe GroupFormsMoveMailer, type: :mailer do
           new_group_name: group.name,
           org_admin_email: current_user.email,
           org_admin_name: current_user.name,
+          group_active: group.active?,
         )
       end
 
       it "sends an email with the correct template" do
-        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.group_form_moved_group_admin_editor_template_id)
+        expect(mail.govuk_notify_template).to eq(Settings.govuk_notify.admin_alerts.group_form_moved_group_admin_editor_template_id)
       end
 
       it "includes the personalisation" do
@@ -55,6 +66,7 @@ describe GroupFormsMoveMailer, type: :mailer do
         expect(mail.govuk_notify_personalisation[:new_group_name]).to eq(group.name)
         expect(mail.govuk_notify_personalisation[:org_admin_email]).to eq(current_user.email)
         expect(mail.govuk_notify_personalisation[:org_admin_name]).to eq(current_user.name)
+        expect(mail.govuk_notify_personalisation[:group_active]).to eq("no")
       end
     end
   end

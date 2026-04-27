@@ -67,7 +67,7 @@ RSpec.describe Forms::UnarchiveController, type: :request do
         post(unarchive_create_path(form_id: form.id), params: form_params)
         expect(ActionMailer::Base.deliveries.count).to eq(1)
 
-        template_id = Settings.govuk_notify.org_admin_alerts.archived_form_made_live_template_id
+        template_id = Settings.govuk_notify.admin_alerts.archived_form_made_live_template_id
         expect(ActionMailer::Base.deliveries.last.govuk_notify_template).to eq(template_id)
       end
     end

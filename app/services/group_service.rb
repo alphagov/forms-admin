@@ -96,7 +96,7 @@ private
   end
 
   def send_delete_email_to_org_admin_user(to_email)
-    GroupDeleteMailer.group_deleted_email_org_admin(
+    AdminAlerts::GroupDeleteMailer.group_deleted_email_org_admin(
       to_email: to_email,
       group_name: @group.name,
       org_admin_email_address: @current_user.email,
@@ -105,7 +105,7 @@ private
   end
 
   def send_delete_email_to_group_admin_or_editor_user(to_email)
-    GroupDeleteMailer.group_deleted_email_group_admins_and_editors(
+    AdminAlerts::GroupDeleteMailer.group_deleted_email_group_admins_and_editors(
       to_email: to_email,
       group_name: @group.name,
       org_admin_email_address: @current_user.email,
