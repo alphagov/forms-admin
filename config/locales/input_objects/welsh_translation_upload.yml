@@ -12,6 +12,9 @@ en:
               malformed: The CSV has invalid formatting - try downloading a new version, then uploading it again
               too_big: The selected file must be smaller than 10MB
   helpers:
+    hint:
+      forms_welsh_translation_upload_input:
+        file: The file must be in CSV UTF-8 file format. In Excel, go to ‘File’, then ‘Save as’.
     label:
       forms_welsh_translation_upload_input:
         file: Upload CSV file
