@@ -416,14 +416,14 @@ RSpec.describe Forms::WelshTranslationController, type: :request do
 
     it "downloads a CSV file" do
       expect(response).to have_http_status(:ok)
-      expect(response.headers["content-type"]).to eq "text/csv; charset=iso-8859-1"
-      expect(response.headers["content-disposition"]).to match("attachment; filename=a_form_with_welsh.csv")
+      expect(response.headers["content-type"]).to eq "text/csv; charset=utf-8"
+      expect(response.headers["content-disposition"]).to match("attachment; filename=\"a_form_with_welsh.csv\"; filename*=UTF-8''a_form_with_welsh.csv")
     end
 
     it "returns a CSV with a header row and and content" do
       csv = CSV.parse(response.body)
 
-      expect(csv.first).to eq(["Content ID", "English content", "Welsh content"])
+      expect(csv.first).to eq(["\uFEFFContent ID", "English content", "Welsh content"])
       expect(csv.second).to eq(["Form name", "A form with Welsh", "Welsh A form with Welsh"])
     end
   end
