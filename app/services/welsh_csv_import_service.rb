@@ -2,6 +2,7 @@ class WelshCsvImportService
   include WelshTranslationContentLabels
 
   class InvalidHeadersError < StandardError; end
+  class InvalidEncodingError < StandardError; end
 
   attr_reader :file
 
@@ -18,6 +19,8 @@ class WelshCsvImportService
 
   def read
     file_content = file.read.force_encoding("UTF-8")
+    raise InvalidEncodingError unless file_content.valid_encoding?
+
     file_content.delete_prefix!("\xEF\xBB\xBF") # delete UTF-8 BOM if present
     csv = CSV.parse(file_content, headers: true)
 

@@ -96,6 +96,18 @@ RSpec.describe WelshCsvImportService do
     end
   end
 
+  context "when the CSV is not UTF-8 encoded" do
+    before do
+      file.binmode
+      file.write("Content ID,English content,Welsh content\r\nForm name,A form,caf\xE9\r\n".b)
+      file.rewind
+    end
+
+    it "raises an InvalidEncodingError" do
+      expect { service.read }.to raise_error(WelshCsvImportService::InvalidEncodingError)
+    end
+  end
+
   context "when the CSV has invalid headers" do
     before do
       rows = [

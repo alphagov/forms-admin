@@ -16,6 +16,9 @@ class Forms::WelshTranslationUploadInput < BaseInput
   rescue CSV::MalformedCSVError
     errors.add(:file, :malformed)
     false
+  rescue WelshCsvImportService::InvalidEncodingError
+    errors.add(:file, :invalid_encoding)
+    false
   rescue WelshCsvImportService::InvalidHeadersError
     errors.add(:file, :invalid_headers)
     false

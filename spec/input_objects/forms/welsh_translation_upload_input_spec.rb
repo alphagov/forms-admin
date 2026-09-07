@@ -85,6 +85,18 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       end
     end
 
+    context "when the CSV is not UTF-8 encoded" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::InvalidEncodingError)
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors.full_messages_for(:file)).to include("File File is not in CSV UTF-8 format - in Excel, go to ‘File’ then ‘Save as’")
+      end
+    end
+
     context "when the CSV has invalid headers" do
       before do
         allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::InvalidHeadersError)
