@@ -144,5 +144,47 @@ RSpec.describe Forms::WelshTranslationUploadInput do
         expect(input.errors.full_messages_for(:file)).to include("File Question 2 is missing Welsh translations for one or more options - add them, then try uploading the CSV again")
       end
     end
+
+    context "when a FormContentNotFoundError is raised" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::FormContentNotFoundError.new("An error", 2))
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors).to be_of_kind(:file, :form_content_not_found)
+        expect(input.errors.full_messages_for(:file)).to include("File It looks like the form has changed since you downloaded the CSV of existing content - try downloading a new version, then uploading it again")
+        expect(input.error_row_number).to eq 2
+      end
+    end
+
+    context "when a QuestionTextMismatchError is raised" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::QuestionTextMismatchError.new("An error", 2))
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors).to be_of_kind(:file, :question_text_mismatch)
+        expect(input.errors.full_messages_for(:file)).to include("File It looks like the form has changed since you downloaded the CSV of existing content - try downloading a new version, then uploading it again")
+        expect(input.error_row_number).to eq 2
+      end
+    end
+
+    context "when a ExitPageHeadingMismatchError is raised" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::ExitPageHeadingMismatchError.new("An error", 2))
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors).to be_of_kind(:file, :exit_page_heading_mismatch)
+        expect(input.errors.full_messages_for(:file)).to include("File It looks like the form has changed since you downloaded the CSV of existing content - try downloading a new version, then uploading it again")
+        expect(input.error_row_number).to eq 2
+      end
+    end
   end
 end
