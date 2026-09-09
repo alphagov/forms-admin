@@ -108,5 +108,41 @@ RSpec.describe Forms::WelshTranslationUploadInput do
         expect(input.errors.full_messages_for(:file)).to include("File We couldn’t upload the CSV because the column headings are wrong - check them and try uploading again")
       end
     end
+
+    context "when a DifferentNumberOfSelectionOptionsError is raised" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::DifferentNumberOfSelectionOptionsError.new("An error", 2))
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors.full_messages_for(:file)).to include("File There’s a different number of options for the English and Welsh versions of Question 2 - try downloading a new CSV of the existing content, then uploading it again")
+      end
+    end
+
+    context "when a SelectionOptionsMismatchError is raised" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::SelectionOptionsMismatchError.new("An error", 2))
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors.full_messages_for(:file)).to include("File For the list options in question 2, the English and Welsh versions do not match - try downloading a new CSV of the existing content, then uploading it again")
+      end
+    end
+
+    context "when a SelectionOptionTranslationsMissingError is raised" do
+      before do
+        allow(mock_welsh_csv_import_service).to receive(:read).and_raise(WelshCsvImportService::SelectionOptionTranslationsMissingError.new("An error", 2))
+      end
+
+      it "returns false and adds an error" do
+        input = described_class.new(form: form, file: file)
+        expect(input.read_file).to be false
+        expect(input.errors.full_messages_for(:file)).to include("File Question 2 is missing Welsh translations for one or more options - add them, then try uploading the CSV again")
+      end
+    end
   end
 end

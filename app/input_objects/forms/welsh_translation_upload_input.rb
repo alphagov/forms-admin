@@ -22,6 +22,15 @@ class Forms::WelshTranslationUploadInput < BaseInput
   rescue WelshCsvImportService::InvalidHeadersError
     errors.add(:file, :invalid_headers)
     false
+  rescue WelshCsvImportService::DifferentNumberOfSelectionOptionsError => e
+    errors.add(:file, :different_number_of_selection_options, question_number: e.question_number)
+    false
+  rescue WelshCsvImportService::SelectionOptionsMismatchError => e
+    errors.add(:file, :selection_options_mismatch, question_number: e.question_number)
+    false
+  rescue WelshCsvImportService::SelectionOptionTranslationsMissingError => e
+    errors.add(:file, :selection_options_translations_missing, question_number: e.question_number)
+    false
   end
 
 private
