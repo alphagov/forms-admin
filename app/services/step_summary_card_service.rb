@@ -37,6 +37,7 @@ class StepSummaryCardService
     options.concat(address_options) if @step.answer_type == "address"
     options.concat(name_options) if @step.answer_type == "name"
     options.concat(route_options) if @step.respond_to?(:routing_conditions) && @step.routing_conditions.present?
+    options.concat(exit_page_options) if @step.exit_pages.present? && @multiple_branches_enabled
     options
   end
 
@@ -340,5 +341,24 @@ private
 
   def exit_page_position_calc(exit_page)
     @step.exit_pages.find_index(exit_page) + 1
+  end
+
+  def exit_page_options
+    exit_page_section = [{
+      key: { text: I18n.t("step_summary_card.exit_page.section_heading", question_number: @step.position, count: @step.exit_pages.count), classes: "govuk-summary-list__row--no-actions govuk-heading-m" },
+      classes: "govuk-summary-list__row--no-border",
+    }]
+
+    exit_page_counter = 1
+
+    @step.exit_pages.each do |exit_page|
+      exit_page_section << { key: { text: "" }, classes: "govuk-summary-list__row--no-border" } unless exit_page_counter == 1 # spacer row
+      exit_page_section << { key: { text: I18n.t("step_summary_card.exit_page.number", exit_page_number: exit_page_counter) }, classes: "govuk-summary-list__row--no-border govuk-!-margin-top-4" }
+      exit_page_section << { key: { text: I18n.t("step_summary_card.exit_page.heading", exit_page_number: exit_page_counter) }, value: { text: exit_page.heading } }
+      exit_page_section << { key: { text: I18n.t("step_summary_card.exit_page.content", exit_page_number: exit_page_counter) }, value: { text: exit_page.markdown } }
+      exit_page_counter += 1
+    end
+
+    exit_page_section
   end
 end
