@@ -17,6 +17,19 @@ class WelshCsvImportService
   class SelectionOptionsMismatchError < QuestionError; end
   class SelectionOptionTranslationsMissingError < QuestionError; end
 
+  class MismatchWithCurrentFormError < StandardError
+    attr_reader :row_number
+
+    def initialize(message, row_number)
+      super(message)
+      @row_number = row_number
+    end
+  end
+
+  class FormContentNotFoundError < MismatchWithCurrentFormError; end
+  class QuestionTextMismatchError < MismatchWithCurrentFormError; end
+  class ExitPageHeadingMismatchError < MismatchWithCurrentFormError; end
+
   attr_reader :file
 
   HEADER_INDEXES = {
@@ -40,6 +53,7 @@ class WelshCsvImportService
     raise InvalidHeadersError unless headers_valid?(csv)
 
     validate_selection_question_options!(csv)
+    validate_matches_current_form!(csv)
 
     csv.each_with_object({}) do |row, values|
       content_id = row[WelshCsvService::CONTENT_ID_HEADER]
@@ -83,8 +97,43 @@ private
     end
   end
 
+  def validate_matches_current_form!(csv)
+    # Check question text and exit page heading English content matches the current form,
+    # to avoid applying translations to the wrong question or exit page if the order has changed.
+    csv.each_with_index do |row, index|
+      content_id = row[content_id_column]
+      current_english = current_form_english_by_content_id[content_id]
+
+      row_number = index + 2 # accounts for header row
+
+      if current_english.nil?
+        raise FormContentNotFoundError.new(
+          "Content ID is not present for the current form: \"#{content_id}\"", row_number
+        )
+      end
+
+      if is_question_text?(content_id) && row[english_column] != current_english
+        raise QuestionTextMismatchError.new(
+          "The question text does not have the same English content as the current form", row_number
+        )
+      end
+
+      next unless is_exit_page_heading?(content_id) && row[english_column] != current_english
+
+      raise ExitPageHeadingMismatchError.new(
+        "The exit page heading does not have the same English content as the current form", row_number
+      )
+    end
+  end
+
   def current_form_state_csv
     @current_form_state_csv ||= CSV.parse(WelshCsvService.new(@form).as_csv(include_bom: false), headers: true)
+  end
+
+  def current_form_english_by_content_id
+    @current_form_english_by_content_id ||= current_form_state_csv.each_with_object({}) do |row, hash|
+      hash[row[content_id_column]] = row[english_column]
+    end
   end
 
   def selection_option_rows_by_question(csv)
@@ -96,12 +145,22 @@ private
   end
 
   def english_values(rows)
-    column = HEADER_INDEXES[WelshCsvService::ENGLISH_CONTENT_HEADER]
-    rows.map { |row| row[column] }
+    rows.map { |row| row[english_column] }
   end
 
   def welsh_values(rows)
-    column = HEADER_INDEXES[WelshCsvService::WELSH_CONTENT_HEADER]
-    rows.map { |row| row[column] }
+    rows.map { |row| row[welsh_column] }
+  end
+
+  def content_id_column
+    HEADER_INDEXES[WelshCsvService::CONTENT_ID_HEADER]
+  end
+
+  def english_column
+    HEADER_INDEXES[WelshCsvService::ENGLISH_CONTENT_HEADER]
+  end
+
+  def welsh_column
+    HEADER_INDEXES[WelshCsvService::WELSH_CONTENT_HEADER]
   end
 end

@@ -13,6 +13,34 @@ RSpec.describe WelshTranslationContentLabels do
     end
   end
 
+  describe "#is_question_text?" do
+    it "returns true for a question text label" do
+      expect(helper.is_question_text?("Question 1 - question text")).to be true
+    end
+
+    it "returns false for a hint text label" do
+      expect(helper.is_question_text?("Question 1 - hint text")).to be false
+    end
+  end
+
+  describe "#is_exit_page_heading?" do
+    it "returns true for a condition-style exit page heading label" do
+      expect(helper.is_exit_page_heading?("Question 1 - exit page heading")).to be true
+    end
+
+    it "returns true for a numbered exit page heading label" do
+      expect(helper.is_exit_page_heading?("Question 1 - exit page 2 heading")).to be true
+    end
+
+    it "returns false for an exit page content label" do
+      expect(helper.is_exit_page_heading?("Question 1 - exit page content")).to be false
+    end
+
+    it "returns false for a question text label" do
+      expect(helper.is_exit_page_heading?("Question 1 - question text")).to be false
+    end
+  end
+
   describe "#question_number_from_label" do
     it "returns the question number from a question text label" do
       expect(helper.question_number_from_label("Question 3 - question text")).to eq(3)
