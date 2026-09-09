@@ -6,6 +6,7 @@ RSpec.describe WelshCsvImportService do
   let(:form) do
     create :form,
            :with_pages,
+           :with_group,
            name: "A form",
            what_happens_next_markdown: "English what happens next",
            privacy_policy_url: "https://www.gov.uk/privacy",
@@ -105,6 +106,110 @@ RSpec.describe WelshCsvImportService do
 
     it "raises an InvalidEncodingError" do
       expect { service.read }.to raise_error(WelshCsvImportService::InvalidEncodingError)
+    end
+
+    describe "selection option questions validation" do
+      context "when a selection question has fewer options in the CSV than in the form" do
+        before do
+          rows = [
+            ["Content ID", "English content", "Welsh content"],
+            ["Form name", "A form", "Welsh A form"],
+            ["Question 1 - question text", "Pick an option", "Welsh Pick an option"],
+            ["Question 1 - option 1", "Option 1", "Welsh Option 1"],
+          ]
+          file.write(rows.map(&:to_csv).join)
+          file.rewind
+        end
+
+        it "raises a DifferentNumberOfSelectionOptionsError" do
+          expect { service.read }
+            .to raise_error(WelshCsvImportService::DifferentNumberOfSelectionOptionsError) do |e|
+            expect(e.question_number).to eq(page.position)
+          end
+        end
+      end
+
+      context "when a selection question has more options in the CSV than in the form" do
+        before do
+          rows = [
+            ["Content ID", "English content", "Welsh content"],
+            ["Form name", "A form", "Welsh A form"],
+            ["Question 1 - question text", "Pick an option", "Welsh Pick an option"],
+            ["Question 1 - option 1", "Option 1", "Welsh Option 1"],
+            ["Question 1 - option 2", "Option 2", "Welsh Option 2"],
+            ["Question 1 - option 3", "Option 3", "Welsh Option 3"],
+          ]
+          file.write(rows.map(&:to_csv).join)
+          file.rewind
+        end
+
+        it "raises a DifferentNumberOfSelectionOptionsError" do
+          expect { service.read }
+            .to raise_error(WelshCsvImportService::DifferentNumberOfSelectionOptionsError) do |e|
+            expect(e.question_number).to eq(page.position)
+          end
+        end
+      end
+
+      context "when the English for a selection option in the CSV does not match the form" do
+        before do
+          rows = [
+            ["Content ID", "English content", "Welsh content"],
+            ["Form name", "A form", "Welsh A form"],
+            ["Question 1 - question text", "Pick an option", "Welsh Pick an option"],
+            ["Question 1 - option 1", "Option 1", "Welsh Option 1"],
+            ["Question 1 - option 2", "NOT THE SAME", "Welsh Option 2"],
+          ]
+          file.write(rows.map(&:to_csv).join)
+          file.rewind
+        end
+
+        it "raises a SelectionOptionsMismatchError" do
+          expect { service.read }
+            .to raise_error(WelshCsvImportService::SelectionOptionsMismatchError) do |e|
+            expect(e.question_number).to eq(page.position)
+          end
+        end
+      end
+
+      context "when some selection options are translated but others are not" do
+        before do
+          rows = [
+            ["Content ID", "English content", "Welsh content"],
+            ["Form name", "A form", "Welsh A form"],
+            ["Question 1 - question text", "Pick an option", "Welsh Pick an option"],
+            ["Question 1 - option 1", "Option 1", "Welsh Option 1"],
+            ["Question 1 - option 2", "Option 2", ""],
+          ]
+          file.write(rows.map(&:to_csv).join)
+          file.rewind
+        end
+
+        it "raises a SelectionOptionTranslationsMissingError" do
+          expect { service.read }
+            .to raise_error(WelshCsvImportService::SelectionOptionTranslationsMissingError) do |e|
+            expect(e.question_number).to eq(page.position)
+          end
+        end
+      end
+
+      context "when none of the selection options are translated" do
+        before do
+          rows = [
+            ["Content ID", "English content", "Welsh content"],
+            ["Form name", "A form", "Welsh A form"],
+            ["Question 1 - question text", "Pick an option", "Welsh Pick an option"],
+            ["Question 1 - option 1", "Option 1", ""],
+            ["Question 1 - option 2", "Option 2", ""],
+          ]
+          file.write(rows.map(&:to_csv).join)
+          file.rewind
+        end
+
+        it "does not raise an error" do
+          expect { service.read }.not_to raise_error
+        end
+      end
     end
   end
 

@@ -48,4 +48,12 @@ module WelshTranslationContentLabels
   def question_name(page)
     "Question #{page.position}"
   end
+
+  def is_selection_option?(label)
+    label.to_s.match?(/^Question \d+ - option \d+$/)
+  end
+
+  def question_number_from_label(label)
+    /^Question (\d+)/.match(label)&.[](1)&.to_i
+  end
 end
