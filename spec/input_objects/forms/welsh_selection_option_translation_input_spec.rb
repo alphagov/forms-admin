@@ -10,7 +10,7 @@ RSpec.describe Forms::WelshSelectionOptionTranslationInput, type: :model do
     {
       selection_option: selection_option_cy,
       page:,
-      id: "1",
+      id: "1", # zero-based index
       name_cy: "Other name",
     }
   end
@@ -90,6 +90,52 @@ RSpec.describe Forms::WelshSelectionOptionTranslationInput, type: :model do
           expected_error_message = "Name cy #{I18n.t('activemodel.errors.models.forms/welsh_selection_option_translation_input.attributes.name_cy.blank', selection_number: 2, question_number: page.position)}"
           expect(welsh_selection_option_translation_input.errors.full_messages_for(:name_cy)).to include(expected_error_message)
         end
+      end
+    end
+  end
+
+  describe "#assign_from_spreadsheet" do
+    context "when the spreadsheet data contains a Welsh translation for this option" do
+      let(:spreadsheet_data) do
+        {
+          "Question #{page.position} - option 1" => "Welsh Option 1 from spreadsheet",
+          "Question #{page.position} - option 2" => "Welsh Option 2 from spreadsheet",
+        }
+      end
+
+      it "sets name_cy from the correct key in the spreadsheet data" do
+        welsh_selection_option_translation_input.assign_from_spreadsheet(spreadsheet_data)
+        expect(welsh_selection_option_translation_input.name_cy).to eq("Welsh Option 2 from spreadsheet")
+      end
+    end
+
+    context "when the spreadsheet data does not include the key for this option" do
+      let(:spreadsheet_data) { { "Question #{page.position} - option 1" => "Some other option" } }
+
+      it "keeps the existing name_cy unchanged" do
+        welsh_selection_option_translation_input.assign_from_spreadsheet(spreadsheet_data)
+        expect(welsh_selection_option_translation_input.name_cy).to eq("Other name")
+      end
+    end
+
+    context "when the spreadsheet data includes a blank value for this option" do
+      let(:spreadsheet_data) { { "Question #{page.position} - option 2" => "" } }
+
+      it "keeps the existing name_cy unchanged" do
+        welsh_selection_option_translation_input.assign_from_spreadsheet(spreadsheet_data)
+        expect(welsh_selection_option_translation_input.name_cy).to eq("Other name")
+      end
+    end
+
+    context "when the selection option is nil" do
+      before { welsh_selection_option_translation_input.selection_option = nil }
+
+      let(:spreadsheet_data) { { "Question #{page.position} - option 2" => "Welsh Option from spreadsheet" } }
+
+      it "returns self without changing name_cy" do
+        result = welsh_selection_option_translation_input.assign_from_spreadsheet(spreadsheet_data)
+        expect(result).to eq(welsh_selection_option_translation_input)
+        expect(welsh_selection_option_translation_input.name_cy).to eq("Other name")
       end
     end
   end

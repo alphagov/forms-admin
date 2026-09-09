@@ -2,12 +2,13 @@ class Forms::WelshSelectionOptionTranslationInput < BaseInput
   include TextInputHelper
   include ActionView::Helpers::FormTagHelper
   include ActiveModel::Attributes
+  include WelshTranslationContentLabels
 
   NAME_MAX_LENGTH = 250
 
   attr_accessor :selection_option, :page
 
-  attribute :id, :integer
+  attribute :id, :integer # the zero-based index of the option
   attribute :name_cy
 
   validate :name_present?, on: :mark_complete
@@ -23,6 +24,14 @@ class Forms::WelshSelectionOptionTranslationInput < BaseInput
     return self unless selection_option
 
     self.name_cy = selection_option.name
+    self
+  end
+
+  def assign_from_spreadsheet(data)
+    return self unless selection_option
+
+    content_label = selection_option_label(page, id)
+    self.name_cy = data[content_label] if data.key?(content_label) && data[content_label].present?
     self
   end
 
