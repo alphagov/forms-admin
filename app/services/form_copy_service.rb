@@ -39,7 +39,7 @@ class FormCopyService
       copy_group
 
       # Copy Welsh translations if available
-      if content["available_languages"].include?("cy")
+      if content&.[]("available_languages")&.include?("cy")
         copy_welsh_translations(tag:, version: form_doc.version)
       end
     rescue ActiveRecord::RecordInvalid => e

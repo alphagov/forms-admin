@@ -542,6 +542,17 @@ RSpec.describe FormCopyService do
       end
     end
 
+    context "when the FormDocument content does not include 'available_languages'" do
+      before do
+        live_form_document = source_form.latest_form_document
+        live_form_document.update!(content: live_form_document.content.except("available_languages"))
+      end
+
+      it "does not raise an error" do
+        expect { copied_form }.not_to raise_error
+      end
+    end
+
     context "when Welsh copy fails" do
       let(:source_form) do
         form = create(:form, :live, available_languages: %w[en cy])
