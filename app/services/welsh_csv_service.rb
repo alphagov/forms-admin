@@ -127,7 +127,7 @@ private
   end
 
   def add_form_metadata(csv)
-    add_field_if_present(csv, FORM_ATTRIBUTE_LABELS[:declaration_markdown], form.declaration_text, form.declaration_text_cy)
+    add_field_if_present(csv, FORM_ATTRIBUTE_LABELS[:declaration_markdown], form.declaration_markdown, form.declaration_markdown_cy)
     add_field_if_present(csv, FORM_ATTRIBUTE_LABELS[:what_happens_next_markdown], form.what_happens_next_markdown, form.what_happens_next_markdown_cy)
     add_field_if_present(csv, FORM_ATTRIBUTE_LABELS[:payment_url], form.payment_url, form.payment_url_cy)
     add_field_if_present(csv, FORM_ATTRIBUTE_LABELS[:privacy_policy_url], form.privacy_policy_url, form.privacy_policy_url_cy)

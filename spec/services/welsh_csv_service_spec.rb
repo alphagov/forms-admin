@@ -17,7 +17,7 @@ RSpec.describe "WelshCsvService", feature_multiple_branches: false do
     end
 
     context "when the form has a declaration" do
-      let(:form) { build :form, declaration_text: "Declaration text", declaration_text_cy: "Welsh Declaration text" }
+      let(:form) { build :form, declaration_markdown: "Declaration text", declaration_markdown_cy: "Welsh Declaration text" }
 
       it "contains the declaration" do
         expect(csv_rows(form)).to include([
@@ -323,7 +323,7 @@ RSpec.describe "WelshCsvService", feature_multiple_branches: false do
               support_url_cy: "https://www.gov.uk/support_cy",
               support_url_text: "Support URL text",
               support_url_text_cy: "Welsh Support URL text",
-              declaration_text: "Declaration text",
+              declaration_markdown: "Declaration text",
               pages: [page, another_page]
       end
       let(:page) do
