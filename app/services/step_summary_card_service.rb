@@ -37,6 +37,7 @@ class StepSummaryCardService
     options.concat(address_options) if @step.answer_type == "address"
     options.concat(name_options) if @step.answer_type == "name"
     options.concat(route_options) if @step.respond_to?(:routing_conditions) && @step.routing_conditions.present?
+    options.concat(exit_page_options) if @step.exit_pages.present? && @multiple_branches_enabled
     options
   end
 
@@ -225,9 +226,13 @@ private
 
   def print_routes(conditions)
     answer_value_groups = answer_value_groups(conditions)
-    answer_value_groups.map { |goto_page_id, condition_group|
-      if goto_page_id.nil?
+    answer_value_groups.map { |group|
+      condition_group = group[:conditions]
+
+      if group[:group_type] == :skip_to_end
         caption = content_tag(:p, I18n.t("page_conditions.go_to_the_end"), class: "govuk-body-s")
+      elsif group[:group_type] == :exit_page
+        caption = content_tag(:p, I18n.t("page_conditions.go_to_exit_page", exit_page_index: group[:exit_page_index], exit_page_heading: group[:exit_page].heading), class: "govuk-body-s")
       else
         goto_question = @steps.find { |page| page.id == condition_group.first.goto_page_id }
         goto_page_question_text = ActionController::Base.helpers.sanitize(goto_question.question_text)
@@ -288,12 +293,72 @@ private
   end
 
   def answer_value_groups(conditions)
-    answer_order = @step.answer_settings.selection_options.map(&:value) || []
+    ordered_conditions = ordered_conditions_for(conditions)
 
-    conditions.group_by(&:goto_page_id).map { |goto_page_id, condition_group|
-      goto_page_position = @steps.find_index { |page| page.id == goto_page_id } + 1 unless goto_page_id.nil?
-      sorted_condition_group = condition_group.in_order_of(:answer_value, answer_order, filter: false)
-      [goto_page_position, sorted_condition_group]
-    }.sort_by { |goto_page_position, _| goto_page_position || Float::INFINITY }
+    goto_page_groups(ordered_conditions) +
+      skip_to_end_groups(ordered_conditions) +
+      exit_page_groups(ordered_conditions)
+  end
+
+  def ordered_conditions_for(conditions)
+    answer_order = @step.answer_settings&.selection_options&.map(&:value) || []
+
+    conditions.to_a.in_order_of(:answer_value, answer_order, filter: false)
+  end
+
+  def goto_page_groups(ordered_conditions)
+    ordered_conditions
+      .select { |condition| condition.goto_page_id.present? }
+      .group_by(&:goto_page_id)
+      .values
+      .map { |grouped_conditions| { group_type: :goto_page, conditions: grouped_conditions } }
+  end
+
+  def skip_to_end_groups(ordered_conditions)
+    skip_to_end_conditions = ordered_conditions.select(&:skip_to_end)
+    return [] unless skip_to_end_conditions.any?
+
+    [{ group_type: :skip_to_end, conditions: skip_to_end_conditions }]
+  end
+
+  def exit_page_groups(ordered_conditions)
+    ordered_conditions
+      .select { |condition| condition.exit_page_id.present? }
+      .group_by(&:exit_page_id)
+      .values
+      .sort_by { |grouped_conditions| grouped_conditions.first.exit_page_id }
+      .map do |grouped_conditions|
+        exit_page = @step.exit_pages.detect { it.id == grouped_conditions.first.exit_page_id }
+
+        {
+          group_type: :exit_page,
+          exit_page_index: exit_page_position_calc(exit_page),
+          conditions: grouped_conditions,
+          exit_page:,
+        }
+      end
+  end
+
+  def exit_page_position_calc(exit_page)
+    @step.exit_pages.find_index(exit_page) + 1
+  end
+
+  def exit_page_options
+    exit_page_section = [{
+      key: { text: I18n.t("step_summary_card.exit_page.section_heading", question_number: @step.position, count: @step.exit_pages.count), classes: "govuk-summary-list__row--no-actions govuk-heading-m" },
+      classes: "govuk-summary-list__row--no-border",
+    }]
+
+    exit_page_counter = 1
+
+    @step.exit_pages.each do |exit_page|
+      exit_page_section << { key: { text: "" }, classes: "govuk-summary-list__row--no-border" } unless exit_page_counter == 1 # spacer row
+      exit_page_section << { key: { text: I18n.t("step_summary_card.exit_page.number", exit_page_number: exit_page_counter) }, classes: "govuk-summary-list__row--no-border govuk-!-margin-top-4" }
+      exit_page_section << { key: { text: I18n.t("step_summary_card.exit_page.heading", exit_page_number: exit_page_counter) }, value: { text: exit_page.heading } }
+      exit_page_section << { key: { text: I18n.t("step_summary_card.exit_page.content", exit_page_number: exit_page_counter) }, value: { text: exit_page.markdown } }
+      exit_page_counter += 1
+    end
+
+    exit_page_section
   end
 end

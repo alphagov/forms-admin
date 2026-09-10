@@ -596,6 +596,40 @@ describe StepSummaryCardService do
             },
           )
         end
+
+        context "with multiple branches enabled" do
+          let(:multiple_branches_enabled) { true }
+
+          it "includes the exit pages section heading" do
+            expect(step_summary_card_service.all_options_for_answer_type).to include({
+              key: { text: I18n.t("step_summary_card.exit_page.section_heading", question_number: page.position, count: 1), classes: "govuk-summary-list__row--no-actions govuk-heading-m" },
+              classes: "govuk-summary-list__row--no-border",
+            })
+          end
+
+          it "includes the exit pages number" do
+            expect(step_summary_card_service.all_options_for_answer_type).to include({
+              key: { text: I18n.t("step_summary_card.exit_page.number", exit_page_number: 1) },
+              classes: "govuk-summary-list__row--no-border govuk-!-margin-top-4",
+            })
+          end
+
+          it "includes the exit page heading row" do
+            exit_page = condition.exit_page
+            expect(step_summary_card_service.all_options_for_answer_type).to include({
+              key: { text: I18n.t("step_summary_card.exit_page.heading", exit_page_number: 1) },
+              value: { text: exit_page.heading },
+            })
+          end
+
+          it "includes the exit page content row" do
+            exit_page = condition.exit_page
+            expect(step_summary_card_service.all_options_for_answer_type).to include({
+              key: { text: I18n.t("step_summary_card.exit_page.content", exit_page_number: 1) },
+              value: { text: exit_page.markdown },
+            })
+          end
+        end
       end
     end
 
@@ -667,6 +701,153 @@ describe StepSummaryCardService do
             { key: { text: I18n.t("step_summary_card.page_heading") } },
           )
         end
+      end
+    end
+  end
+
+  describe "#answer_value_groups" do
+    subject(:groups) { step_summary_card_service.send(:answer_value_groups, form_document_step.routing_conditions) }
+
+    let(:form) { create :form, :ready_for_live, :ready_for_routing }
+    let(:page) { form.pages.first }
+
+    context "with goto_page conditions" do
+      before do
+        create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: form.pages.third.id, answer_value: "Option 1"
+        create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: form.pages.fourth.id, answer_value: "Option 2"
+        page.reload
+        form.reload.make_live!
+      end
+
+      it "returns one group per destination page" do
+        expect(groups.length).to eq(2)
+        expect(groups.map { |g| g[:group_type] }).to all(eq(:goto_page))
+      end
+    end
+
+    context "with a skip_to_end condition" do
+      before do
+        create :condition, routing_page_id: page.id, check_page_id: page.id, skip_to_end: true, answer_value: "Option 1"
+        page.reload
+        form.reload.make_live!
+      end
+
+      it "returns a single skip_to_end group" do
+        expect(groups).to include(a_hash_including(group_type: :skip_to_end))
+      end
+    end
+
+    context "with an exit_page condition" do
+      before do
+        create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id, answer_value: "Option 1"
+        page.reload
+        form.reload.make_live!
+      end
+
+      it "returns a single exit_page group" do
+        expect(groups).to include(a_hash_including(group_type: :exit_page))
+      end
+
+      it "includes exit_page and exit_page_index in the group" do
+        exit_page_group = groups.find { |g| g[:group_type] == :exit_page }
+        expect(exit_page_group).to include(:exit_page, :exit_page_index)
+      end
+    end
+
+    context "with mixed condition types" do
+      before do
+        page.answer_settings.selection_options << DataStruct.new(name: "Option 3", value: "Option 3")
+        page.save!
+
+        create :condition, routing_page_id: page.id, check_page_id: page.id, goto_page_id: form.pages.third.id, answer_value: "Option 1"
+        create :condition, routing_page_id: page.id, check_page_id: page.id, skip_to_end: true, answer_value: "Option 2"
+        create :condition, :with_exit_page, routing_page_id: page.id, check_page_id: page.id, answer_value: "Option 3"
+        page.reload
+        form.reload.make_live!
+      end
+
+      it "returns goto_page groups first, then skip_to_end, then exit_page" do
+        group_types = groups.map { |g| g[:group_type] }
+        expect(group_types).to eq(%i[goto_page skip_to_end exit_page])
+      end
+    end
+  end
+
+  describe "#exit_page_options" do
+    subject(:options) { step_summary_card_service.send(:exit_page_options) }
+
+    let(:form) { create :form, :ready_for_live, :ready_for_routing }
+    let(:page) { form.pages.first }
+
+    context "with one exit page" do
+      before do
+        create :exit_page, question_page: page
+        page.reload
+        form.reload.make_live!
+      end
+
+      it "includes a section heading row with no-border class" do
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.section_heading", question_number: page.position, count: 1), classes: "govuk-summary-list__row--no-actions govuk-heading-m" },
+          classes: "govuk-summary-list__row--no-border",
+        })
+      end
+
+      it "includes the exit page number row with no-border class" do
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.number", exit_page_number: 1) },
+          classes: "govuk-summary-list__row--no-border govuk-!-margin-top-4",
+        })
+      end
+
+      it "includes the exit page heading row" do
+        exit_page = page.exit_pages.first
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.heading", exit_page_number: 1) },
+          value: { text: exit_page.heading },
+        })
+      end
+
+      it "includes the exit page content row" do
+        exit_page = page.exit_pages.first
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.content", exit_page_number: 1) },
+          value: { text: exit_page.markdown },
+        })
+      end
+    end
+
+    context "with multiple exit pages" do
+      before do
+        create :exit_page, question_page: page
+        create :exit_page, question_page: page
+        create :exit_page, question_page: page
+        page.reload
+        form.reload.make_live!
+      end
+
+      it "uses the plural section heading" do
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.section_heading", question_number: page.position, count: 3), classes: "govuk-summary-list__row--no-actions govuk-heading-m" },
+          classes: "govuk-summary-list__row--no-border",
+        })
+      end
+
+      it "includes a spacer row with no-border class between exit pages" do
+        spacer_rows = options.select { |row| row == { key: { text: "" }, classes: "govuk-summary-list__row--no-border" } }
+        expect(spacer_rows.length).to eq(2)
+      end
+
+      it "numbers exit pages sequentially" do
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.number", exit_page_number: 2) },
+          classes: "govuk-summary-list__row--no-border govuk-!-margin-top-4",
+        })
+
+        expect(options).to include({
+          key: { text: I18n.t("step_summary_card.exit_page.number", exit_page_number: 3) },
+          classes: "govuk-summary-list__row--no-border govuk-!-margin-top-4",
+        })
       end
     end
   end
